@@ -15,7 +15,7 @@ import {
     AUTH,
     authSuccess,
     authnFailure,
-} from './actions'
+} from '../../reducer/actions'
 
 const url = '/graphql' //the api for the whisky
 /*
