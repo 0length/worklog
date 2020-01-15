@@ -1,7 +1,8 @@
 var path = require('path')
 var nodeExternals = require('webpack-node-externals')
 
-module.exports = [{
+module.exports = [
+    {
     node: {
         fs: 'empty',
         net: 'empty',
@@ -11,29 +12,22 @@ module.exports = [{
     externals: [nodeExternals()],
     mode: 'development',
     devtool: 'inline-source-map',
-    entry: './app/app.js',
+    entry: './app/app.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js',
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
-        extensions: ['.graphql', '.jsx', '.js', '.css'],
+        extensions: ['.graphql', '.jsx', '.tsx', '.ts', '.js', '.json', '.css'],
     },
     module: {
         rules: [
             // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
             {
-                test: /\.js$/,
-                loader: 'babel-loader',
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
                 exclude: [/node_modules/],
-                options: {
-                    presets: ['react', 'es2015'],
-                    plugins: ['transform-class-properties']
-                    // targets: {
-                    //     node: true,
-                    // },
-                },
             }
             ,{
                 test:/\.css$/,
@@ -46,12 +40,12 @@ module.exports = [{
     mode: 'development',
     target: 'web',
     entry: {
-        'home.js': path.resolve(__dirname, 'view/admin/index.tsx'),
+        'home.js': path.resolve(__dirname, 'view/admin/index.ts'),
         // 'multipleRoutes.js': path.resolve(__dirname, 'view/portfolio/routes.js')
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
-        extensions: [ '.tsx', '.ts', '.js' ],
+        extensions: [ '.tsx', '.ts', '.js'],
     },
     devtool: 'inline-source-map',
     module: {
@@ -60,10 +54,6 @@ module.exports = [{
             exclude: /node_modules/,
             use: {
               loader: 'ts-loader',
-              options: {
-                presets: ['react', 'es2015'],
-                plugins: ['transform-class-properties']
-              }
             }
         },{
             test:/\.css$/,
