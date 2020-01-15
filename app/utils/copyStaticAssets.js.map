@@ -1,1 +1,0 @@
-{"version":3,"file":"copyStaticAssets.js","sourceRoot":"","sources":["../../utils/copyStaticAssets.js"],"names":[],"mappings":";AAAA,MAAM,EAAE,GAAG,OAAO,CAAC,UAAU,CAAC,CAAA;AAE9B,IAAI;IACF,mEAAmE;IAEnE,OAAO,CAAC,GAAG,CAAC,0CAA0C,CAAC,CAAA;CACxD;AAAC,OAAO,GAAG,EAAE;IACZ,OAAO,CAAC,KAAK,CAAC,6CAA6C,EAAE,GAAG,CAAC,OAAO,CAAC,CAAA;CAC1E"}
