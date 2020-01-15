@@ -11,7 +11,7 @@
     "build:watch": "webpack --watch",
     "run": "node ./dist/app.js",
     "run:watch": "nodemon ./dist/app.js",
-    "copy_static_assets": "node ./utils/copyStaticAssets.js",
+    "copy_static_assets": "node ./utils/copyStaticAssets.js"
   },
   "author": "0length",
   "license": "ISC",
