@@ -18,9 +18,9 @@ export const Main: React.FC<any> = (props)=>{
       </div>
     );
 }
-const mapStateToProps = state => (state);
+const mapStateToProps = (state:any) => (state);
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       fetchArticles,
       auth

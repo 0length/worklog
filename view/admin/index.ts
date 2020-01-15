@@ -16,5 +16,5 @@ const store = createStore(Reducer, preloadState, composeWithDevTools(middleware)
 epicMiddleware.run(rootEpic);
 let willberemoved: HTMLElement | null= document.getElementById("willberemoved");
 willberemoved && willberemoved.parentNode && willberemoved.parentNode.removeChild(willberemoved);
-hydrate(<Admin store={store}/>, document.getElementById('root'));
+hydrate(React.createElement(Admin, {store}, null), document.getElementById('root'));
 
