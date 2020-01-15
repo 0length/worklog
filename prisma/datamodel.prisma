@@ -1,0 +1,32 @@
+type User {
+    email: String @unique
+    name: String
+    password: String
+}
+
+type Work {
+    id: ID! @unique
+    name: String! @unique
+    p: String
+    simple_caption: String!
+    img_url: String!
+    client: String
+    website: String
+    completed_at: String!
+    long_desc: String!
+    interisting_count: Int!
+    social_links: String
+}
+
+type Post {
+    id: ID! @unique
+    title: String! @unique
+    p: String
+    author_name: String!
+    img_url: String!
+    text_content: String
+    published_at: String
+    view_cont: String!
+    interisting_count: Int!
+    social_links: String
+}

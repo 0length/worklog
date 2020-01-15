@@ -1,0 +1,36 @@
+version: "3"
+services:
+  prisma:
+    container_name: prisma_app_me
+    image: prismagraphql/prisma:1.17
+    restart: always
+    ports:
+      - "4466:4466"
+    environment:
+      PRISMA_CONFIG: |
+        port: 4466
+        # uncomment the next line and provide the env var PRISMA_MANAGEMENT_API_SECRET=my-secret to activate cluster security
+        # managementApiSecret: my-secret
+        databases:
+          default:
+            connector: mongo
+            uri: mongodb://prisma:prisma@mongo:27017
+  mongo:
+    container_name: mongo_app_me
+    image: mongo:3.6
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: prisma
+      MONGO_INITDB_ROOT_PASSWORD: prisma
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/var/lib/mongo
+  redis:
+    image: redis
+    container_name: cache_app_me
+    restart: always
+    expose:
+      - 6379
+volumes:
+  mongo:
