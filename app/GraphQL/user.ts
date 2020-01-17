@@ -1,8 +1,9 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
+import { jwtGen } from '../lib/utils/jwtGen'
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const { APP_SECRET } = require('../../prisma/src/utils')
+// const jwt = require('jsonwebtoken')
+
 
 export const typeDefs =  gql`
     type User {
@@ -37,7 +38,7 @@ export const resolvers = {
     // },
     Mutation: {
         login: async (obj:any, {email, password}:any, context:any, info:any)=>{
-            const  user = await prisma.user({email});
+            let  user = await prisma.user({email});
             if(!user){
                 throw new Error('No such user found')
             }
@@ -45,7 +46,8 @@ export const resolvers = {
             if(!valid){
                 throw new Error('Invalid password')
             }
-            const token = jwt.sign({ userId: user.email }, APP_SECRET)
+            const token = jwtGen({ userId: user.email })
+            user.password = password
             return { token, user };
 
         },
@@ -59,7 +61,7 @@ export const resolvers = {
             if(!createdUser){
                 throw new Error('Fail Create User');
             }
-            const token = jwt.sign({ userId: createdUser.email }, APP_SECRET)
+            const token = jwtGen({ userId: createdUser.email })
             return { token, user: createdUser }
         }
     }

@@ -42,11 +42,18 @@ const server = new ApolloServer({
         require('./GraphQL/user'),  
         require('./GraphQL/work')
     ],
-    // playground: true,
-    path:'/graphql'
+    
+    path:'/graphql',
+    context: async ({req}:any) =>{
+      if(req.headers.authorization){
+        return {
+          token: req.headers.authorization,  
+        }
+      }return { token: ":(" }
+    }
 })
 
-app.use('/graphql', csrfProtection, bodyParser.json());
+app.use('/graphql', csrfProtection, bodyParser.json())
 server.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
@@ -54,7 +61,7 @@ app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response
     // res.cookie('XSRF-TOKEN', csrf_token)
 // const { name = 'Marvelous Wololo' } = req.query
 // const initialState = { initialArticleState, initialTranslateArticleState}
-const store = createStore(Reducer, {csrfReducer: { token: csrf_token}})
+const store = createStore(Reducer, {csrf: { token: csrf_token}})
 const componentStream  = ReactDOMServer.renderToNodeStream(React.createElement(Admin, {store}, null))
 const preloadedState = store.getState();
   const htmlStart : string = `

@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
+import { getUserId } from '../lib/utils/getUserId';
 
 export const typeDefs =  gql`
     type Work {
@@ -36,7 +37,7 @@ export const typeDefs =  gql`
 
 export const resolvers = {
     Query: {
-        works: async (root: any, args: any, context: any, info: any)=> await prisma.works(),
+        works: async (root: any, args: any, context: any, info: any)=> {await getUserId(context) ;return await prisma.works()},
         work: async (obj: any, args: any, context: any, info: any) => await prisma.work({id: args.id})
     },
     Mutation: {
