@@ -7,12 +7,12 @@ import {
     TRANSLATE_ARTICLES,
     TRANSLATE_ARTICLES_SUCCESS,
     TRANSLATE_ARTICLES_FAILURE,
-    AUTH,
-    AUTH_SUCCESS,
-    AUTH_FAILURE,
-    
+      
    } from "./actions";
   import { combineReducers, Reducer as R,  CombinedState } from "redux";
+
+import userReducer from "./user";
+import { initialTokenType } from "./init";
   
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -22,11 +22,7 @@ import {
   // });
   
   // export default rootReducer;
-export const initialTokenType = {
-    token: "",
-    isLoading:false,
-    error:null
- }
+
 
   export const initialArticleState = {
        data: [],
@@ -152,33 +148,13 @@ const csrfReducer = (state: any= null, action: any) =>{
     return tokenTypeReducer(state, action, 'CSRF')
   }
   
-const authReducer = (state = initialTokenType, action: any)=>{
-  // return authentications(state, action, 'AUTH')
-  switch (action.type){
-    case AUTH:
-      return {
-          token: "",
-          isLoading: true,
-          error: null
-      };
-      case AUTH_SUCCESS:
-      return {
-          token: action.payload.token,
-          isLoading:false,
-          user: action.payload.user,
-          error:null
-      };
-      case AUTH_FAILURE:
-      return{
-          token: "",
-          isLoading: false,
-          error: action.payload
-      };
-      default:
-      return state;
-  }
-}
 
-   export const Reducer: R<CombinedState<any>> =combineReducers({authReducer,csrfReducer, fetchArticleReducer});
+
+   export const Reducer: R<CombinedState<any>> =combineReducers({
+     //authReducer, 
+     csrf: csrfReducer,
+     fetchArticleReducer,
+     user: userReducer
+    });
    export default Reducer;
   

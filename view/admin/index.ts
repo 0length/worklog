@@ -6,7 +6,7 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from 'redux-logger'
 import { createEpicMiddleware } from 'redux-observable';
-import {rootEpic} from '../../reducer/epic'
+import {rootEpic} from '../../lib/epic'
 // import thunkMiddleware from "redux-thunk";
 declare const window: any;
 const epicMiddleware = createEpicMiddleware();

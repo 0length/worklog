@@ -11,9 +11,6 @@ export const REQUEST_CSRF_TOKEN = 'REQUEST_CSRF_TOKEN';
 export const REQUEST_CSRF_TOKEN_SUCCESS = 'REQUEST_CSRF_TOKEN_SUCCESS';
 export const REQUEST_CSRF_TOKEN_FAILURE = 'REQUEST_CSRF_TOKEN_FAILURE';
 
-export const AUTH = 'AUTH';
-export const AUTH_SUCCESS = 'AUTH_SUCCESS';
-export const AUTH_FAILURE = 'AUTH_FAILURE';
 
 
 
@@ -62,17 +59,3 @@ export const requestCsrfTokenFailure = (message: any) => ({
     payload: message
 });
 //
-export const auth = (param: any) => ({
-    type: AUTH,
-    query: param
-});
-
-export const authSuccess = (payload: any) =>({
-    type: AUTH_SUCCESS,
-    payload: payload
-});
-
-export const authnFailure = (message: any) => ({
-    type: AUTH_FAILURE,
-    payload: message
-});

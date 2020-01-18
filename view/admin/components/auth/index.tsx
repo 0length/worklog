@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchArticles, auth} from '../../../../reducer/actions';
+import { auth } from '../../../../reducer/user/actions';
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import Forgot from './Forgot'
@@ -148,7 +148,6 @@ const mapStateToProps = (state: any) => (state);
 
 const mapDispatchToProps = (dispatch: any) =>
     bindActionCreators({
-      fetchArticles,
       auth
     }, dispatch);
 

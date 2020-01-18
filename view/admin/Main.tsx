@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchArticles, auth} from '../../reducer/actions';
+import { fetchArticles } from '../../reducer/actions';
 import Auth from './components/auth'
 
 
@@ -23,7 +23,7 @@ const mapStateToProps = (state:any) => (state);
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       fetchArticles,
-      auth
+      
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

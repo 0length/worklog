@@ -12,10 +12,10 @@ import {
     // translateArticlesFailure,
     // translateArticlesSuccess,
 
-    AUTH,
-    authSuccess,
-    authnFailure,
 } from '../../reducer/actions'
+import { userTypes } from '../../reducer/user/types';
+import client from '../api/client';
+import { authFailure, authSuccess } from '../../reducer/user/actions';
 
 const url = '/graphql' //the api for the whisky
 /*
@@ -31,36 +31,17 @@ const url = '/graphql' //the api for the whisky
 
 const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
     //action$.ofType is the outer Observable
+    let act : any;
      return action$.pipe(
-         ofType(AUTH),
-         flatMap((action: any)=>ajax({
-            "url": `${url}`,
-            "method": "POST",
-            'withCredentials': true,
-            "headers": {
-                'content-type': 'application/json',
-                'CSRF-Token': store.value.csrfReducer.token,
-                'Accept': 'application/json',
-                "Referer":"http://localhost:3000/graphql"
-            },
-            "body" : {
-                variables: {},
-                operationName: null,
-                query: `
-                ${action.query}
-                  `
-              }
-         })),
+         ofType(userTypes.AUTH),
+         flatMap((action: any)=>{act = action;return client({service: 'graphql', url, csrf: store.value.csrf.token, graphqlBody: {query: 
+            // "query{  works{ name }}"
+            action.query
+        }})}),
          map((data: AjaxResponse) =>data.response), 
-        //  map(articles=>articles.map(article=>({
-        //      id: article.id,
-        //      title: article.title,
-        //      text_content: article.text_content,
-        //      imageUrl: 'http://bolehju.ga:4000/'+article.img_url
-        //  }))),
-        //  map(articles=>articles.filter(article=>article.imageUrl)),
-         map((payload: any)=>authSuccess(payload.data)),
-         catchError(error =>of(authnFailure(error.message)))
+         map((payload: any) =>payload.data[Object.keys(payload.data)[0]]), 
+         map((payload: any)=>{localStorage.setItem("YOUR-APP-NAME", payload); return authSuccess(payload)}),
+         catchError(error =>of(authFailure(error.message)))
      )
     
  }
