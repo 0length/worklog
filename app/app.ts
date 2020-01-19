@@ -8,9 +8,11 @@ import { createStore } from 'redux';
 import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server'
 import { StaticRouter as Router } from 'react-router-dom'
-// import gdrive from './GDrive'
+import gdrive from './lib/utils/google-drive'
 import Admin from '../view/admin/Admin'
 import Reducer from '../reducer'
+import { getfile } from './GDrive/getfile'
+import { postfile } from './GDrive/postfile'
 // import Routes from '../view/portfolio/index'
 // const bodyParser = require('body-parser')
 const { ApolloServer } = require('apollo-server-express')
@@ -96,10 +98,10 @@ const preloadedState = store.getState();
   })
 })
 
-// app.get("/api/gdrive/*",  gdrive)
-// app.post("/api/gdrive/*",
+app.get("/api/gdrive/*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
+app.post("/api/gdrive",
 //  csrfProtection,
-//  gdrive)
+ (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
 
 
 

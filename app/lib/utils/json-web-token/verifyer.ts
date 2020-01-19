@@ -1,8 +1,8 @@
-import { i, s, a } from "./jwtGen";
+import { i, s, a } from "./generator";
 
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-let publicKEY  = fs.readFileSync('./app/lib/jwt-key/public.key', 'utf8');
+let publicKEY  = fs.readFileSync('./app/lib/common-keys/jwt/public.key', 'utf8');
 
 var verifyOptions = {
     issuer:  i,

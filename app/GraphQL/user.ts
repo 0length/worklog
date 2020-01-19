@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
-import { jwtGen } from '../lib/utils/jwtGen'
+import { tokenGenerator } from '../lib/utils/json-web-token/generator'
 const bcrypt = require('bcryptjs')
 // const jwt = require('jsonwebtoken')
 
@@ -46,7 +46,7 @@ export const resolvers = {
             if(!valid){
                 throw new Error('Invalid password')
             }
-            const token = jwtGen({ userId: user.email })
+            const token = tokenGenerator({ userId: user.email })
             user.password = password
             return { token, user };
 
@@ -61,7 +61,7 @@ export const resolvers = {
             if(!createdUser){
                 throw new Error('Fail Create User');
             }
-            const token = jwtGen({ userId: createdUser.email })
+            const token = tokenGenerator({ userId: createdUser.email })
             return { token, user: createdUser }
         }
     }

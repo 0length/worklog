@@ -1,1 +1,2 @@
-"jwt malformed" => token wrong
+"Jwt malformed" => token wrong
+"No such user found" => user not found
