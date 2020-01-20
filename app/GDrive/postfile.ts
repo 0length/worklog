@@ -4,12 +4,21 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
 
     const drive = google.drive({version: 'v3', auth});
         // upload file
+        console.log("req.file", httpReq)
+        // console.log("req", httpReq.body)
+        // console.log("req", httpReq)
+
+        const file = await httpReq.on('end', ()=>{
+            return httpReq.body
+            // return httpReq.busboy.on('file', (fieldname, file, filename)=>file)
+        })
+        console.log(file)
         var fileMetadata = {
-            'name': 'photo.jpg'
+            'name': 'photo2.jpg'
           };
           var media = {
             mimeType: 'image/jpeg',
-            body: httpReq.body //fs.createReadStream('./app/GDrive/jpg.jpg')
+            body: file //fs.createReadStream('./app/GDrive/jpg.jpg')
           };
           await drive.files.create({
             resource: fileMetadata,
@@ -25,5 +34,9 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
               httpRes.json(result)
             }
           });
+
+          setTimeout(()=>{
+            console.log("req.file", httpReq.body)
+          }, 5000)
     
 }

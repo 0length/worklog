@@ -97,10 +97,11 @@ const preloadedState = store.getState();
     res.end()
   })
 })
-
+const bodyParserencoded = bodyParser.urlencoded({ extended: true })
 app.get("/api/gdrive/*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
 app.post("/api/gdrive",
 //  csrfProtection,
+bodyParserencoded,
  (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
 
 
