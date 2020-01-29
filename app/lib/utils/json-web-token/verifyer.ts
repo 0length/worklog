@@ -14,12 +14,9 @@ var verifyOptions = {
 
 function getUserId(context: any){
     const Authorization = context.token
- 
-    if(Authorization){
+     if(Authorization !==":("){
         const token = Authorization.replace('Bearer ', '')
-    //     console.log(token)
         const { userId } = jwt.verify(token, publicKEY, verifyOptions)
-            console.log(userId)
         return userId
     }
 
