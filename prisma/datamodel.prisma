@@ -1,32 +1,43 @@
 type User {
-    email: String @unique
-    name: String
-    password: String
+    email: String! @unique
+    name: String!
+    password: String!
+    group: String!
+}
+
+type Group {
+    name: String! @unique
+    access: String!
+}
+
+type Menu {
+    name: String! @unique
+    parent_name: String!
+    sequence: Int!
 }
 
 type Work {
-    id: ID! @unique
     name: String! @unique
-    p: String
+    p: String!
+    author_name: String!
     simple_caption: String!
     img_url: String!
-    client: String
-    website: String
+    client: String!
+    website: String!
     completed_at: String!
     long_desc: String!
     interisting_count: Int!
-    social_links: String
+    social_links: String!
 }
 
 type Post {
-    id: ID! @unique
     title: String! @unique
-    p: String
+    p: String!
     author_name: String!
     img_url: String!
-    text_content: String
-    published_at: String
+    text_content: String!
+    published_at: String!
     view_cont: String!
     interisting_count: Int!
-    social_links: String
+    social_links: String!
 }
