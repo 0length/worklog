@@ -12,6 +12,7 @@
     "run": "node ./dist/app.js",
     "run:watch": "nodemon ./dist/app.js",
     "copy_static_assets": "node ./utils/copyStaticAssets.js",
+    "db-seed": "node ./utils/seeder.js",
     "prisma": "prisma deploy"
   },
   "author": "0length",
