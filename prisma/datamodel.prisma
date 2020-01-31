@@ -1,6 +1,7 @@
 type User {
-    email: String! @unique
+    username: String! @unique
     name: String!
+    email: String! @unique
     password: String!
     group: String!
 }
@@ -40,4 +41,11 @@ type Post {
     view_cont: String!
     interisting_count: Int!
     social_links: String!
+}
+
+type Comment {
+    id: ID! @unique
+    post_title: String!
+    user_username: String!
+    text_content: String!
 }
