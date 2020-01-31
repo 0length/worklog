@@ -45,6 +45,7 @@ type Post {
 
 type Comment {
     id: ID! @unique
+    parent_id: ID
     post_title: String!
     user_username: String!
     text_content: String!
