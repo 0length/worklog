@@ -14,9 +14,10 @@ export const getAccess = async (context: any)=>{
         throw new Error('No access for this user')
     }
     const Group = await prisma.group({name: group})
-    const access = Group?.access
+    let access = JSON.parse(Group!.access)
     if(!access){
         throw new Error('Nothing to access for this user')
     }
+    access.owner={user, group: Group}
     return access
 }
