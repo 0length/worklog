@@ -80,9 +80,6 @@ export const resolvers = {
             }
             password = await bcrypt.hash(password, 10);
             const createdUser = await prisma.createUser({name, username,  email, password, group: "guest"});
-            if(!createdUser){
-                throw new Error('Fail Create User');
-            }
             const token = tokenGenerator({ userId: createdUser.email })
             return { token, user: createdUser }
         },
