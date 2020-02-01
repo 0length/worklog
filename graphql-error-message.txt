@@ -1,7 +1,7 @@
 "Jwt malformed" => token wrong
-"Not Found" => user not found
-"Already Exist" => cant mutating the user because already exist 
-"No Access" => access with group nit avaliable for this menu
-"Invalid Password" => cant mutating the user because already exist 
+"Not Found" => data not found
+"Already Exist" => cant add the data because already exist 
+"No Access" => access with group not avaliable for this menu
+"Invalid Password" => cant mutating the data because already exist 
 "Nothing to Update" => trying to update but with no data send 
 "Fail Create User" => error while creating user 
