@@ -1,6 +1,5 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
-import { getUserId } from '../lib/utils/json-web-token/verifyer';
 import { getAccess } from '../lib/utils/getAccess';
 
 export const typeDefs =  gql`
