@@ -4,5 +4,8 @@ import Main from './Main'
 interface Props {
     store: any
 }
-const Admin: React.FC <Props> = (props)=>(<Provider store={props.store}><Main/></Provider>)
+const Admin: React.FC <Props> = (props)=>(
+<Provider store={props.store}>
+    <Main/>
+</Provider>)
 export default Admin;
