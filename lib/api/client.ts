@@ -12,7 +12,7 @@ export interface AgentOption {
     service?: string;
     credential?: boolean|null|undefined 
     graphqlBody?: GraphQlBody;
-    header?:any;
+    headers?:any;
     body?: any;
 }
 
@@ -30,6 +30,7 @@ const cainedOption: any = (aO: AgentOption)=>{
     aO.method ? finalOption.method = aO.method : null
     aO.url ? finalOption.url = aO.url : null
     aO.credential ? finalOption.withCredentials = aO.credential : null
+    aO.headers && aO.headers.authorization ? finalOption.headers['Authorization'] = aO.headers.authorization : null
     aO.csrf ? finalOption.headers['CSRF-Token'] = aO.csrf : null
 
     
