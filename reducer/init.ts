@@ -1,6 +1,12 @@
 export const initUser = {
-    asGuest: true,
+    asGuest: false,
     token: "",
-    isLoading:false,
-    error:null
- }
+    isLoading: false,
+    error: null
+}
+
+export const initMenu = {
+    isLoading: false,
+    error: null,
+    data: []
+}
