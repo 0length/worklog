@@ -42,7 +42,11 @@ app.use(cors())
 const server = new ApolloServer({ 
     modules: [
         require('./GraphQL/user'),  
-        require('./GraphQL/work')
+        require('./GraphQL/work'),
+        require('./GraphQL/menu'),
+        require('./GraphQL/group'),
+        require('./GraphQL/post'),
+        // require('./GraphQL/comment'),
     ],
     
     path:'/graphql',
@@ -55,7 +59,7 @@ const server = new ApolloServer({
     }
 })
 
-app.use('/graphql', csrfProtection, bodyParser.json())
+// app.use('/graphql', csrfProtection, bodyParser.json())
 server.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
@@ -72,6 +76,8 @@ const preloadedState = store.getState();
     <head>
     <meta charset="utf-8">
       <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico' />
+      <link href="/static/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+      <link href="/static/plugins/flaticon/css/flaticon.css" rel="stylesheet" type="text/css" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <script id="willberemoved">window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
