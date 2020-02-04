@@ -3,7 +3,7 @@ import styled, {css} from 'styled-components'
 const Input = styled.input`
     display: block;
     width: 100%;
-    height: calc(1.5em + 1.3rem + 2px);
+    // height: calc(1.5em + 1.3rem + 2px);
     padding: .65rem 1rem;
     font-size: 1rem;
     font-weight: 400;
@@ -28,6 +28,7 @@ const Input = styled.input`
         margin-top: .1rem;
         color:
         #595d6e;
+
         `
     }
     ${(props: any)=>

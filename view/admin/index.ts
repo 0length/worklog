@@ -14,7 +14,7 @@ const middleware = applyMiddleware(createLogger(), epicMiddleware);
 const preloadState: any = window.__PRELOADED_STATE__;
 const store = createStore(Reducer, preloadState, composeWithDevTools(middleware))
 epicMiddleware.run(rootEpic);
-let willberemoved: HTMLElement | null= document.getElementById("willberemoved");
+let willberemoved = document.getElementById("willberemoved");
 willberemoved && willberemoved.parentNode && willberemoved.parentNode.removeChild(willberemoved);
 hydrate(React.createElement(Admin, {store}, null), document.getElementById('root'));
 

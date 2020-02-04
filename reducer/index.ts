@@ -12,7 +12,7 @@ import {
   import { combineReducers, Reducer as R,  CombinedState } from "redux";
 
 import userReducer from "./user";
-import { initialTokenType } from "./init";
+import menuReducer from "./menu";
   
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -69,7 +69,11 @@ import { initialTokenType } from "./init";
     }
   }
 
-  const tokenTypeReducer = (state=initialTokenType, action: any, tokenType: string)=>{
+  const tokenTypeReducer = (state={
+    token: "",
+    isLoading: false,
+    error: null
+  }, action: any, tokenType: string)=>{
     switch (action.type){
         case `REQUEST_${tokenType}_TOKEN`:
         return {
@@ -154,7 +158,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      //authReducer, 
      csrf: csrfReducer,
      fetchArticleReducer,
-     user: userReducer
+     user: userReducer,
+     menu: menuReducer
     });
    export default Reducer;
   

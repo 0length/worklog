@@ -16,9 +16,10 @@ export const Main: React.FC<any> = (props)=>{
     } = props;
 
   useEffect(()=>{
-    let loadedToken
+    let loadedToken, loadedUser
     loadedToken = window.localStorage.getItem('WORKLOG://User/auth_token')
-    loadedToken ? props.authSuccess(loadedToken) : unauth
+    loadedUser = window.localStorage.getItem('WORKLOG://User/data')
+    loadedToken && loadedUser ? props.authSuccess({token:loadedToken, user: JSON.parse(atob(loadedUser))}) : props.unauth()
   }, [])
   
   return (
@@ -31,7 +32,8 @@ const mapStateToProps = (state:any) => (state);
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
-      authSuccess
+      authSuccess,
+      unauth
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
