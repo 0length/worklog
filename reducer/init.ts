@@ -8,5 +8,5 @@ export const initUser = {
 export const initMenu = {
     isLoading: false,
     error: null,
-    data: []
+    data: [{name: "dashboard", parent_name: "", sequence:"0"}]
 }

@@ -1,9 +1,16 @@
 import { userTypes } from "./types";
-import { initialTokenType } from "../init";
+import { initUser } from "../init";
 
-const userReducer = (state = initialTokenType, action: any)=>{
+const userReducer = (state = initUser, action: any)=>{
 
     switch (action.type){
+        case userTypes.UNAUTHENTICATED:
+        return {
+            authToken: "",
+            isLoading: false,
+            error: null,
+            asGuest: true
+        };
         case userTypes.AUTH:
         return {
             authToken: "",

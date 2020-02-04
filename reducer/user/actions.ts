@@ -2,6 +2,10 @@ import {
 userTypes
 } from './types'
 
+export const unauth = (param: any) => ({
+    type: userTypes.UNAUTHENTICATED,
+});
+
 export const auth = (param: any) => ({
     type: userTypes.AUTH,
     query: param
