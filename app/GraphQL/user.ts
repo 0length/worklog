@@ -78,7 +78,7 @@ export const resolvers = {
                 throw new Error(`Already Exist`);
             }
             password = await bcrypt.hash(password, 10);
-            const createdUser = await prisma.createUser({name, username,  email, password, group: "guest"});
+            const createdUser = await prisma.createUser({name, username,  email, password, group: "Guest"});
             const token = tokenGenerator({ userId: createdUser.email })
             return { token, user: createdUser }
         },
@@ -89,7 +89,7 @@ export const resolvers = {
                 if(userWithUsernameAlreadyExists){
                     throw new Error(`Already Exist`);
                 }
-                const createdUser = await prisma.createUser({name, username, email, password, group: "guest"});
+                const createdUser = await prisma.createUser({name, username, email, password, group: "Guest"});
                 return createdUser;
             }
             if(access.user.indexOf("c")===-1){throw new Error("No Access")}else{return result}

@@ -2,11 +2,6 @@ import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
 import { getAccess } from '../lib/utils/getAccess'
 
-
-const bcrypt = require('bcryptjs')
-// const jwt = require('jsonwebtoken')
-
-
 export const typeDefs =  gql`
     type Menu {
         name: String!
@@ -37,7 +32,9 @@ export const resolvers = {
     Query: {
         menus: async (root:any, args:any, context:any, info:any)=>{
             const  access: any = await getAccess(context)
-            const result: any = await prisma.menus()
+            const allMenu =  await prisma.menus()
+            const result: any = []
+            Object.keys(access).map((keys)=>access[keys] && result.push(...allMenu.filter((menu)=>menu.name===keys)))
             if(access.menu.indexOf("r")===-1){throw new Error("No Access")}else{return result}
         }, 
         menu: async (obj:any, {name}:any, context:any, info:any) =>{
