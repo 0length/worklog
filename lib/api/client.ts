@@ -1,4 +1,4 @@
-import { ajax } from "rxjs/ajax";
+import { ajax, AjaxRequest } from "rxjs/ajax";
 
 export interface GraphQlBody {
     variables?: string;
@@ -7,7 +7,7 @@ export interface GraphQlBody {
 }
 export interface AgentOption {
     method?: string;
-    url: string;
+    url?: string;
     csrf: string;
     service?: string;
     credential?: boolean|null|undefined 
@@ -19,7 +19,7 @@ export interface AgentOption {
 const cainedOption: any = (aO: AgentOption)=>{
     
     let finalOption: any = {
-        url: `${aO.url}`,
+        url: '',
         method: 'GET',
         withCredentials : true,
         headers: {
@@ -28,6 +28,7 @@ const cainedOption: any = (aO: AgentOption)=>{
     }
 
     aO.method ? finalOption.method = aO.method : null
+    aO.url ? finalOption.url = aO.url : null
     aO.credential ? finalOption.withCredentials = aO.credential : null
     aO.csrf ? finalOption.headers['CSRF-Token'] = aO.csrf : null
 
@@ -36,6 +37,7 @@ const cainedOption: any = (aO: AgentOption)=>{
         case 'graphql':
             const {graphqlBody} = aO
             finalOption.method = 'POST'
+            finalOption.url = '/graphql'
             finalOption.headers['content-type'] = 'application/json'
             finalOption.headers['Accept'] = 'application/json'
             const initBody = {variables: {},operationName: null,query: ''}
