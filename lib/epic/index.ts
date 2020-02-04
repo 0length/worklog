@@ -1,23 +1,30 @@
-import { combineEpics, ofType, Epic } from 'redux-observable';
-import { Observable , throwError, of} from 'rxjs';
+import { of } from 'rxjs';
 import { map, catchError, flatMap, mergeMap } from 'rxjs/operators';
-import {ajax, AjaxResponse} from 'rxjs/ajax'
-
-import {
-    FETCH_ARTICLES,
-    fetchArticlesFailure,
-    fetchArticlesSuccess,
-
-    // TRANSLATE_ARTICLES,
-    // translateArticlesFailure,
-    // translateArticlesSuccess,
-
-} from '../../reducer/actions'
-import { userTypes } from '../../reducer/user/types';
+import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
-import { authFailure, authSuccess } from '../../reducer/user/actions';
+import { userTypes } from '../../reducer/user/types';
+import { authSuccess, authFailure } from '../../reducer/user/actions';
+import { AjaxResponse } from 'rxjs/ajax';
 
-const url = '/graphql' //the api for the whisky
+
+const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
+    //action$.ofType is the outer Observable
+    let act : any;//for accesing action outside flat map
+     return action$.pipe(
+         ofType(userTypes.AUTH),
+         flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
+            // "query{  works{ name }}"
+            action.query
+        }})}),
+         map((data: AjaxResponse) =>data.response), 
+         map((payload: any) =>payload.data[Object.keys(payload.data)[0]]), 
+         map((payload: any)=>{localStorage.setItem("WORKLOG://User/auth_token", payload.token); return authSuccess(payload)}),
+         catchError(error =>of(authFailure(error.message)))
+     )
+    
+ }
+
+
 /*
     The API returns the data in the following format:
     {
@@ -29,22 +36,7 @@ const url = '/graphql' //the api for the whisky
     since we are only interested in the results array we will have to use map on our observable
  */
 
-const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;
-     return action$.pipe(
-         ofType(userTypes.AUTH),
-         flatMap((action: any)=>{act = action;return client({service: 'graphql', url, csrf: store.value.csrf.token, graphqlBody: {query: 
-            // "query{  works{ name }}"
-            action.query
-        }})}),
-         map((data: AjaxResponse) =>data.response), 
-         map((payload: any) =>payload.data[Object.keys(payload.data)[0]]), 
-         map((payload: any)=>{localStorage.setItem("YOUR-APP-NAME", payload); return authSuccess(payload)}),
-         catchError(error =>of(authFailure(error.message)))
-     )
-    
- }
+
 
 //  const fetchArticle = (action$: any, store: any)=>{ //action$ is a stream of actions
 //     //action$.ofType is the outer Observable
