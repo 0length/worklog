@@ -14,3 +14,8 @@ export const getMenuFailure = (message: any) => ({
     type: menuTypes.GET_FAILURE,
     payload: message
 });
+
+export const setActiveMenu = (payload: any) => ({
+    type: menuTypes.SET_MENU_ACTIVE,
+    payload: payload
+});

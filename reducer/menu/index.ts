@@ -22,6 +22,11 @@ const menuReducer = (state = initMenu, action: any)=>{
             isLoading: false,
             error: action.payload.error
         };
+        case menuTypes.SET_MENU_ACTIVE:
+            return {
+                ...state,
+                active:action.payload
+            };
         default:
         return state;
     }

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { getMenu } from '../../../../reducer/menu/actions'
+import Menu from './Menu'
+
+
 
 
 const SideBar: React.FC<any> = (props)=>{
-    const [menuDom, setMenuDom] = useState<JSX.Element>(<li></li>)
+    // const [menuDom, setMenuDom] = useState<JSX.Element>(<li></li>)
     
     const LocalStyle = createGlobalStyle`
 
     .wl-sidebar {
+        font-family: Poppins,Helvetica,sans-serif;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -32,63 +33,106 @@ const SideBar: React.FC<any> = (props)=>{
     }
 
     .wl-sidebar__menu {
-    }
-
-    .wl-sidebar__menu ul{
         margin-top: 80px;
         padding-top: 10px;
     }
-    `
-    useEffect(()=>{
-        props.user && props.user.authToken && props.getMenu(`{ menus { name, parent_name, sequence } }`)
-    },[props.user.authToken])
 
-    useEffect(()=>{
-        if(props.menu.data.length>0){
-            let menuDom = props.menu.data.filter((item: any)=>item.parent_name==="").map((item: any, idx: any) => {
-                return (<li 
-                    key={`sidebar-menu-${item.parent_name}-${item.sequence}`}
-                    className=""
-                >
-                    <span>{item.name}</span>
-                    <ul>
-                        {
-                            props.menu.data.filter((child: any)=>child.parent_name===item.name).map((child: any, idx: any)=>{
-                                return(<li 
-                                    key={`sidebar-menu-${item.sequence}-${child.sequence}`}
-                                    className=""
-                                >
-                                        <span>{child.name}</span>
-                                </li>)
-                            })
-                            
-                        }
-                    </ul>
-                </li>)
-            })
-            setMenuDom(menuDom)
-        }
-    },[props.menu.data])
+    .wl-sidebar__menu-main{
+        margin: none;
+        list-style: none;
+        box-sizeing: border-box;
+        
+    }
+
+    .wl-sidebar__menu-main__item{
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        float; none;
+        padding:0;
+        flex-direction: column;
+        margin: 2px 0;
+        transition: background-color .3s;
+
+    }
+    .wl-sidebar__menu-main__item-toggle{
+        display: flex;
+        flex-grow: 1;
+        -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        margin: 0;
+        padding: 5px 40px;
+        text-decoration: none;
+        outline: 0;
+        min-height: 35px;
+    }
+    
+    .wl-sidebar__menu__text{
+        display: flex;
+        align-item: center;
+        flex-grow: 1;
+        font-weight: 400;
+        font-size: 1rem;
+        text-transform: initial;
+        -webkit-box-align: center;
+        -webkit-box-flex: 1;
+        padding: 0;
+        text-transform: capitalize;
+        cursor: pointer;
+    }
+
+    .wl-sidebar__menu-2nd{
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        margin: none;
+        list-style: none;
+        box-sizeing: border-box;
+        transform: translateZ(0);
+        -webkit-transform-style: preserve-3d;
+    }
+
+    .wl-sidebar__menu-2nd__item{
+        display flex;
+        float; none;
+        padding:0;
+        flex-direction: column;
+        margin: 2px 0;
+        transition: background-color .3s;
+    }
+
+    .wl-sidebar__menu-nd__item-toggle{
+        display: flex-box;
+        flex-grow: 1;
+        -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+        align-items: stretch;
+        margin: 0;
+        text-decoration: none;
+        outline: 0;
+        min-height: 25px;
+        margin-left: 10px;
+    }
+
+    `
+
 
 
     return(
         <div className="wl-sidebar wl-sidebar--fixed">
                 <LocalStyle />
             <div className="wl-sidebar__menu">
-                <ul className="">
-                    {
-                        menuDom
-                    }
-                    
-                </ul>
+                <Menu />
             </div>
         </div>
     )
 }
-const mapStateToProps = (state:any) => (state);
 
-const mapDispatchToProps = (dispatch:any) =>
-    bindActionCreators({
-        getMenu
-    }, dispatch);
-export default connect(mapStateToProps, mapDispatchToProps)(SideBar)
+export default SideBar
