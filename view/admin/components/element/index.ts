@@ -5,6 +5,6 @@ import Checkbox from './Checkbox'
 export {
     Button,
     Checkbox,
-    Input
+    Input,
 }
 

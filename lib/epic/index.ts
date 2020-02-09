@@ -21,7 +21,7 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
         }})}),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>{
-                if(payload.errors){return {payload: {error: payload.errors[0].message}}}
+                if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
          map((payload: any)=>{
@@ -29,7 +29,7 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
                 localStorage.setItem("WORKLOG://User/auth_token", payload.token);
                 localStorage.setItem("WORKLOG://User/data", btoa(JSON.stringify(payload.user)));
                 return authSuccess(payload)}else{
-                return authFailure(payload)
+                return authFailure(payload.error)
                 }
             }),
          catchError((error: any) =>of(authFailure(error.message)))
@@ -49,13 +49,15 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
         })}),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>{
-                if(payload.errors){return {payload: {error: payload.errors[0].message}}}
+             console.log(payload)
+                if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
          map((payload: any)=>{
+             console.log(payload)
                 if(!payload.error){
                 return getMenuSuccess(payload)}else{
-                return getMenuFailure(payload)
+                return getMenuFailure(payload.error)
                 }
             }),
          catchError((error: any) =>of(getMenuFailure(error.message)))
