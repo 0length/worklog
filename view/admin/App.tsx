@@ -5,12 +5,10 @@ import { fetchArticles } from '../../reducer/actions';
 import Header from './components/header'
 import { createGlobalStyle } from 'styled-components';
 import SideBar from './components/sidebar';
-import  PopUpNotifier  from './components/PopUpNotifier';
+import  ToasNotifier from './components/toast-notifier';
 
 export const App: React.FC<any> = (props)=>{
-//   const {
-//       user
-//     } = props;
+
     const [notification, setNotification] = useState<Array<any>>([])
 
   const GlobalStyle = createGlobalStyle`
@@ -46,21 +44,21 @@ export const App: React.FC<any> = (props)=>{
         <GlobalStyle />
         <Header />
         <SideBar  />
-        <PopUpNotifier notification={notification}/> 
-        <button style={{zIndex: 10, color: 'blue'}} onClick={()=>{
+        <ToasNotifier notification={notification}/> 
+        <button style={{zIndex: 10, color: 'blue', position: 'absolute', left: '500px', top: '500px'}} onClick={async ()=>{
           const newData={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 10000, type: "info", created_at: new Date+""};
           const newData2={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 12000, type: "success", created_at: new Date+""};
           const newData3={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 14000, type: "warning", created_at: new Date+""};
           const newData4={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 15000, type: "danger", created_at: new Date+""};
-          
-          setNotification([...notification, newData, newData2])
-          
+
+          await setNotification([...notification, newData, newData2, newData3, newData4]);
+          await setNotification([]);
         setTimeout(() => {
           console.log(notification.indexOf(newData),notification.indexOf(newData2))
           // setNotification(notification.splice(notification.indexOf(newData), 1))
           // setNotification(notification.splice(notification.indexOf(newData2), 1))
           // setNotification(notification.splice(notification.indexOf(newData3), 1))
-          setNotification([]) ;
+          // setNotification([]);
         }, 1);
         }}>Yoa</button>
     </div>

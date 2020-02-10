@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css, createGlobalStyle } from 'styled-components'
-import NotifCard from './NotifCard'
+import {NotifCard} from '../element'
 
 const Wrapper = styled.div`
     display: flex;
     position: fixed;
     left: 10px;
     bottom: 10px;
-    height: 40vh;
+    height: auto;
     max-width: 30vw;
     z-index: 100000;
 `
@@ -18,27 +18,27 @@ align-items: flex-end;
 flex-direction: column;
 `
 
-const GlobalStyle = createGlobalStyle`
-wl-popupnotifier__container-span{
-}
-`;
 
-interface PopUpNotificationData {
+interface ToastNotificationData {
     message: string;
     timeOut: number;
     type: string;
     created_at: string;
 }
-interface PopUpNotifDomData{
+interface ToastNotifDomData{
     [key: string]: JSX.Element;
 }
-
-const PopUpNotifier: React.FC<any> = ({notification})=>{
-    const [notifDom, setNotifDom] = useState<PopUpNotifDomData>({})
+interface ToastNotifierProps{
+    notification: Array<ToastNotificationData>
+}
+//todo connect redux store Toast
+const ToastNotifier: React.FC<ToastNotifierProps> = ({notification})=>{
+    const [notifDom, setNotifDom] = useState<ToastNotifDomData>({})
     
     const removeMe = (key: string)=> {
         let temp = notifDom
         delete temp[key]
+        lastLength = lastLength-1
         return setNotifDom({...temp})
     }
 
@@ -49,19 +49,22 @@ const PopUpNotifier: React.FC<any> = ({notification})=>{
             notification.map((item: any, idx: any)=>{
                console.log(item)
                 const {message, timeOut, type, created_at} = item
-                let temp: any=notifDom
-                temp[btoa((created_at+idx).replace(/ /g,"_"))]=<NotifCard key={created_at+idx} {...{removeMe, message, timeOut, type, idx, created_at}}/>
-                setNotifDom({...temp})
+                const id = btoa((created_at+idx).replace(/ /g,"_"))
+                // let temp: any=notifDom
+                notifDom[id]=<NotifCard key={id} {...{removeMe, message, timeOut, type, idx, created_at}}/>
+                // setNotifDom({...temp})
             })
+            console.log('before', lastLength)
+            lastLength=Object.keys(notifDom).length
+            console.log('after', lastLength)
         }
-        lastLength=notification.length
+        
     }, [notification])
 
 
     return(<>{
     Object.keys(notifDom).length>0 &&
-    <Wrapper className="wl-popupnotifier__wrapper" >
-                <GlobalStyle />
+    <Wrapper className="wl-toast-notifier__wrapper">
                 <Container>
                     {
                     Object.keys(notifDom).map((item)=>notifDom[item])
@@ -71,4 +74,4 @@ const PopUpNotifier: React.FC<any> = ({notification})=>{
     </>)
 }
 
-export default PopUpNotifier
+export default ToastNotifier

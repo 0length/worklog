@@ -98,42 +98,39 @@ const Span = styled.span`
 align-self: center;
 flex-grow: 1;
 `
-
-const NotifCard: React.FC<any>=(props)=>{
-    const {message, timeOut, type, removeMe, idx, created_at} = props
-    const id = btoa((created_at+idx).replace(/ /g,"_"))
-    let width = '100%'
+interface NotificationData {
+    message: string;
+    timeOut: number;
+    type: string;
+    created_at: string;
+    removeMe:  (id: string) => void;
+    idx: number;
+}
+const NotifCard: React.FC<NotificationData>=(props)=>{
+    let {message, timeOut, type, removeMe, idx, created_at} = props;
+    !created_at?created_at=new Date().toString():!idx.toString()?idx=Math.floor((Math.random() * 10)):!type?type="info":!message?message="Hi. I'm a Toast.":""
+    const id = btoa((created_at+idx).replace(/ /g,"_"));
     useEffect(()=>{
-        const item = document.getElementById(id)
-
-        setTimeout(()=>{
-            item && item.setAttribute('style', `--${id}: 100%`);
-            //   console.log(item)
-        }, 10)
+        console.log(props, type, id, idx)
+        if(timeOut)
+        {const item = document.getElementById(id)
+            setTimeout(()=>{
+                item && item.setAttribute('style', `--${id}: 100%`);
+            }, 10)
             
             setTimeout(()=>{
                 item && item.setAttribute('style', `--${id}: 0%`);
-                //  width = '0%'
             }, 100)
 
             setTimeout(()=>{
-                // console.log(created_at)
-            removeMe(id)
-            }, timeOut)
-    }, )
+                removeMe(id)
+            }, timeOut)}
+    }, []);
 
-    // const GlobalStyle = createGlobalStyle`
-    // // #${id}::before{
-    //     --${id}:100%;
-    // // }
-    // `
-    return (<span  className={"wl-popupnotifier__container-span"}>
+
+    return (<span>
     <Container id={id} {...{styleProfile: {type, timeOut}}}>
-        {
-        /* <GlobalStyle /> */
-        }
-    <Span>{message}</Span>  
-    
+    <Span>{message}</Span>
     </Container></span>)
 }
 
