@@ -3,11 +3,11 @@ import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn }
 import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
 import { userTypes } from '../../reducer/user/types';
-import { authSuccess, authFailure } from '../../reducer/user/actions';
+import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure } from '../../reducer/user/actions';
 import { AjaxResponse } from 'rxjs/ajax';
 import { menuTypes } from '../../reducer/menu/types';
 import { getMenuSuccess, getMenuFailure } from '../../reducer/menu/actions';
-import { strict } from 'assert';
+
 
 
 const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
@@ -27,7 +27,7 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
          map((payload: any)=>{
                 if(payload.token&&payload.user){
                 localStorage.setItem("WORKLOG://User/auth_token", payload.token);
-                localStorage.setItem("WORKLOG://User/data", btoa(JSON.stringify(payload.user)));
+                localStorage.setItem("WORKLOG://User/data/username", btoa(payload.user.username));
                 return authSuccess(payload)}else{
                 return authFailure(payload.error)
                 }
@@ -61,6 +61,34 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
                 }
             }),
          catchError((error: any) =>of(getMenuFailure(error.message)))
+     )
+    
+ }
+
+ const getUserData = (action$: any, store: any)=>{ //action$ is a stream of actions
+    //action$.ofType is the outer Observable
+    let act : any;//for accesing action outside flat map
+     return action$.pipe(
+         ofType(userTypes.GET_USER_DATA),
+         flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
+            // "query{  works{ name }}"
+            action.query
+            },headers:{authorization:`Bearer ${store.value.user.authToken}`}
+        })}),
+         map((data: AjaxResponse) =>data.response), 
+         map((payload: any) =>{
+             console.log(payload)
+                if(payload.errors){return {error: payload.errors[0].message}}
+                if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
+            }), 
+         map((payload: any)=>{
+             console.log(payload)
+                if(!payload.error){
+                return getUserDataSuccess(payload)}else{
+                return getUserDataFailure(payload.error)
+                }
+            }),
+         catchError((error: any) =>of(getUserDataFailure(error.message)))
      )
     
  }
@@ -154,7 +182,8 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
  combineEpics(
     // fetchArticle, 
     auth,
-    getMenu
+    getMenu,
+    getUserData
  )(action$.pipe(
      observeOn(queueScheduler)
  ), store);
