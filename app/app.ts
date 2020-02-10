@@ -59,7 +59,7 @@ const server = new ApolloServer({
     }
 })
 
-// app.use('/graphql', csrfProtection, bodyParser.json())
+app.use('/graphql', csrfProtection, bodyParser.json())
 server.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
