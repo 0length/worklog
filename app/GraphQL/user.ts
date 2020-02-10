@@ -32,7 +32,7 @@ export const typeDefs =  gql`
 
     extend type Query {
         users: [User]
-        user(email: String!): User
+        user(username: String!): User
     }
 
     input UserWhereUniqueInput {
@@ -53,7 +53,7 @@ export const resolvers = {
         }, 
         user: async (obj:any, args:any, context:any, info:any) =>{
             const  access: any = await getAccess(context)
-            const result: any = await prisma.user({email: args.email})
+            const result: any = await prisma.user({username: args.username})
             if(access.user.indexOf("r")===-1){throw new Error("No Access")}else{return result}
         } 
     },

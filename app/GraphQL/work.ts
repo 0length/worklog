@@ -48,7 +48,7 @@ export const resolvers = {
         },
         work: async (obj: any, {name}: any, context: any, info: any) =>{
             const  access: any = await getAccess(context)
-            const result: any = await prisma.work(name)
+            const result: any = await prisma.work({name})
             if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result}
         }
     },

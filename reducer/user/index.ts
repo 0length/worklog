@@ -22,7 +22,6 @@ const userReducer = (state = initUser, action: any)=>{
         return {
             authToken: action.payload.token,
             isLoading:false,
-            userData: action.payload.user,
             asGuest: false,
             error:null
         };
@@ -33,6 +32,25 @@ const userReducer = (state = initUser, action: any)=>{
             isLoading: false,
             error: action.payload
         };
+        case userTypes.GET_USER_DATA:
+            return {
+                ...state,
+                isLoading: true,
+                error: null,
+            };
+            case userTypes.GET_USER_DATA_SUCCESS:
+            return {
+                ...state,
+                userData: action.payload,
+                isLoading:false,
+                error:null
+            };
+            case userTypes.GET_USER_DATA_FAILURE:
+            return{
+                ...state,
+                isLoading: false,
+                error: action.payload
+            };
         default:
         return state;
     }

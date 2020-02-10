@@ -20,3 +20,18 @@ export const authFailure = (message: any) => ({
     type: userTypes.AUTH_FAILURE,
     payload: message
 });
+
+export const getUserData = (param: any) => ({
+    type: userTypes.GET_USER_DATA,
+    query: param
+});
+
+export const getUserDataSuccess = (payload: any) => ({
+    type: userTypes.GET_USER_DATA_SUCCESS,
+    payload: payload
+});
+
+export const getUserDataFailure = (message: any) => ({
+    type: userTypes.GET_USER_DATA_FAILURE,
+    payload: message
+});
