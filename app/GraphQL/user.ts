@@ -54,7 +54,7 @@ export const resolvers = {
         user: async (obj:any, args:any, context:any, info:any) =>{
             const  access: any = await getAccess(context)
             const result: any = await prisma.user({username: args.username})
-            if(access.user.indexOf("r")===-1){throw new Error("No Access")}else{return result}
+            if(access.user.indexOf("r")===-1||access.owner.user.username!==args.username){throw new Error("No Access")}else{return result}
         } 
     },
     Mutation: {
