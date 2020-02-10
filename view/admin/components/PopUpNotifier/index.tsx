@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { css, createGlobalStyle } from 'styled-components'
 import NotifCard from './NotifCard'
 
@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     left: 10px;
     bottom: 10px;
     height: 40vh;
-    width: 30vw;
+    max-width: 30vw;
     z-index: 100000;
 `
 const Container = styled.div`
@@ -42,7 +42,6 @@ const PopUpNotifier: React.FC<any> = ({notification})=>{
         return setNotifDom({...temp})
     }
 
-
         let lastLength=0 
 
     useEffect(()=>{
@@ -54,20 +53,22 @@ const PopUpNotifier: React.FC<any> = ({notification})=>{
                 temp[btoa((created_at+idx).replace(/ /g,"_"))]=<NotifCard key={created_at+idx} {...{removeMe, message, timeOut, type, idx, created_at}}/>
                 setNotifDom({...temp})
             })
-            lastLength=notification.length
         }
-
+        lastLength=notification.length
     }, [notification])
 
 
-    return(<Wrapper className="wl-popupnotifier__wrapper" >
-        <GlobalStyle />
-        <Container>
-            {
-            Object.keys(notifDom).map((item)=>notifDom[item])
-            }
-        </Container>
-    </Wrapper>)
+    return(<>{
+    Object.keys(notifDom).length>0 &&
+    <Wrapper className="wl-popupnotifier__wrapper" >
+                <GlobalStyle />
+                <Container>
+                    {
+                    Object.keys(notifDom).map((item)=>notifDom[item])
+                    }
+                </Container>
+            </Wrapper>}
+    </>)
 }
 
 export default PopUpNotifier

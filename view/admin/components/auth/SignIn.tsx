@@ -35,7 +35,7 @@ const SignIn: React.FC<any> = ({setMode, auth})=>{
                 }}>Forget Password ?</a>
             </div>
             <div className="wl-login__actions" >
-                <Button onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user{name, email, password} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
+                <Button onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
             </div>
         </div>
     </div>

@@ -4,27 +4,30 @@ import { bindActionCreators } from 'redux';
 import { fetchArticles } from '../../reducer/actions';
 import  App  from './App';
 import  Auth  from './components/auth';
-import { authSuccess, unauth } from '../../reducer/user/actions';
+import { authSuccess, unauth, getUserData } from '../../reducer/user/actions';
 
 
 
 
 export const Main: React.FC<any> = (props)=>{
-  
+  let loadedToken: any, loadedUsername: any;
   const {
       user
     } = props;
 
   useEffect(()=>{
-    let loadedToken, loadedUser
     loadedToken = window.localStorage.getItem('WORKLOG://User/auth_token')
-    loadedUser = window.localStorage.getItem('WORKLOG://User/data')
-    loadedToken && loadedUser ? props.authSuccess({token:loadedToken, user: JSON.parse(atob(loadedUser))}) : props.unauth()
+    loadedToken ? props.authSuccess({token:loadedToken}) : props.unauth()
   }, [])
+
+  useEffect(()=>{
+    loadedUsername = window.localStorage.getItem('WORKLOG://User/data/username')
+    loadedUsername && props.getUserData(`{ user (username: "${atob(loadedUsername!)}") { username, email, password} } `)
+  }, [user.authToken])
   
   return (
     <>
-        {user && user.asGuest ?<Auth />:<App />}
+        {user && user.userData ?<App />:<Auth />}
     </>
   );
 }
@@ -33,7 +36,8 @@ const mapStateToProps = (state:any) => (state);
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       authSuccess,
-      unauth
+      unauth,
+      getUserData
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
