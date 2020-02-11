@@ -5,12 +5,12 @@
     <img alt="License: ISC" src="https://img.shields.io/badge/License-ISC-yellow.svg" />
   </a>
 </p>
+The project to managing what project did take and finish in the past. This project using mongodb for database, express for backend, prisma for orm, google drive apis client for storing binary data, graphql for rest api, rxjs for schaduler, react redux and styled component for frontend.
 
-> The project to managing what project did take and finish in the past. 
 ## Prerequirement
 - docker and docker composer
 - prisma cli
-- nodejs
+- nodejs and npm/yarn
 
 ## Install
 
