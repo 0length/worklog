@@ -6,6 +6,8 @@ import Header from './components/header'
 import { createGlobalStyle } from 'styled-components';
 import SideBar from './components/sidebar';
 import  ToasNotifier from './components/toast-notifier';
+import WorkDesk from './components/work-desk';
+import BreadCrumbs from './components/bread-crumbs';
 
 export const App: React.FC<any> = (props)=>{
 
@@ -44,23 +46,9 @@ export const App: React.FC<any> = (props)=>{
         <GlobalStyle />
         <Header />
         <SideBar  />
-        <ToasNotifier notification={notification}/> 
-        <button style={{zIndex: 10, color: 'blue', position: 'absolute', left: '500px', top: '500px'}} onClick={async ()=>{
-          const newData={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 10000, type: "info", created_at: new Date+""};
-          const newData2={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 12000, type: "success", created_at: new Date+""};
-          const newData3={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 14000, type: "warning", created_at: new Date+""};
-          const newData4={message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 15000, type: "danger", created_at: new Date+""};
-
-          await setNotification([...notification, newData, newData2, newData3, newData4]);
-          await setNotification([]);
-        setTimeout(() => {
-          console.log(notification.indexOf(newData),notification.indexOf(newData2))
-          // setNotification(notification.splice(notification.indexOf(newData), 1))
-          // setNotification(notification.splice(notification.indexOf(newData2), 1))
-          // setNotification(notification.splice(notification.indexOf(newData3), 1))
-          // setNotification([]);
-        }, 1);
-        }}>Yoa</button>
+        <BreadCrumbs/>
+        <WorkDesk />
+        <ToasNotifier /> 
     </div>
   );
 }
