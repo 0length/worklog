@@ -21,8 +21,10 @@ export const Main: React.FC<any> = (props)=>{
   }, [])
 
   useEffect(()=>{
-    loadedUsername = window.localStorage.getItem('WORKLOG://User/data/username')
-    loadedUsername && props.getUserData(`{ user (username: "${atob(loadedUsername!)}") { username, email, password} } `)
+    if(typeof user.authToken==="string"){
+      loadedUsername = window.localStorage.getItem('WORKLOG://User/data/username')
+      loadedUsername && props.getUserData(`{ user (username: "${atob(loadedUsername!)}") { username, email, password} } `)
+    }
   }, [user.authToken])
   
   return (
