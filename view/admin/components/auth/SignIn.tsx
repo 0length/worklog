@@ -16,10 +16,10 @@ const SignIn: React.FC<any> = ({setMode, auth})=>{
         </div>
         <div className="wl-login__form">
             <div className="form-group">
-                <Input {...{styleProfile: {auth:true}}} onChange={(e:any)=>{setEmail(e.target.value)}} type="text" placeholder="Email" name="email" />
+                <Input {...{styleProfile: {auth:true}}} onChange={(e:any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />
             </div>
             <div className="form-group">
-                <Input {...{styleProfile: {auth:true, last: true}}} onChange={(e: any)=>{setPassword(e.target.value)}} className="form-control-last" type="password" placeholder="Password" name="password" />
+                <Input {...{styleProfile: {auth:true, last: true}}} onChange={(e: any)=>{setPassword(e.target.value)}} value={password} className="form-control-last" type="password" placeholder="Password" name="password" />
             </div>
             <div className="wl-login__extra" style={{
                 marginTop: '2rem',
@@ -27,12 +27,12 @@ const SignIn: React.FC<any> = ({setMode, auth})=>{
                 justifyContent: 'space-between'
             }}>
                 <Checkbox name="rememberMe">Remember Me</Checkbox>
-                <a onClick={()=>{setMode('Forgot')}} id="kt_login_forgot" style={{
+                {/* <a onClick={()=>{setMode('Forgot')}} id="kt_login_forgot" style={{
                     fontWeight: 500,
                     color:'#595d6e',
                     transition: 'color .3s ease',
                     display: 'inline-block',
-                }}>Forget Password ?</a>
+                }}>Forget Password ?</a> */}
             </div>
             <div className="wl-login__actions" >
                 <Button onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>

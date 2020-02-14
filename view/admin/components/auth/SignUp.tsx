@@ -16,19 +16,19 @@ const SignUp: React.FC<any> = ({setMode, auth}) => {
             <div className="wl-login__form">
                 {/* <form className="wl-form" action=""> */}
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setName(e.target.value)}} type="text" placeholder="Fullname" name="fullname" />
+                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setName(e.target.value)}} value={name} type="text" placeholder="Fullname" name="fullname" />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setUsername(e.target.value)}} type="text" placeholder="Username" name="username" />
+                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setUsername(e.target.value)}} value={username} type="text" placeholder="Username" name="username" />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setEmail(e.target.value)}} type="text" placeholder="Email" name="email" />
+                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setPassword(e.target.value)}} type="password" placeholder="Password" name="password" />
+                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setPassword(e.target.value)}} value={password} type="password" placeholder="Password" name="password" />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true, last: true}}} onChange={(e: any)=>{setPassword(e.target.value)}} className="form-control-last" type="password" placeholder="Confirm Password" name="rpassword" />
+                        <Input {...{styleProfile: {auth:true, last: true}}} value={password} className="form-control-last" type="password" placeholder="Confirm Password" name="rpassword" />
                     </div>
                     <div className="wl-login__extra">
                         <Checkbox name="agreement">I Agree the terms and conditions.</Checkbox>

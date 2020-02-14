@@ -66,6 +66,11 @@ const GlobalStyle = createGlobalStyle`
         margin: 3rem 0;
         text-align: center
     }
+
+    .wl-login__account-link {
+        cursor: pointer;
+        font-weight: bold;
+    }
 `
 interface AllMode {
     [key: string]: JSX.Element
