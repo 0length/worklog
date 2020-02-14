@@ -10,7 +10,7 @@ const Header: React.FC<any> = (props) =>{
         display: -ms-flexbox;
         display: flex;
         justify-content: space-between;
-        height: 80px;
+        height: 8vh;
         transition: all .3s ease;
         background-color:#fff;
         box-shadow: 0 0 40px 0 rgba(82,63,105,.1);
