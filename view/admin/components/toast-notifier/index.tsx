@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css, createGlobalStyle } from 'styled-components'
-import {NotifCard} from '../element'
+import {ToastCard} from '../element'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 const Wrapper = styled.div`
     display: flex;
     position: fixed;
-    left: 10px;
+    right: 10px;
     bottom: 10px;
     height: auto;
-    max-width: 30vw;
+    max-width: 15vw;
     z-index: 100000;
 `
 const Container = styled.div`
@@ -32,9 +34,9 @@ interface ToastNotifierProps{
     notification: Array<ToastNotificationData>
 }
 //todo connect redux store Toast
-const ToastNotifier: React.FC<ToastNotifierProps> = ({notification})=>{
+const ToastNotifier: React.FC<any> = (props)=>{
+    const notification = props.toast.data
     const [notifDom, setNotifDom] = useState<ToastNotifDomData>({})
-    
     const removeMe = (key: string)=> {
         let temp = notifDom
         delete temp[key]
@@ -45,20 +47,20 @@ const ToastNotifier: React.FC<ToastNotifierProps> = ({notification})=>{
         let lastLength=0 
 
     useEffect(()=>{
-        if(lastLength<notification.length){
+        // if(lastLength<notification.length){
             notification.map((item: any, idx: any)=>{
-               console.log(item)
+            //    console.log(item)
                 const {message, timeOut, type, created_at} = item
                 const id = btoa((created_at+idx).replace(/ /g,"_"))
                 // let temp: any=notifDom
-                notifDom[id]=<NotifCard key={id} {...{removeMe, message, timeOut, type, idx, created_at}}/>
+                notifDom[id]=<ToastCard key={id} {...{removeMe, message, timeOut, type, idx, created_at}}/>
                 // setNotifDom({...temp})
             })
-            console.log('before', lastLength)
-            lastLength=Object.keys(notifDom).length
-            console.log('after', lastLength)
-        }
+        //     lastLength = notification.length
+        //     // console.log('after', lastLength)
+        // }
         
+        // console.log(notification.length)
     }, [notification])
 
 
@@ -73,5 +75,10 @@ const ToastNotifier: React.FC<ToastNotifierProps> = ({notification})=>{
             </Wrapper>}
     </>)
 }
+const mapStateToProps = (state:any) => (state);
 
-export default ToastNotifier
+const mapDispatchToProps = (dispatch:any) =>
+    bindActionCreators({
+    }, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(ToastNotifier)
+
