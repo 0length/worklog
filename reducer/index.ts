@@ -13,6 +13,7 @@ import {
 
 import userReducer from "./user";
 import menuReducer from "./menu";
+import toastReducer from "./toast";
   
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -159,7 +160,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      csrf: csrfReducer,
      fetchArticleReducer,
      user: userReducer,
-     menu: menuReducer
+     menu: menuReducer,
+     toast: toastReducer
     });
    export default Reducer;
   
