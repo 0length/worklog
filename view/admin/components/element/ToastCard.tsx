@@ -69,7 +69,6 @@ ${
             props.styleProfile && props.styleProfile.type === "warning" &&
                 css`
                 border-bottom:3px solid #AA7300;
-
                 `
         }
         
@@ -78,20 +77,18 @@ ${
             props.styleProfile && props.styleProfile.type === "danger" &&
                 css`
                 border-bottom:3px solid #A8029B;
-        
                 `
         }
 
-${
-    (props: any)=>
-    props.id && props.styleProfile && props.styleProfile.timeOut &&
-        css`
-        width: var(--${props.id});
-        transition: width ${props.styleProfile.timeOut}ms linear 0s;
-        
-        `
+        ${
+            (props: any)=>
+            props.id && props.styleProfile && props.styleProfile.timeOut &&
+                css`
+                width: var(--${props.id});
+                transition: width ${props.styleProfile.timeOut}ms linear 0s;      
+                `
+        }
     }
-}
 }
 `;
 const Span = styled.span`
@@ -106,12 +103,12 @@ interface NotificationData {
     removeMe:  (id: string) => void;
     idx: number;
 }
-const NotifCard: React.FC<NotificationData>=(props)=>{
+const ToastCard: React.FC<NotificationData>=(props)=>{
     let {message, timeOut, type, removeMe, idx, created_at} = props;
     !created_at?created_at=new Date().toString():!idx.toString()?idx=Math.floor((Math.random() * 10)):!type?type="info":!message?message="Hi. I'm a Toast.":""
     const id = btoa((created_at+idx).replace(/ /g,"_"));
     useEffect(()=>{
-        console.log(props, type, id, idx)
+        // console.log(props, type, id, idx)
         if(timeOut)
         {const item = document.getElementById(id)
             setTimeout(()=>{
@@ -134,4 +131,4 @@ const NotifCard: React.FC<NotificationData>=(props)=>{
     </Container></span>)
 }
 
-export default NotifCard
+export default ToastCard

@@ -1,12 +1,12 @@
 import Button from './Button'
 import Input from './Input'
 import Checkbox from './Checkbox'
-import NotifCard from './NotifCard'
+import ToastCard from './ToastCard'
 
 export {
     Button,
     Checkbox,
     Input,
-    NotifCard
+    ToastCard
 }
 
