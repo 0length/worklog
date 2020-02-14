@@ -17,6 +17,7 @@ useEffect(()=>{
                 className="wl-sidebar__menu-main__item"
             >
                 <div className="wl-sidebar__menu-main__item-toggle" onClick={()=>{props.setActiveMenu(item.name)}}>
+                <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
                 <ul className="wl-sidebar__menu-2nd">
@@ -27,6 +28,7 @@ useEffect(()=>{
                                 className="wl-sidebar__menu-2nd__item"
                             >
                                     <div className="wl-sidebar__menu-nd__item-toggle" onClick={()=>{props.setActiveMenu(child.name)}}>
+                                    &nbsp;&nbsp;&nbsp;
                                         <span className="wl-sidebar__menu__text">{child.name}</span>
                                     </div>
                             </li>)

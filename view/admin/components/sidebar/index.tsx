@@ -16,7 +16,7 @@ const SideBar: React.FC<any> = (props)=>{
         display: -ms-flexbox;
         display: flex;
         justify-content: space-between;
-        width: 255px;
+        width: 13vw;
         height: 100%;
         transition: all .3s ease;
         background-color:#fff;
@@ -33,14 +33,16 @@ const SideBar: React.FC<any> = (props)=>{
     }
 
     .wl-sidebar__menu {
-        margin-top: 80px;
-        padding-top: 10px;
+        margin-top: 10vh;
+        padding-top: 2vh;
+        padding-left:0;
     }
 
     .wl-sidebar__menu-main{
         margin: none;
         list-style: none;
         box-sizeing: border-box;
+        margin-left: -1vw;
         
     }
 
@@ -66,10 +68,11 @@ const SideBar: React.FC<any> = (props)=>{
         -ms-flex-align: stretch;
         align-items: stretch;
         margin: 0;
-        padding: 5px 40px;
+        padding: 1vh 2vw;
         text-decoration: none;
         outline: 0;
-        min-height: 35px;
+        min-height: 3.5vh;
+        margin-left: -1.5vw;
     }
     
     .wl-sidebar__menu__text{
@@ -77,7 +80,8 @@ const SideBar: React.FC<any> = (props)=>{
         align-item: center;
         flex-grow: 1;
         font-weight: 400;
-        font-size: 1rem;
+        font-size: 1.8vh;
+        color: #323638;
         text-transform: initial;
         -webkit-box-align: center;
         -webkit-box-flex: 1;
@@ -97,6 +101,7 @@ const SideBar: React.FC<any> = (props)=>{
         box-sizeing: border-box;
         transform: translateZ(0);
         -webkit-transform-style: preserve-3d;
+        margin-left: 0vw;
     }
 
     .wl-sidebar__menu-2nd__item{
@@ -118,7 +123,7 @@ const SideBar: React.FC<any> = (props)=>{
         text-decoration: none;
         outline: 0;
         min-height: 25px;
-        margin-left: 10px;
+        margin-left: -0.5vw;
     }
 
     `
