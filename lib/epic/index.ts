@@ -1,5 +1,5 @@
-import { of, from, observable, queueScheduler } from 'rxjs';
-import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn } from 'rxjs/operators';
+import { of, from, observable, queueScheduler, interval, merge, Observable, concat, timer } from 'rxjs';
+import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn, take, mapTo, tap, delay } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
 import { userTypes } from '../../reducer/user/types';
@@ -7,6 +7,11 @@ import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure } from
 import { AjaxResponse } from 'rxjs/ajax';
 import { menuTypes } from '../../reducer/menu/types';
 import { getMenuSuccess, getMenuFailure } from '../../reducer/menu/actions';
+import { toastType } from '../../reducer/toast/types';
+import { pushToast, pushedToast, clearToast } from '../../reducer/toast/action';
+import arrayChunks from '../utils/arrayChunks';
+import sortNumber from '../utils/sortNumber';
+import reducer from '../utils/reducerSum';
 
 
 
@@ -77,15 +82,14 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
         })}),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>{
-             console.log(payload)
                 if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
          map((payload: any)=>{
-             console.log(payload)
-                if(!payload.error){
-                return getUserDataSuccess(payload)}else{
+                if(payload.error){
                 return getUserDataFailure(payload.error)
+                }else{
+                return getUserDataSuccess(payload)
                 }
             }),
          catchError((error: any) =>of(getUserDataFailure(error.message)))
@@ -93,6 +97,71 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
     
  }
 
+
+ const setToast = (action$: any, store: any)=>{ //action$ is a stream of actions
+    //action$.ofType is the outer Observable
+    let act : any;//for accesing action outside flat map
+     return action$.pipe(
+         ofType(toastType.SET),
+         mergeMap((action: any)=>{
+            //  if(!action.pending.length){
+                let data = action.send
+                console.log("data", data)
+                let chunks: any;
+
+                chunks = arrayChunks(data, 4)
+                let allTimeout = data.map((item: any)=>item.timeOut).sort(sortNumber)
+                let aveDelay = allTimeout.reduce(reducer)/data.length
+                let maxDelay = allTimeout[0]
+                // store.dispatch()
+                // return pushedToast(chunks[0], nextdelay, chunks.splice(0, 1))
+                
+                 return Observable.create((observer: any)=>{
+                    // chunks.map((im, ix)=>{
+                        // const nextdelay = chunks[0].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[0].length-1]
+                        timer(0, maxDelay+100).pipe(take(chunks.length-1)).subscribe((x)=>{
+                            // console.log(aveDelay, allTimeout, "WOY")
+                            // observer.next(clearToast())
+                            observer.next(pushedToast(chunks[x]))
+                            // aveDelay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[x].length-1]
+                    //     delay(nextdelay)
+                        })
+                    })
+                // })
+            //  }
+            //  if(action.pending.length){
+
+            //  }
+
+        }),
+         catchError((error: any) =>of(clearToast()))
+     )
+ }
+
+//  const pendingToast = (action$: any, store: any)=>{
+//     //  var act: any = {delay:0}
+//     return action$.pipe(
+//         ofType(toastType.SETED),
+//         map((action: any)=>{
+//            let pending = action.pending 
+//            console.log(pending, pending.splice(0,1))
+//            const nextdelay = pending[0].map((item: any)=>item.timeOut).sort(sortNumber)[pending[0].length-1]
+//           return of(()=>pending[0]).pipe(
+//           delay(action.delay),
+//           map((first: any)=>pushedToast(first, nextdelay, pending.splice(0, 1))
+//           ))}),
+//         // catchError((error: any) =>of(clearToast()))
+//     )
+//  }
+
+ const cleanerToast =  (action$: any, store: any)=>{
+   return action$.pipe(
+       ofType(toastType.SETED),
+       delay(1000),
+       map(()=>clearToast())
+    )
+}
+   
 /*
     The API returns the data in the following format:
     {
@@ -178,14 +247,19 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
 
 //  }
 
- export const rootEpic = (action$: any, store: any)=>
+ export const rootEpic = 
+ (action$: any, store: any)=>
  combineEpics(
     // fetchArticle, 
     auth,
     getMenu,
-    getUserData
- )(action$.pipe(
-     observeOn(queueScheduler)
+    getUserData,
+    setToast,
+    // pendingToast,
+    cleanerToast
+ )
+ (action$.pipe(
+     subscribeOn(queueScheduler)
  ), store);
 
 /**
