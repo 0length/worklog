@@ -8,6 +8,9 @@ export const initUser = {
 export const initMenu = {
     isLoading: false,
     error: null,
-    data: [{name: "dashboard", parent_name: "", sequence:"0"}],
+    data: [
+        // {name: "dashboard", parent_name: "", sequence:"0"},
+        {name: "testing", parent_name: "", sequence:"5"}
+    ],
     active: "dashboard"
 }
