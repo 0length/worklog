@@ -99,30 +99,6 @@ import toastReducer from "./toast";
     }
 }
 
-  const fetchArticleReducer = (state = initialArticleState, action: any) =>{
-    switch (action.type){
-      case FETCH_ARTICLES:
-        return {
-            data:[],
-            isLoading: true,
-            error: null
-        };
-      case FETCH_ARTICLES_SUCCESS:
-        return {
-            data: action.payload,
-            isLoading:false,
-            error:null
-        };
-      case FETCH_ARTICLES_FAILURE:
-        return{
-            data: [],
-            isLoading: false,
-            error: action.payload
-        };
-      default:
-        return state;
-    }
-  }
   
   // const translateArticleReducer = (state = initialTranslateArticleState, action) =>{
   //   switch (action.type){
@@ -158,7 +134,6 @@ const csrfReducer = (state: any= null, action: any) =>{
    export const Reducer: R<CombinedState<any>> =combineReducers({
      //authReducer, 
      csrf: csrfReducer,
-     fetchArticleReducer,
      user: userReducer,
      menu: menuReducer,
      toast: toastReducer

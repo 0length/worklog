@@ -12,9 +12,10 @@ const menuReducer = (state = initMenu, action: any)=>{
         };
         case menuTypes.GET_SUCCESS:
         return {
+            ...state,
             isLoading: false,
             error: null,
-            data: [...action.payload]
+            data: [...new Set([ ...action.payload,...state.data])]
         };
         case menuTypes.GET_FAILURE:
         return{
