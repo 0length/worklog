@@ -1,6 +1,6 @@
 import styled, {css} from 'styled-components'
 
-const Input = styled.input`
+const Input = styled(styled.input`
     display: block;
     width: 100%;
     // height: calc(1.5em + 1.3rem + 2px);
@@ -26,9 +26,8 @@ const Input = styled.input`
         border-bottom: 1px solid rgba(235,237,242,.8);
         padding: 1rem 0;
         margin-top: .1rem;
-        color:
-        #595d6e;
-
+        color: #595d6e;
+        background: none;
         `
     }
     ${(props: any)=>
@@ -37,6 +36,11 @@ const Input = styled.input`
         border: 0;
         `
     }
+`)`
+&:-internal-autofill-selected {
+    background-color: none;
+    color: none;
+}
 `
 
 export default Input
