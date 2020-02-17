@@ -5,9 +5,9 @@ import { fetchArticles } from '../../reducer/actions';
 import Header from './components/header'
 import { createGlobalStyle } from 'styled-components';
 import SideBar from './components/sidebar';
-import  ToasNotifier from './components/toast-notifier';
 import WorkDesk from './components/work-desk';
 import BreadCrumbs from './components/bread-crumbs';
+import ToastNotifier from './components/toast-notifier';
 
 export const App: React.FC<any> = (props)=>{
 
@@ -48,7 +48,7 @@ export const App: React.FC<any> = (props)=>{
         <SideBar  />
         <BreadCrumbs/>
         <WorkDesk />
-        <ToasNotifier /> 
+        <ToastNotifier />
     </div>
   );
 }
