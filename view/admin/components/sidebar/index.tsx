@@ -73,6 +73,7 @@ const SideBar: React.FC<any> = (props)=>{
         outline: 0;
         min-height: 3.5vh;
         margin-left: -1.5vw;
+        z-index:97;
     }
     
     .wl-sidebar__menu__text{
@@ -91,7 +92,6 @@ const SideBar: React.FC<any> = (props)=>{
     }
 
     .wl-sidebar__menu-2nd{
-        display: flex;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
