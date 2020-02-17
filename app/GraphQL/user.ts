@@ -66,7 +66,7 @@ export const resolvers = {
             }
             const valid = await bcrypt.compare(password, user.password)
             if(!valid){
-                throw new Error('Invalid password')
+                throw new Error('Invalid Password')
             }
             const token = tokenGenerator({ userId: user.email })
             user.password = password
