@@ -20,6 +20,26 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    input:focus{
+        outline: none;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+    // border: 1px solid green;
+    -webkit-text-fill-color: black;
+    // -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    -webkit-box-shadow: none;
+    transition: background-color 5000s ease-in-out 0s;
+    }
+    
     body {
         font-family: Poppins,Helvetica,sans-serif;
         font-size: 1rem;
@@ -79,15 +99,15 @@ interface AllMode {
 const Auth: React.FC<any> = (props)=>{
 
     const {
-        fetchArticles,
         auth,
+        user
         } = props;
-
+    const {error} = user
     const [mode, setMode]= useState<string>('SignIn');
     const allMode: AllMode = {
-        SignIn :    <SignIn setMode={setMode} auth={auth}/>,
-        SignUp :    <SignUp setMode={setMode} auth={auth}/>,
-        Forgot :    <Forgot setMode={setMode} auth={auth}/>
+        SignIn :    <SignIn setMode={setMode} auth={auth} error={error}/>,
+        SignUp :    <SignUp setMode={setMode} auth={auth} error={error}/>,
+        Forgot :    <Forgot setMode={setMode} auth={auth} error={error}/>
     }
 
     const setModeToDom = (modeWant: string)=>{
