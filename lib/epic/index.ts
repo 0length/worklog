@@ -1,4 +1,4 @@
-import { of, from, observable, queueScheduler, interval, merge, Observable, concat, timer } from 'rxjs';
+import { of, from, observable, queueScheduler, interval, merge, Observable, concat, timer, Observer } from 'rxjs';
 import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn, take, mapTo, tap, delay } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
@@ -12,30 +12,33 @@ import { pushToast, pushedToast, clearToast } from '../../reducer/toast/action';
 import arrayChunks from '../utils/arrayChunks';
 import sortNumber from '../utils/sortNumber';
 import reducer from '../utils/reducerSum';
+import { toastError } from '../utils/toastModel';
+import localStorageKeys from '../const/localStorageKeys';
 
 
 
-const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;//for accesing action outside flat map
+const auth = (action$: any, store: any)=>{ 
      return action$.pipe(
          ofType(userTypes.AUTH),
-         flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            // "query{  works{ name }}"
+         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
             action.query
-        }})}),
+        }})),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>{
                 if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
-         map((payload: any)=>{
+         mergeMap((payload: any)=>{
+             return Observable.create((observer: any)=>{
                 if(payload.token&&payload.user){
-                localStorage.setItem("WORKLOG://User/auth_token", payload.token);
-                localStorage.setItem("WORKLOG://User/data/username", btoa(payload.user.username));
-                return authSuccess(payload)}else{
-                return authFailure(payload.error)
+                    localStorage.setItem(localStorageKeys.auth_token, payload.token);
+                    localStorage.setItem(localStorageKeys.username, btoa(payload.user.username));
+                    observer.next(authSuccess(payload))
+                }else{
+                    observer.next(authFailure(payload.error==="Not Found" || payload.error==="Invalid Password"?"Invalid Username or Password":payload.error))
+                    observer.next(pushToast([toastError(payload.error==="Not Found" || payload.error==="Invalid Password"?"Invalid Username or Password":payload.error, 0)]))
                 }
+             })
             }),
          catchError((error: any) =>of(authFailure(error.message)))
      )
@@ -48,23 +51,25 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
      return action$.pipe(
          ofType(menuTypes.GET),
          flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            // "query{  works{ name }}"
             action.query
             },headers:{authorization:`Bearer ${store.value.user.authToken}`}
         })}),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>{
-             console.log(payload)
                 if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
-         map((payload: any)=>{
-             console.log(payload)
-                if(!payload.error){
-                return getMenuSuccess(payload)}else{
-                return getMenuFailure(payload.error)
+         mergeMap((payload: any)=>{
+            return Observable.create((observer: any)=>{
+                if(payload.error){
+                    observer.next(getMenuFailure(payload.error))
+                    observer.next(pushToast([toastError(payload.error==="jwt expired"?"Your Session has Expired":payload.error)]))
                 }
-            }),
+                if(!payload.error){
+                    observer.next(getMenuSuccess(payload))
+                }
+            })
+        }),
          catchError((error: any) =>of(getMenuFailure(error.message)))
      )
     
@@ -85,13 +90,19 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
                 if(payload.errors){return {error: payload.errors[0].message}}
                 if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
             }), 
-         map((payload: any)=>{
+         mergeMap((payload: any)=>{
+            return Observable.create((observer: any)=>{
                 if(payload.error){
-                return getUserDataFailure(payload.error)
+               
+                    observer.next(getUserDataFailure(payload.error))
+                    observer.next(pushToast([toastError(payload.error==="jwt expired"?"Your Session has Expired":payload.error)]))
+                    localStorage.removeItem(localStorageKeys.auth_token);
+                    localStorage.removeItem(localStorageKeys.username);
                 }else{
-                return getUserDataSuccess(payload)
+                    observer.next(getUserDataSuccess(payload))
                 }
-            }),
+             })
+        }),
          catchError((error: any) =>of(getUserDataFailure(error.message)))
      )
     
@@ -108,21 +119,23 @@ const auth = (action$: any, store: any)=>{ //action$ is a stream of actions
                 let data = action.send
                 console.log("data", data)
                 let chunks: any;
-
-                chunks = arrayChunks(data, 4)
+                data.length>4?chunks = arrayChunks(data, 4):chunks = [data]
                 let allTimeout = data.map((item: any)=>item.timeOut).sort(sortNumber)
                 let aveDelay = allTimeout.reduce(reducer)/data.length
                 let maxDelay = allTimeout[0]
                 // store.dispatch()
                 // return pushedToast(chunks[0], nextdelay, chunks.splice(0, 1))
-                
+                console.log(maxDelay, aveDelay, allTimeout, chunks)
                  return Observable.create((observer: any)=>{
                     // chunks.map((im, ix)=>{
                         // const nextdelay = chunks[0].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[0].length-1]
+                        chunks.length<2&&observer.next(pushedToast(chunks[0]))
                         timer(0, maxDelay+100).pipe(take(chunks.length-1)).subscribe((x)=>{
                             // console.log(aveDelay, allTimeout, "WOY")
                             // observer.next(clearToast())
-                            observer.next(pushedToast(chunks[x]))
+                            const delay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[0]
+                            setTimeout(observer.next(pushedToast(chunks[x])), delay+5000)
+                            
                             // aveDelay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[x].length-1]
                     //     delay(nextdelay)
                         })
