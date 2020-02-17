@@ -7,7 +7,7 @@ margin: 0 0 20px 0;
 border-radius: 4px;
 background: #5867dd;
 color: #fff;
-border: 1px solid #5867dd;
+// border: 1px solid #5867dd;
 ${
     (props: any)=>
     props.styleProfile && props.styleProfile.type === "info" &&
@@ -36,16 +36,24 @@ ${
     (props: any)=>
     props.styleProfile && props.styleProfile.type === "danger" &&
         css`
-        background: #fd27eb;
-
+        background: #FD397A;
+        // #fd27eb;
         `
 }
+${
+    (props: any)=>
+    props.styleProfile && props.styleProfile.timeout === 0 &&
+        css`
+        padding: 0.5rem 1rem;
+        `
+}
+
 `)`
     &::after {
         position: absolute;
         left: 0;        
         content : "";
-        margin-top: 2.02rem;
+        margin-top: 2.03rem;
         border-bottom:2px solid #260026;
         border-bottom-left-radius: 4px;
         ${
@@ -76,7 +84,7 @@ ${
             (props: any)=>
             props.styleProfile && props.styleProfile.type === "danger" &&
                 css`
-                border-bottom:3px solid #A8029B;
+                border-bottom:3px solid #A80238;
                 `
         }
 
@@ -85,9 +93,12 @@ ${
             props.id && props.styleProfile && props.styleProfile.timeOut &&
                 css`
                 width: var(--${props.id});
-                transition: width ${props.styleProfile.timeOut}ms linear 0s;      
+                opacity: var(--${props.id}opacity);
+                transition: width ${props.styleProfile.timeOut}ms linear 0s;     
+                // transition: opacity 1000ms ease-out 3s;     
                 `
         }
+
     }
 }
 `;
@@ -100,7 +111,7 @@ interface NotificationData {
     timeOut: number;
     type: string;
     created_at: string;
-    removeMe:  (id: string) => void;
+    removeMe?:  (id: string) => void;
     idx: number;
 }
 const ToastCard: React.FC<NotificationData>=(props)=>{
@@ -120,14 +131,14 @@ const ToastCard: React.FC<NotificationData>=(props)=>{
             }, 100)
 
             setTimeout(()=>{
-                removeMe(id)
+                removeMe && removeMe(id)
             }, timeOut)}
     }, []);
 
 
     return (<span>
     <Container id={id} {...{styleProfile: {type, timeOut}}}>
-    <Span>{message}</Span>
+    <i className="flaticon-warning"></i> &nbsp; <Span>{message}</Span>
     </Container></span>)
 }
 
