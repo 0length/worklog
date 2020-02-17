@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, Input } from '../element'
+import { Button, Checkbox, Input, ToastCard } from '../element'
+import ToastNotifier from '../toast-notifier'
 
-const SignIn: React.FC<any> = ({setMode, auth})=>{
+const SignIn: React.FC<any> = ({setMode, auth, error})=>{
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
 
@@ -14,6 +15,7 @@ const SignIn: React.FC<any> = ({setMode, auth})=>{
         }}>
             <h3 className="wl-login__title">Sign In To Admin</h3>
         </div>
+        {error && <ToastCard message={error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
         <div className="wl-login__form">
             <div className="form-group">
                 <Input {...{styleProfile: {auth:true}}} onChange={(e:any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />
