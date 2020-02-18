@@ -1,5 +1,6 @@
 import { of, from, observable, queueScheduler, interval, merge, Observable, concat, timer, Observer } from 'rxjs';
-import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn, take, mapTo, tap, delay } from 'rxjs/operators';
+import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn, take, mapTo, tap, delay, takeUntil } from 'rxjs/operators';
+import { webSocket } from "rxjs/webSocket";
 import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
 import { userTypes } from '../../reducer/user/types';
@@ -14,8 +15,15 @@ import sortNumber from '../utils/sortNumber';
 import reducer from '../utils/reducerSum';
 import { toastError } from '../utils/toastModel';
 import localStorageKeys from '../const/localStorageKeys';
+import { workTypes } from '../../reducer/work/types';
 
 
+const socket$ = webSocket(
+    {
+        url:"ws://localhost:3000/graphql",
+        protocol: "graphql-ws",
+    }
+  );
 
 const auth = (action$: any, store: any)=>{ 
      return action$.pipe(
@@ -134,7 +142,7 @@ const auth = (action$: any, store: any)=>{
                             // console.log(aveDelay, allTimeout, "WOY")
                             // observer.next(clearToast())
                             const delay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[0]
-                            setTimeout(observer.next(pushedToast(chunks[x])), delay+5000)
+                            setTimeout(observer.next(pushedToast(chunks[x])), delay+3000)
                             
                             // aveDelay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[x].length-1]
                     //     delay(nextdelay)
@@ -150,6 +158,23 @@ const auth = (action$: any, store: any)=>{
          catchError((error: any) =>of(clearToast()))
      )
  }
+
+
+ const workSubsriber = (action$: any, store: any)=>{ //action$ is a stream of actions
+    //action$.ofType is the outer Observable
+    let act : any;//for accesing action outside flat map
+     return action$.pipe(
+         ofType(workTypes.START_SUBSCRIBE_WORKS),
+         mergeMap((action: any) =>{
+            return Observable.create((observer: any)=>{           
+                socket$.subscribe(({payload}: any)=>{observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: payload.data[Object.keys(payload.data)[0]]})})
+                socket$.next({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n    name\n  }\n}\n"}})
+            })
+        }),
+         catchError((error: any) =>of(getMenuFailure(error.message)))
+     )
+ }
+
 
 //  const pendingToast = (action$: any, store: any)=>{
 //     //  var act: any = {delay:0}
@@ -269,7 +294,8 @@ const auth = (action$: any, store: any)=>{
     getUserData,
     setToast,
     // pendingToast,
-    cleanerToast
+    cleanerToast,
+    workSubsriber
  )
  (action$.pipe(
      subscribeOn(queueScheduler)
