@@ -31,4 +31,8 @@ To install the project you need to have `node` and `npm`
     npm run prisma
     ...
     ```
-4. Happy Coding
+4. Seeding
+    ```sh
+    npm run db-seed
+    ``
+5. Happy Coding
