@@ -34,5 +34,5 @@ To install the project you need to have `node` and `npm`
 4. Seeding
     ```sh
     npm run db-seed
-    ``
+    ```
 5. Happy Coding
