@@ -1,6 +1,14 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
 import { getAccess } from '../lib/utils/getAccess';
+import { BehaviorSubject } from 'rxjs'
+import observableToIterator from '../lib/utils/observableToAsyncIterator';
+import { map } from 'rxjs/operators';
+
+
+
+const workSub =  async ()=>await prisma.works()
+const workSubject = new BehaviorSubject(workSub())
 
 export const typeDefs =  gql`
     type Work {
@@ -49,21 +57,24 @@ export const resolvers = {
         work: async (obj: any, {name}: any, context: any, info: any) =>{
             const  access: any = await getAccess(context)
             const result: any = await prisma.work({name})
-            if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result}
+            if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result }
         }
     },
     Mutation: {
         createWork: async (obj: any, {name, p, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
+            console.log({name, p, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},  access.owner.user.name)
             const result: any = async () => {
                 const workWithNameAlreadyExists = await prisma.work({name});
                 if(workWithNameAlreadyExists){
                 throw new Error(` ${name} already in use`);
                 }
-                const createdWork = await prisma.createWork({name, p, author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links});
+               
+                const createdWork =  await prisma.createWork({name, p, author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links});
+                workSubject.next(workSub())
                 return createdWork;
             }
-            if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
 
         },
         updateWork: async (obj: any, { where, name, p, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links }: any, context: any, info: any)=>{
@@ -96,6 +107,11 @@ export const resolvers = {
         }
     },
     Subscription: {
-        /**Masih Kosong */
+        works: {
+            subscribe: () => {
+                return observableToIterator(
+                workSubject.pipe(map((item: any)=>({works: item})))
+            )},
+        }
     }
 }
