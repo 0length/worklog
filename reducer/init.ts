@@ -14,3 +14,10 @@ export const initMenu = {
     ],
     active: "dashboard"
 }
+
+export const initWork = {
+    uptodate: [],
+    data: [],
+    isLoading: false,
+    error: null
+}

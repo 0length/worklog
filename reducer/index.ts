@@ -14,6 +14,7 @@ import {
 import userReducer from "./user";
 import menuReducer from "./menu";
 import toastReducer from "./toast";
+import workReducer from "./work";
   
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -136,7 +137,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      csrf: csrfReducer,
      user: userReducer,
      menu: menuReducer,
-     toast: toastReducer
+     toast: toastReducer,
+     work: workReducer
     });
    export default Reducer;
   
