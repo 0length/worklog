@@ -23,6 +23,12 @@ To install the project you need to have `node` and `npm`
 2. from the root of the project: 
     - ```npm install <package-name0> <package-name1> <package-name2> .etc --global``` to install  (prisma-cli, ???) dependencies gobally
     - ```npm install``` to install all dependencies locally
-    - ```npm run prisma``` to generate prisma orm source code
+    
 4. Build the database service using docker and docker-composer
-    ???
+    ```sh
+    cd worklog/prisma
+    docker-compose up -d --build prisma && docker-compose up -d --build mongo
+    npm run prisma
+    ...
+    ```
+5. Done
