@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import { Button, Checkbox, Input } from '../element'
+import { Button, Checkbox, Input, ToastCard } from '../element'
 
-const SignUp: React.FC<any> = ({setMode, auth}) => {
+const SignUp: React.FC<any> = ({setMode, auth, error}) => {
     const [name, setName] = useState<string>("")
     const [username, setUsername] = useState<string>("")
     const [email, setEmail] = useState<string>("")
@@ -13,6 +13,7 @@ const SignUp: React.FC<any> = ({setMode, auth}) => {
                 <h3 className="wl-login__title">Sign Up</h3>
                 <div className="wl-login__desc">Enter your details to create your account:</div>
             </div>
+            {error && <ToastCard message={error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
             <div className="wl-login__form">
                 {/* <form className="wl-form" action=""> */}
                     <div className="form-group">
