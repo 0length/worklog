@@ -13,6 +13,7 @@ import Admin from '../view/admin/Admin'
 import Reducer from '../reducer'
 import { getfile } from './GDrive/getfile'
 import { postfile } from './GDrive/postfile'
+import { createServer } from 'http'
 // import Routes from '../view/portfolio/index'
 // const bodyParser = require('body-parser')
 const { ApolloServer } = require('apollo-server-express')
@@ -39,7 +40,7 @@ app.use(cookieParser())
 // app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 // app.use(compression())
-const server = new ApolloServer({ 
+const apolloServer = new ApolloServer({ 
     modules: [
         require('./GraphQL/user'),  
         require('./GraphQL/work'),
@@ -51,7 +52,7 @@ const server = new ApolloServer({
     
     path:'/graphql',
     context: async ({req}:any) =>{
-      if(req.headers.authorization){
+      if(req && req.headers && req.headers.authorization){
         return {
           token: req.headers.authorization,  
         }
@@ -60,7 +61,7 @@ const server = new ApolloServer({
 })
 
 app.use('/graphql', csrfProtection, bodyParser.json())
-server.applyMiddleware({app})
+apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
     const csrf_token = req.csrfToken()
@@ -111,7 +112,8 @@ bodyParserencoded,
  (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
 
 
-
-app.listen({port: 3000}, () =>(
-    console.log(`🚀 Server ready at http://localhost:3000`)
+const httpServer = createServer(app);
+apolloServer.installSubscriptionHandlers(httpServer);
+httpServer.listen({port: 3000}, () =>(
+    console.log(`🚀 Server ready at http://localhost:3000`, apolloServer.subscriptionsPath)
 ))
