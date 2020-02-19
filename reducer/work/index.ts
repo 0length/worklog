@@ -40,7 +40,7 @@ const workReducer = (state = initWork, action: any)=>{
             case workTypes.STOP_SUBSCRIBE_WORKS:
             return{
                 ...state,
-                uptodate: null
+                uptodate: []
             };
         default:
         return state;
