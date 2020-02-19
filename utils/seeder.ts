@@ -6,7 +6,7 @@ const groupSeeder = async ({name, access}: Group)=>await prisma.createGroup({nam
 const userSeeder = async ({name, username, email, password, group}: User)=>await prisma.createUser({name, username, email, password, group})
 const workSeeder = async ({name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}: Work)=>await prisma.createWork({name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p})
 
-
+const ikisandiku = '$2a$10$/5z0fKK1YYXAAnY7cDJJ7.IfDr4k3LpY9tvqH7ToSeHIO8kVSNlSO'
 
 const initGroup = [
     {name:'SuperUser', access:`{"dashboard":"r", "user":"crud", "group":"crud", "menu":"crud", "work":"crud", "post":"crud"}`},
@@ -14,9 +14,9 @@ const initGroup = [
     {name:'Guest', access:`{"dashboard":"r", "user":"", "group":"", "menu":"r", "work":"crud", "post":"crud"}`},
 ]
 const initUser = [
-    {name: 'su', username: 'su', email: 'su@this.site', password: 'ikisandiku', group: 'SuperUser'},
-    {name: 'admin', username: 'admin', email: 'admin@this.site', password: 'ikisandiku', group: 'Admin'},
-    {name: 'guest', username: 'guest', email: 'guest@this.site', password: 'ikisandiku', group: 'Guest'}
+    {name: 'su', username: 'su', email: 'su@this.site', password: ikisandiku, group: 'SuperUser'},
+    {name: 'admin', username: 'admin', email: 'admin@this.site', password: ikisandiku, group: 'Admin'},
+    {name: 'guest', username: 'guest', email: 'guest@this.site', password: ikisandiku, group: 'Guest'}
 
 ]
 const initMemu = [
