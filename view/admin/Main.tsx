@@ -5,8 +5,6 @@ import { fetchArticles } from '../../reducer/actions';
 import  App  from './App';
 import  Auth  from './components/auth';
 import { authSuccess, unauth, getUserData } from '../../reducer/user/actions';
-import { startSubscribeWork } from '../../reducer/work/actions';
-import ToastNotifier from './components/toast-notifier';
 import localStorageKeys from '../../lib/const/localStorageKeys';
 import LoadingBar from './components/loadingbar';
 
@@ -19,6 +17,7 @@ export const Main: React.FC<any> = (props)=>{
       user
     } = props;
 
+
   useEffect(()=>{
     loadedToken = window.localStorage.getItem(localStorageKeys.auth_token)
     loadedToken ? props.authSuccess({token:loadedToken}) : props.unauth()
@@ -27,12 +26,10 @@ export const Main: React.FC<any> = (props)=>{
   useEffect(()=>{
     if(typeof user.authToken==="string"){
       loadedUsername = window.localStorage.getItem(localStorageKeys.username)
-      loadedUsername && props.getUserData(`{ user (username: "${atob(loadedUsername!)}") { username, email, password} } `)
+      loadedUsername && props.getUserData(`{ user (username: "${atob(loadedUsername!)}") { username, name, email, password} } `)
     }
   }, [user.authToken])
-  useEffect(()=>{
-    user && user.userData?props.startSubscribeWork():null
-  }, [user.userData])
+  
 
   return (
     <>
@@ -47,8 +44,7 @@ const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       authSuccess,
       unauth,
-      getUserData,
-      startSubscribeWork
+      getUserData
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

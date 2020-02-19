@@ -55,7 +55,7 @@ export const resolvers = {
                 const createdComment = await prisma.createComment({post_title, parent_id, user_username: access.owner.user.name, text_content});
                 return createdComment;
             }
-            if(access.comments.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.comments.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
 
         },
         updateComment: async (obj: any, { where, parent_id, post_title, text_content }: any, context: any, info: any)=>{
@@ -71,7 +71,7 @@ export const resolvers = {
                 const updatedComment = await prisma.updateComment({data:{parent_id, post_title, text_content},where:{id:where.id}})
                 return updatedComment;
             }
-            if(access.comment.indexOf("u")===-1){throw new Error("No Access")}else{return result}
+            if(access.comment.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
         deleteComment: async (obj: any, {where}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -84,7 +84,7 @@ export const resolvers = {
                 const deletedComment = await prisma.deleteComment({id});
                 return deletedComment;
             }
-            if(access.comment.indexOf("d")===-1){throw new Error("No Access")}else{return result}
+            if(access.comment.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     },
     Subscription: {

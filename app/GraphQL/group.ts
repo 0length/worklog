@@ -53,7 +53,7 @@ export const resolvers = {
                 const createdGroup =  await prisma.createGroup({name: args.name, access: args.access});
                 return createdGroup;
             }
-            if(access.group.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.group.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
         },
         updateGroup: async (obj: any, args: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -68,7 +68,7 @@ export const resolvers = {
                 const updatedGroup = await prisma.updateGroup({data:{name, access},where:{name:args.where.name}})
                 return updatedGroup;
             }
-            if(access.group.indexOf("u")===-1){throw new Error("No Access")}else{return result}
+            if(access.group.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
         deleteGroup: async (obj: any, {where}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -81,7 +81,7 @@ export const resolvers = {
                 const deletedGroup = await prisma.deleteGroup({name});
                 return deletedGroup;
             }
-            if(access.group.indexOf("d")===-1){throw new Error("No Access")}else{return result}
+            if(access.group.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     }
 }

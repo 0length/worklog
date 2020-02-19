@@ -1,17 +1,20 @@
 import React, { JSXElementConstructor, useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchArticles } from '../../reducer/actions';
 import Header from './components/header'
 import { createGlobalStyle } from 'styled-components';
+import { pushToast } from '../../reducer/toast/action';
+import { startSubscribeWork } from '../../reducer/work/actions';
 import SideBar from './components/sidebar';
 import WorkDesk from './components/work-desk';
 import BreadCrumbs from './components/bread-crumbs';
 import ToastNotifier from './components/toast-notifier';
+import { toastSuccess } from '../../lib/utils/toastModel';
 
 export const App: React.FC<any> = (props)=>{
-
+const { user } = props
     const [notification, setNotification] = useState<Array<any>>([])
+    const WELCOME_MESSAGE = "Welcome back Mr. " 
 
   const GlobalStyle = createGlobalStyle`
   .wl-grid {
@@ -31,6 +34,13 @@ export const App: React.FC<any> = (props)=>{
   }
 
   `;
+
+  useEffect(()=>{
+    if(user && user.userData){
+      props.startSubscribeWork()
+      props.pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)])
+    }
+  }, [user.userData])
   
   // useEffect(()=>{
     
@@ -56,8 +66,8 @@ const mapStateToProps = (state:any) => (state);
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
-      fetchArticles,
-      
+      startSubscribeWork,
+      pushToast,
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

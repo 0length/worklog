@@ -15,7 +15,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
         }}>
             <h3 className="wl-login__title">Sign In To Admin</h3>
         </div>
-        {error && <ToastCard message={error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
+        {error && <ToastCard message={error === 'jwt expired'?'Your Session has Expired':error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
         <div className="wl-login__form">
             <div className="form-group">
                 <Input {...{styleProfile: {auth:true}}} onChange={(e:any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />

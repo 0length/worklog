@@ -54,7 +54,7 @@ export const resolvers = {
                 const createdMenu = await prisma.createMenu({name, parent_name, sequence});
                 return createdMenu;
             }
-            if(access.menu.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.menu.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
         },
         updateMenu: async (obj: any, {where, name, parent_name, sequence}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -69,7 +69,7 @@ export const resolvers = {
                 const updatedMenu = await prisma.updateMenu({data:{name, parent_name, sequence},where:{name:where.name}})
                 return updatedMenu;
             }
-            if(access.menu.indexOf("u")===-1){throw new Error("No Access")}else{return result}
+            if(access.menu.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
         deleteMenu: async (obj: any, {where}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -82,7 +82,7 @@ export const resolvers = {
                 const deletedMenu = await prisma.deleteMenu({name});
                 return deletedMenu;
             }
-            if(access.menu.indexOf("d")===-1){throw new Error("No Access")}else{return result}
+            if(access.menu.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     }
 }

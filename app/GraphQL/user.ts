@@ -54,7 +54,8 @@ export const resolvers = {
         user: async (obj:any, args:any, context:any, info:any) =>{
             const  access: any = await getAccess(context)
             const result: any = await prisma.user({username: args.username})
-            if(access.user.indexOf("r")===-1||access.owner.user.username!==args.username){throw new Error("No Access")}else{return result}
+            console.log(access.owner.user.username, access.owner.user.username===args.username, access.user.indexOf("r")===-1)
+            if(access.owner.user.username!==args.username){throw new Error("No Access")}else{return result}
         } 
     },
     Mutation: {
@@ -92,7 +93,7 @@ export const resolvers = {
                 const createdUser = await prisma.createUser({name, username, email, password, group: "Guest"});
                 return createdUser;
             }
-            if(access.user.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.user.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
         },
         updateUser: async (obj: any, {where, name, username, email, password, group}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -107,7 +108,7 @@ export const resolvers = {
                 const updatedUser = await prisma.updateUser({data:{name, username, email, password, group},where:{username:where.username}})
                 return updatedUser;
             }
-            if(access.user.indexOf("u")===-1){throw new Error("No Access")}else{return result}
+            if(access.user.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
         deleteUser: async (obj: any, {where}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -120,7 +121,7 @@ export const resolvers = {
                 const deletedUser = await prisma.deleteUser({username});
                 return deletedUser;
             }
-            if(access.user.indexOf("d")===-1){throw new Error("No Access")}else{return result}
+            if(access.user.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     }
 }

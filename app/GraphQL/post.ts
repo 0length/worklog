@@ -56,7 +56,7 @@ export const resolvers = {
                 const createdPost = await prisma.createPost({title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links});
                 return createdPost;
             }
-            if(access.post.indexOf("c")===-1){throw new Error("No Access")}else{return result}
+            if(access.post.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
         },
         updatePost: async (obj: any, { where, title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -69,7 +69,7 @@ export const resolvers = {
                 const updatedPost = await prisma.updatePost({data:{title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links},where:{title:where.title}})
                 return updatedPost;    
             }
-            if(access.post.indexOf("u")===-1){throw new Error("No Access")}else{return result}
+            if(access.post.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
         deletePost: async (obj: any, {where}: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
@@ -82,7 +82,7 @@ export const resolvers = {
                 const deletedPost = await prisma.deletePost({title});
                 return deletedPost;
             }
-            if(access.post.indexOf("d")===-1){throw new Error("No Access")}else{return result}
+            if(access.post.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     }
 }
