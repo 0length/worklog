@@ -11,7 +11,10 @@ const initGroup = [
     {name:'Guest', access:`{"dashboard":"r", "user":"", "group":"", "menu":"r", "work":"crud", "post":"crud"}`},
 ]
 const initUSer = [
-    {name: 'admin', username: 'admin', email: 'admin@this.site', password: 'ikisandiku'}
+    {name: 'su', username: 'su', email: 'su@this.site', password: 'ikisandiku', group: 'SuperUser'},
+    {name: 'admin', username: 'admin', email: 'admin@this.site', password: 'ikisandiku', group: 'Admin'},
+    {name: 'guest', username: 'guest', email: 'guest@this.site', password: 'ikisandiku', group: 'Guest'}
+
 ]
 const initMemu = [
     {name:'dashboard', parent_name: "", sequence: 0},
