@@ -1,5 +1,5 @@
-import { of, from, observable, queueScheduler, interval, merge, Observable, concat, timer, Observer } from 'rxjs';
-import { map, catchError, flatMap, mergeMap, switchMap, observeOn, subscribeOn, take, mapTo, tap, delay, takeUntil } from 'rxjs/operators';
+import { of, queueScheduler, Observable, timer } from 'rxjs';
+import { map, catchError, flatMap, mergeMap, subscribeOn, take, delay, takeUntil } from 'rxjs/operators';
 import { webSocket } from "rxjs/webSocket";
 import { combineEpics, ofType } from 'redux-observable';
 import client from '../api/client';
@@ -16,6 +16,7 @@ import reducer from '../utils/reducerSum';
 import { toastError } from '../utils/toastModel';
 import localStorageKeys from '../const/localStorageKeys';
 import { workTypes } from '../../reducer/work/types';
+import graphResponseParser from '../utils/graphResParser';
 
 
 const socket$ = webSocket(
@@ -32,10 +33,7 @@ const auth = (action$: any, store: any)=>{
             action.query
         }})),
          map((data: AjaxResponse) =>data.response), 
-         map((payload: any) =>{
-                if(payload.errors){return {error: payload.errors[0].message}}
-                if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
-            }), 
+         map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
              return Observable.create((observer: any)=>{
                 if(payload.token&&payload.user){
@@ -53,20 +51,15 @@ const auth = (action$: any, store: any)=>{
     
  }
 
- const getMenu = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;//for accesing action outside flat map
+ const getMenu = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(menuTypes.GET),
-         flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
+         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
             action.query
             },headers:{authorization:`Bearer ${store.value.user.authToken}`}
-        })}),
+        })),
          map((data: AjaxResponse) =>data.response), 
-         map((payload: any) =>{
-                if(payload.errors){return {error: payload.errors[0].message}}
-                if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
-            }), 
+         map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
                 if(payload.error){
@@ -83,21 +76,15 @@ const auth = (action$: any, store: any)=>{
     
  }
 
- const getUserData = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;//for accesing action outside flat map
+ const getUserData = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(userTypes.GET_USER_DATA),
-         flatMap((action: any)=>{act = action;return client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            // "query{  works{ name }}"
+         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
             action.query
             },headers:{authorization:`Bearer ${store.value.user.authToken}`}
-        })}),
+        })),
          map((data: AjaxResponse) =>data.response), 
-         map((payload: any) =>{
-                if(payload.errors){return {error: payload.errors[0].message}}
-                if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
-            }), 
+         map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
                 if(payload.error){
@@ -113,84 +100,47 @@ const auth = (action$: any, store: any)=>{
         }),
          catchError((error: any) =>of(getUserDataFailure(error.message)))
      )
-    
  }
 
 
- const setToast = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;//for accesing action outside flat map
+ const setToast = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(toastType.SET),
          mergeMap((action: any)=>{
-            //  if(!action.pending.length){
                 let data = action.send
-                console.log("data", data)
                 let chunks: any;
                 data.length>4?chunks = arrayChunks(data, 4):chunks = [data]
                 let allTimeout = data.map((item: any)=>item.timeOut).sort(sortNumber)
                 let aveDelay = allTimeout.reduce(reducer)/data.length
                 let maxDelay = allTimeout[0]
-                // store.dispatch()
-                // return pushedToast(chunks[0], nextdelay, chunks.splice(0, 1))
-                console.log(maxDelay, aveDelay, allTimeout, chunks)
+                // console.log(maxDelay, aveDelay, allTimeout, chunks)
                  return Observable.create((observer: any)=>{
-                    // chunks.map((im, ix)=>{
-                        // const nextdelay = chunks[0].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[0].length-1]
                         chunks.length<2&&observer.next(pushedToast(chunks[0]))
                         timer(0, maxDelay+100).pipe(take(chunks.length-1)).subscribe((x)=>{
-                            // console.log(aveDelay, allTimeout, "WOY")
-                            // observer.next(clearToast())
                             const delay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[0]
                             setTimeout(observer.next(pushedToast(chunks[x])), delay+3000)
-                            
-                            // aveDelay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[chunks[x].length-1]
-                    //     delay(nextdelay)
                         })
                     })
-                // })
-            //  }
-            //  if(action.pending.length){
-
-            //  }
-
         }),
          catchError((error: any) =>of(clearToast()))
      )
  }
 
 
- const workSubsriber = (action$: any, store: any)=>{ //action$ is a stream of actions
-    //action$.ofType is the outer Observable
-    let act : any;//for accesing action outside flat map
+ const workSubsriber = (action$: any, store: any)=>{ 
      return action$.pipe(
          ofType(workTypes.START_SUBSCRIBE_WORKS),
          mergeMap((action: any) =>{
             return Observable.create((observer: any)=>{           
-                socket$.subscribe(({payload}: any)=>{observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: payload.data[Object.keys(payload.data)[0]]})})
-                socket$.next({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n    name\n  }\n}\n"}})
-            })
+                socket$.subscribe(({payload}: any)=>{observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: graphResponseParser(payload)})})
+                socket$.next(action.param)
+            }).pipe(
+                takeUntil(action$.pipe(ofType(workTypes.STOP_SUBSCRIBE_WORKS)))
+            )
         }),
          catchError((error: any) =>of(getMenuFailure(error.message)))
      )
  }
-
-
-//  const pendingToast = (action$: any, store: any)=>{
-//     //  var act: any = {delay:0}
-//     return action$.pipe(
-//         ofType(toastType.SETED),
-//         map((action: any)=>{
-//            let pending = action.pending 
-//            console.log(pending, pending.splice(0,1))
-//            const nextdelay = pending[0].map((item: any)=>item.timeOut).sort(sortNumber)[pending[0].length-1]
-//           return of(()=>pending[0]).pipe(
-//           delay(action.delay),
-//           map((first: any)=>pushedToast(first, nextdelay, pending.splice(0, 1))
-//           ))}),
-//         // catchError((error: any) =>of(clearToast()))
-//     )
-//  }
 
  const cleanerToast =  (action$: any, store: any)=>{
    return action$.pipe(
@@ -199,101 +149,14 @@ const auth = (action$: any, store: any)=>{
        map(()=>clearToast())
     )
 }
-   
-/*
-    The API returns the data in the following format:
-    {
-        "count": number,
-        "next": "url to next page",
-        "previous": "url to previous page",
-        "results: array of whiskies
-    }
-    since we are only interested in the results array we will have to use map on our observable
- */
-
-
-
-//  const fetchArticle = (action$: any, store: any)=>{ //action$ is a stream of actions
-//     //action$.ofType is the outer Observable
-//      return action$.pipe(
-//          ofType(FETCH_ARTICLES),
-//          flatMap((action)=>ajax({
-//             "url": `${url}`,
-//             "method": "POST",
-//             'withCredentials': true,
-//             "headers": {
-//                 'content-type': 'application/json',
-//                 'CSRF-Token': store.value.csrfReducer.token,
-//                 'Accept': 'application/json',
-//             },
-//             "body" : {
-//                 variables: {},
-//                 operationName: null,
-//                 query: `
-//                 { users { name email password } } 
-//                   `
-//               }
-//          })
-//         ),
-//         map((data: AjaxResponse) =>data.response), 
-//         //todo: make global type for interface data based graphql
-//         map((user: any)=>user.data.users.map((user: any)=>({
-//              name: user.name,
-//              email: user.email,
-//              password: user.password,
-//          }))),
-//         map((users: )=>users.filter(user=>user.email)),
-//         map(data=>({ type: 'FETCH_ARTICLES_SUCCESS', payload: data })),
-//         catchError(error =>of(fetchArticlesFailure(error.message)))
-//      )
-//  }
-
-//  const translateArticle = (action$)=>{ //action$ is a stream of actions
-//     //action$.ofType is the outer Observable
-//     // console.log("uye",action$);
-//     // let source = "en",
-//     // target = "ko";
-//     // input = "Officia odit qui nisi molestiae officiis. Corrupti optio eaque sed facilis pariatur id. Laborum nostrum soluta itaque harum saepe repellendus architecto.";
-//     // aticles.map((aticle, index)=>{
-    
-//         return action$.pipe(
-//             ofType(TRANSLATE_ARTICLES),
-//             flatMap(()=>{
-//                 // console.log(articles.payload[0].title)
-//                 // ajax.getJSON(url).pipe(
-//                 //     map(userResponse => console.log('users: ', userResponse)),
-//                 //     catchError(error => {
-//                 //       console.log('error: ', error);
-//                 //       return of(error);
-//                 //     })
-//                 //   );
-//                 ajax({
-//                 "url": `https://systran-systran-platform-for-language-processing-v1.p.rapidapi.com/translation/text/translate?source=en&target=ko&input=ffewifujiwoe`,
-//                 "method": "GET",
-//                 "headers": {
-//                     "x-rapidapi-host": "systran-systran-platform-for-language-processing-v1.p.rapidapi.com",
-//                     "x-rapidapi-key": "19acad232amsh0a11577fffe3373p1c1006jsn8ac5528d25e4"
-//                     }
-//                 })
-                
-//             }),        
-//             // map(data =>console.log('uye',data)), 
-//             map(whiskies=>console.log(whiskies)),
-//             catchError(error =>of(translateArticlesFailure(error.message)))
-//         )
-//     // });
-
-//  }
 
  export const rootEpic = 
  (action$: any, store: any)=>
  combineEpics(
-    // fetchArticle, 
     auth,
     getMenu,
     getUserData,
     setToast,
-    // pendingToast,
     cleanerToast,
     workSubsriber
  )
