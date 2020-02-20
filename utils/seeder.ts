@@ -35,8 +35,27 @@ const dummyWork: Array<Work> = [
 ]
 
 
-initMemu.map((item)=>menuSeeder(item))
-initGroup.map((item, idx)=>groupSeeder(item))
-initUser.map((item, idx)=>userSeeder(item))
-dummyWork.map((item, idx)=>workSeeder(item))
+const runner = () =>{
+    console.log("deleting old menus")
+    prisma.deleteManyMenus({name_not: "ahahaha telo goreng hahahahah"})
+    console.log("seeding menus")
+    initMemu.map((item)=>menuSeeder(item))
+
+    console.log("deleting old groups")
+    prisma.deleteManyGroups({name_not: "ahahaha cicak krispy hahahahah"})
+    console.log("seeding groups")
+    initGroup.map((item, idx)=>groupSeeder(item))
+
+    console.log("deleting old users")
+    prisma.deleteManyUsers({name_not: "ahahaha as kui hahahahah"})
+    console.log("seeding users")
+    initUser.map((item, idx)=>userSeeder(item))
+
+    // console.log("deleting old work")
+    // prisma.deleteManyWorks({name_not: "ahaha"})
+    dummyWork.map((item, idx)=>workSeeder(item))
+}
+
+
+
 console.log("done")
