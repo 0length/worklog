@@ -10,6 +10,14 @@ try {
     }
     console.log('Copy completed!')
   }); 
+  fs.copy('static_assets/img', 'dist/public/img', function (err) {
+    if (err){
+        console.log('An error occured while copying img.')
+        return console.error(err)
+    }
+    console.log('Copy completed!')
+  }); 
+
   console.log('######## static assets copy: OK ########')
 } catch (err) {
   console.error('######## static assets copy: ERROR ########', err.message)
