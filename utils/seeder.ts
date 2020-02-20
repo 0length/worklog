@@ -57,5 +57,5 @@ const runner = () =>{
 }
 
 
-
+runner()
 console.log("done")
