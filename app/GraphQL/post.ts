@@ -1,6 +1,12 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
 import { getAccess } from '../lib/utils/getAccess'
+import { BehaviorSubject } from 'rxjs'
+import observableToIterator from '../lib/utils/observableToAsyncIterator'
+import { map } from 'rxjs/operators'
+
+const postSub =  async ()=>await prisma.posts()
+const postSubject = new BehaviorSubject(postSub())
 
 export const typeDefs =  gql`
 type Post {
@@ -30,6 +36,10 @@ type Post {
         deletePost(where: PostWhereUniqueInput!): Post
     }   
 
+
+    extend type Subscription {
+        posts: [Post]
+    }
 `
 
 export const resolvers = {
@@ -54,6 +64,7 @@ export const resolvers = {
                 throw new Error(`Already Exist`);
                 }
                 const createdPost = await prisma.createPost({title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links});
+                postSubject.next(postSub())
                 return createdPost;
             }
             if(access.post.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
@@ -67,7 +78,8 @@ export const resolvers = {
                 }
                 !title&& !p&& !author_name&& !img_url&& !text_content&& !published_at&& !view_cont&& !interisting_count&& !social_links? ()=>{throw new Error("nothing to update")}:!title?title=postWhereName.title:!p?p=postWhereName.p:!author_name?author_name=postWhereName.author_name:!img_url?img_url=postWhereName.img_url:!text_content?text_content=postWhereName.text_content:!published_at?published_at=postWhereName.published_at: !view_cont?view_cont=postWhereName.view_cont: !interisting_count?interisting_count=postWhereName.interisting_count: !social_links?social_links=postWhereName.social_links:null 
                 const updatedPost = await prisma.updatePost({data:{title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links},where:{title:where.title}})
-                return updatedPost;    
+                postSubject.next(postSub())
+                return updatedPost;
             }
             if(access.post.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
         },
@@ -80,9 +92,19 @@ export const resolvers = {
                     throw new Error(`Not Found`);
                 }
                 const deletedPost = await prisma.deletePost({title});
+                postSubject.next(postSub())
                 return deletedPost;
             }
             if(access.post.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
+        }
+    },
+    Subscription: {
+        posts: {
+            subscribe: () => {
+                return observableToIterator(
+                    postSubject.pipe(map((item: any)=>({posts: item})))
+                )
+            },
         }
     }
 }
