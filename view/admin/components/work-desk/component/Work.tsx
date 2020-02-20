@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createGlobalStyle } from 'styled-components';
+import { Work } from '../../../../../prisma/src/generated/prisma-client';
 
 const Work: React.FC<any> = (props)=>{
+const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr></tr>])
 
     const StyleWork = createGlobalStyle`
         .div-work{
@@ -36,6 +38,49 @@ const Work: React.FC<any> = (props)=>{
         }
     `
 
+    // useEffect(()=>{
+    //     if(props.work.uptodate){
+    //         let temp: Array<JSX.Element> = []
+    //         props.work.uptodate.map((item: Work)=>{
+    //             temp.push( <tr>
+    //                 <td>{item.name}</td>
+    //                 <td>{item.p}</td>
+    //                 <td>{item.author_name}</td>
+    //                 <td>{item.simple_caption}</td>
+    //                 <td><img src={'/gdrive/'+ item.img_url} alt={item.name} /></td>
+    //                 <td>{item.client}</td>
+    //                 <td>{item.website}</td>
+    //                 <td>{item.completed_at}</td>
+    //                 <td>{item.long_desc}</td>
+    //                 <td>{item.interisting_count}</td>
+    //                 {/* <td>https://instagram.com/social</td> */}
+    //             </tr>)
+    //         })
+    //     setTbody(temp);
+    //     }
+    // }, [])
+
+    useEffect(()=>{
+        if(props.work.uptodate){
+            let temp: Array<JSX.Element> = []
+            props.work.uptodate.map((item: Work)=>{
+                temp.push( <tr>
+                    <td>{item.name}</td>
+                    <td>{item.p}</td>
+                    <td>{item.author_name}</td>
+                    <td>{item.simple_caption}</td>
+                    <td><img width="150px" height="auto" src={'/api/gdrive/'+ item.img_url} alt={item.name} /></td>
+                    <td>{item.client}</td>
+                    <td>{item.website}</td>
+                    <td>{item.completed_at}</td>
+                    <td>{item.long_desc.substr(0, 150)+'...'}</td>
+                    <td>{item.interisting_count}</td>
+                    {/* <td>https://instagram.com/social</td> */}
+                </tr>)
+            })
+            setTbody(temp);   
+        }
+    }, [props.work.uptodate])
     return (<>
         <div className="div-work">
             <StyleWork />
@@ -52,23 +97,11 @@ const Work: React.FC<any> = (props)=>{
                         <th>Completed_at</th>
                         <th>long Desc</th>
                         <th>Interesting Count</th>
-                        <th>Social Links</th>
+                        {/* <th>Social Links</th> */}
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Raihan</td>
-                        <td>this Perihal</td>
-                        <td>hidesec</td>
-                        <td>About My World</td>
-                        <td>http://img.url</td>
-                        <td>hans</td>
-                        <td>http://web.site</td>
-                        <td>02 Februrari 2020</td>
-                        <td>Hey this long description</td>
-                        <td>304</td>
-                        <td>https://instagram.com/social</td>
-                    </tr>
+                    {tbody}
             </tbody>
             </table>
         </div>
