@@ -35,3 +35,7 @@ export const getUserDataFailure = (message: any) => ({
     type: userTypes.GET_USER_DATA_FAILURE,
     payload: message
 });
+
+export const logout = () => ({
+    type: userTypes.LOGOUT,
+});

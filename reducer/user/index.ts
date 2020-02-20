@@ -51,6 +51,13 @@ const userReducer = (state = initUser, action: any)=>{
                 isLoading: false,
                 error: action.payload
             };
+            case userTypes.LOGOUT:
+            return{
+                ...state,
+                userData: null,
+                authToken: null,
+                asGuest: true,
+            };
         default:
         return state;
     }

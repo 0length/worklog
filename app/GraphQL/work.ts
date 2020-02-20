@@ -5,8 +5,6 @@ import { BehaviorSubject } from 'rxjs'
 import observableToIterator from '../lib/utils/observableToAsyncIterator';
 import { map } from 'rxjs/operators';
 
-
-
 const workSub =  async ()=>await prisma.works()
 const workSubject = new BehaviorSubject(workSub())
 
@@ -15,6 +13,7 @@ export const typeDefs =  gql`
         id: ID
         name: String
         p: String
+        author_name: String
         simple_caption: String
         img_url: String
         client: String
@@ -112,8 +111,9 @@ export const resolvers = {
         works: {
             subscribe: () => {
                 return observableToIterator(
-                workSubject.pipe(map((item: any)=>({works: item})))
-            )},
+                    workSubject.pipe(map((item: any)=>({works: item})))
+                )
+            },
         }
     }
 }

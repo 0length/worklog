@@ -1,6 +1,12 @@
 import { gql } from 'apollo-server-express'
 import { prisma } from '../../prisma/src/generated/prisma-client'
 import { getAccess } from '../lib/utils/getAccess';
+import observableToIterator from '../lib/utils/observableToAsyncIterator';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+
+const commentSub =  async ()=>await prisma.comments()
+const commentSubject = new BehaviorSubject(commentSub())
 
 export const typeDefs =  gql`
     type Comment {
@@ -25,7 +31,7 @@ export const typeDefs =  gql`
     }
     
     extend type Subscription {
-        comment: [Comment]
+        comments: [Comment]
     }
 
 `
@@ -53,6 +59,7 @@ export const resolvers = {
             const  access: any = await getAccess(context)
             const result: any = async () => {
                 const createdComment = await prisma.createComment({post_title, parent_id, user_username: access.owner.user.name, text_content});
+                commentSubject.next(commentSub())
                 return createdComment;
             }
             if(access.comments.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
@@ -69,6 +76,7 @@ export const resolvers = {
                  * using original if undefine
                  */!parent_id && !post_title && !text_content ?()=>{throw new Error("nothing to update")}:!parent_id?parent_id=commentWhereName.parent_id:!post_title?post_title=commentWhereName.post_title:!text_content?text_content=commentWhereName.text_content:null 
                 const updatedComment = await prisma.updateComment({data:{parent_id, post_title, text_content},where:{id:where.id}})
+                commentSubject.next(commentSub())
                 return updatedComment;
             }
             if(access.comment.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
@@ -82,12 +90,19 @@ export const resolvers = {
                     throw new Error(`Not found`);
                 }
                 const deletedComment = await prisma.deleteComment({id});
+                commentSubject.next(commentSub())
                 return deletedComment;
             }
             if(access.comment.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
         }
     },
     Subscription: {
-        /**Masih Kosong */
+        comments: {
+            subscribe: () => {
+                return observableToIterator(
+                    commentSubject.pipe(map((item: any)=>({comments: item})))
+                )
+            },
+        }
     }
 }
