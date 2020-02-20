@@ -1,4 +1,5 @@
 import { ajax, AjaxRequest } from "rxjs/ajax";
+import endPoint from "../const/endpoint";
 
 export interface GraphQlBody {
     variables?: string;
@@ -38,7 +39,7 @@ const cainedOption: any = (aO: AgentOption)=>{
         case 'graphql':
             const {graphqlBody} = aO
             finalOption.method = 'POST'
-            finalOption.url = '/graphql'
+            finalOption.url = endPoint.GRAPHQL
             finalOption.headers['content-type'] = 'application/json'
             finalOption.headers['Accept'] = 'application/json'
             const initBody = {variables: {},operationName: null,query: ''}
