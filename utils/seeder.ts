@@ -35,19 +35,19 @@ const dummyWork: Array<Work> = [
 ]
 
 
-const runner = () =>{
+const runner = async () =>{
     console.log("deleting old menus")
-    prisma.deleteManyMenus({name_not: "ahahaha telo goreng hahahahah"})
+    await prisma.deleteManyMenus({name_not: "ahahaha telo goreng hahahahah"})
     console.log("seeding menus")
     initMemu.map((item)=>menuSeeder(item))
 
     console.log("deleting old groups")
-    prisma.deleteManyGroups({name_not: "ahahaha cicak krispy hahahahah"})
+    await prisma.deleteManyGroups({name_not: "ahahaha cicak krispy hahahahah"})
     console.log("seeding groups")
     initGroup.map((item, idx)=>groupSeeder(item))
 
     console.log("deleting old users")
-    prisma.deleteManyUsers({name_not: "ahahaha as kui hahahahah"})
+    await prisma.deleteManyUsers({name_not: "ahahaha as kui hahahahah"})
     console.log("seeding users")
     initUser.map((item, idx)=>userSeeder(item))
 
