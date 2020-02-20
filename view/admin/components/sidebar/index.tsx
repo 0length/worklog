@@ -82,7 +82,7 @@ const SideBar: React.FC<any> = (props)=>{
         flex-grow: 1;
         font-weight: 400;
         font-size: 1.8vh;
-        color: #323638;
+        color: #595d6e;;
         text-transform: initial;
         -webkit-box-align: center;
         -webkit-box-flex: 1;
