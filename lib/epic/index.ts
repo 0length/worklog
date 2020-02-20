@@ -133,7 +133,8 @@ const auth = (action$: any, store: any)=>{
          mergeMap((action: any) =>{
             return Observable.create((observer: any)=>{           
                 socket$.subscribe(({payload}: any)=>{observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: graphResponseParser(payload)})})
-                socket$.next(action.param)
+                socket$.next(action.query)
+                console.log(action.query)
             }).pipe(
                 takeUntil(action$.pipe(ofType(workTypes.STOP_SUBSCRIBE_WORKS)))
             )
@@ -149,7 +150,15 @@ const auth = (action$: any, store: any)=>{
        map(()=>clearToast())
     )
 }
-
+const logout =  (action$: any, store: any)=>{
+    return action$.pipe(
+        ofType(userTypes.LOGOUT),
+        map(()=>{
+            localStorage.removeItem(localStorageKeys.auth_token);
+            localStorage.removeItem(localStorageKeys.username);
+        })
+     )
+ }
  export const rootEpic = 
  (action$: any, store: any)=>
  combineEpics(
@@ -158,7 +167,8 @@ const auth = (action$: any, store: any)=>{
     getUserData,
     setToast,
     cleanerToast,
-    workSubsriber
+    workSubsriber,
+    logout
  )
  (action$.pipe(
      subscribeOn(queueScheduler)
