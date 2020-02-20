@@ -1,6 +1,7 @@
 import React from 'react'
 import styled,{ createGlobalStyle } from 'styled-components'
 import Testing from './component/Testing'
+import Work from './component/Work'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
@@ -21,6 +22,7 @@ interface HighOrderType {
 }
 
 const HighOrder:  HighOrderType= {
+    'work': <Work/>,
     'testing' : <Testing />
 }
 
