@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styled, { createGlobalStyle } from 'styled-components';
-
+import { logout } from './../../../../reducer/user/actions'
 
 const Wrapper = styled.div`
     display: flex;
@@ -91,7 +91,7 @@ const ActiveAccount: React.FC<any> = (props)=>{
                 <img className={"wl-header__right-top-bg-liquid "} src="/static/img/aa-curve.svg" alt=""/>
                 <div className={"wl-header__right-active__account"}>
                     <ul>
-                        <li {...{static: "bottom"}}><div>about</div>|<div><i className={"flaticon-logout"}/>&nbsp;&nbsp;&nbsp;logout</div></li>
+                        <li {...{static: "bottom"}}><div>about</div>|<div onClick={()=>{props.logout()}}><i className={"flaticon-logout"}/>&nbsp;&nbsp;&nbsp;logout</div></li>
                     </ul>
                 </div>
             </Container>
@@ -103,7 +103,7 @@ const mapStateToProps = (state:any) => (state);
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
-        
+        logout
     }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveAccount);

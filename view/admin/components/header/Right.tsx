@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { Input } from '../element'
 import { createGlobalStyle } from 'styled-components'
+import ActiveAccount from './ActiveAccount'
 const Right: React.FC<any> = (props)=>{
     const [query, setQuery] = useState<string>('')
+    const [toggleAA, setToggleAA] = useState<boolean>(false)
+
     const LocalStyle = createGlobalStyle`
     .wl-header__right {
         display: -webkit-box;
@@ -71,6 +74,7 @@ const Right: React.FC<any> = (props)=>{
           margin: 0 10px;
           background-color: #22b9ff;
           color: white;
+          z-index: 99;
       }
 
       .wl-header__right-icon__profile:hover {
@@ -112,9 +116,10 @@ const Right: React.FC<any> = (props)=>{
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon"><i className="flaticon2-bell-alarm-symbol"/></span></div>
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon"><i className="flaticon2-gear"/></span></div>
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__translate"><img src="/static/plugins/custom-icon/icon/translate.png"/></span></div>
-             <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__profile "><i className="flaticon2-user-outline-symbol"/></span></div>
+             <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__profile " onClick={()=>setToggleAA(!toggleAA)}><i className="flaticon2-user-outline-symbol"/></span></div>
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__quckpanel "><i className="flaticon2-cube-1"/></span></div>
             {/* <Input {...{styleProfile: {}}} onChange={(e:any)=>{setQuery(e.target.value)}} type="text" placeholder="Search" name="search-bar" /> */}
+            {toggleAA && <ActiveAccount {...{toggle: toggleAA}}/>}
         </div>
     )
 }

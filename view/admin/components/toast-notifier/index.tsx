@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     bottom: 10px;
     height: auto;
     max-width: 15vw;
-    z-index: 100000;
+    z-index: 96;
 `
 const Container = styled.div`
 margin-top:auto;
