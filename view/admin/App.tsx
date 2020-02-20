@@ -37,7 +37,7 @@ const { user } = props
 
   useEffect(()=>{
     if(user && user.userData){
-      props.startSubscribeWork()
+      props.startSubscribeWork({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n   name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}\n}\n"}})
       props.pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)])
     }
   }, [user.userData])
