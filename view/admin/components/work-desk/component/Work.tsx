@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { createGlobalStyle } from 'styled-components';
 import { Work } from '../../../../../prisma/src/generated/prisma-client';
 import { Button } from '../../element';
+import endPoint from '../../../../../lib/const/endpoint';
 
 const Work: React.FC<any> = (props)=>{
 const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr></tr>])
@@ -83,7 +84,7 @@ const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr></tr>])
                     <td key={"wl_dt__work-p"+(idx+1)}>{item.p}</td>
                     <td key={"wl_dt__work-author"+(idx+1)}>{item.author_name}</td>
                     <td key={"wl_dt__work-cap"+(idx+1)} className="text">{item.simple_caption.substr(0, 50)+'...'}</td>
-                    <td key={"wl_dt__work-img"+(idx+1)}><img width="50px" height="auto" src={'/api/gdrive/'+ item.img_url} alt={item.name} /></td>
+                    <td key={"wl_dt__work-img"+(idx+1)}><img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} /></td>
                     <td key={"wl_dt__work-client"+(idx+1)}>{item.client}</td>
                     <td key={"wl_dt__work-date"+(idx+1)}>{item.completed_at}</td>
                     <td key={"wl_dt__work-desc"+(idx+1)} className="longtext">{item.long_desc.substr(0, 150)+'...'}</td>
