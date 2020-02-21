@@ -13,8 +13,25 @@ const GlobalStyle = createGlobalStyle`
 }
 
  .active {
-     border: 2px solid black;
+    color: #22B9FF;
+    & > .wl-sidebar__menu-main__item-toggle {
+        & > span {
+            color: #22B9FF;   
+        }
+    }
+
+    .wl-sidebar__menu-nd__item-toggle.active {
+        & > span {
+            color: #22B9FF;   
+        }
+    }
  }
+
+ .wl-sidebar__menu-nd__item-toggle.active {
+    & > span {
+        color: #22B9FF;   
+    }
+}
 `
 
 const Menu: React.FC<any> = (props)=>{
@@ -32,9 +49,11 @@ useEffect(()=>{
                 className={"wl-sidebar__menu-main__item "+item.name}
             >
                 <div className="wl-sidebar__menu-main__item-toggle" onClick={(e: any)=>{
+                    //todo: create function for this
                     props.setActiveMenu(item.name);
                     let element: any = document.querySelectorAll('.wl-sidebar__menu-main__item.'+item.name)[0]
                     document.querySelectorAll('.wl-sidebar__menu-main__item').forEach((item: any)=>item.classList.toggle("active", false))
+                    document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle').forEach((item: any)=>item.classList.toggle("active", false))
                     !element.classList.contains("active") ?element.classList.toggle("active", true):element.classList.toggle("active", false)
                     let subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
                     !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true)&&subMenuClassList.toggle("show", false):subMenuClassList.toggle("hidden", false)&&subMenuClassList.toggle("hidden", true)

@@ -146,7 +146,7 @@ const auth = (action$: any, store: any)=>{
  const cleanerToast =  (action$: any, store: any)=>{
    return action$.pipe(
        ofType(toastType.SETED),
-       delay(1000),
+       delay(3000),
        map(()=>clearToast())
     )
 }

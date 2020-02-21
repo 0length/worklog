@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import styled, { css, createGlobalStyle } from "styled-components";
 
+let removeMeTimeout: any
+
 const Container = styled(styled.div`
-padding: 1rem 2rem;
-margin: 0 0 20px 0;
+padding: 1rem 2rem 1rem 3rem ;
+margin: 5px 0 0 0;
 border-radius: 4px;
 background: #5867dd;
 color: #fff;
@@ -49,6 +51,8 @@ ${
 }
 
 `)`
+
+
     &::after {
         position: absolute;
         left: 0;        
@@ -105,6 +109,23 @@ ${
 const Span = styled.span`
 align-self: center;
 flex-grow: 1;
+position: relative;
+`
+
+const LocalStyle = createGlobalStyle`
+.btn-close{
+    position: absolute;
+   display: flex;
+   flex-direction: row;
+   cursor: pointer;
+   left: -2.75rem;
+   top: -1rem;
+   height: 100%;
+    
+   span {
+    margin: 0;
+   }
+}
 `
 interface NotificationData {
     message: string;
@@ -118,28 +139,51 @@ const ToastCard: React.FC<NotificationData>=(props)=>{
     let {message, timeOut, type, removeMe, idx, created_at} = props;
     !created_at?created_at=new Date().toString():!idx.toString()?idx=Math.floor((Math.random() * 10)):!type?type="info":!message?message="Hi. I'm a Toast.":""
     const id = btoa((created_at+idx).replace(/ /g,"_"));
-    useEffect(()=>{
-        // console.log(props, type, id, idx)
-        if(timeOut)
-        {const item = document.getElementById(id)
-            setTimeout(()=>{
-                item && item.setAttribute('style', `--${id}: 100%`);
-            }, 10)
-            
-            setTimeout(()=>{
-                item && item.setAttribute('style', `--${id}: 0%`);
-            }, 100)
+    
+    const timer = ()=>{
+        const item = document.getElementById(id)
+        setTimeout(()=>{
+            item && item.setAttribute('style', `--${id}: 100%`);
+        }, 10)
+        
+        setTimeout(()=>{
+            item && item.setAttribute('style', `--${id}: 0%`);
+        }, 100)
+    }
 
-            setTimeout(()=>{
+    const close = ()=>{
+        removeMe && removeMe(id)
+    }
+    
+    useEffect(()=>{
+        if(timeOut)
+        {
+
+            timer()
+            removeMeTimeout = setTimeout(()=>{
                 removeMe && removeMe(id)
-            }, timeOut)}
+            }, timeOut+500)
+        }
     }, []);
 
+    const cancelTimeOut = ()=>{
+        clearTimeout(removeMeTimeout)
+        const item = document.getElementById(id)
+        item && item.setAttribute('style', `transition: none;`);
+    }
 
     return (<span>
-    <Container id={id} {...{styleProfile: {type, timeOut}}}>
-    <i className="flaticon-warning"></i> &nbsp; <Span>{message}</Span>
-    </Container></span>)
+        <LocalStyle />
+        {/* <i className="flaticon-warning"></i> &nbsp; */}
+        
+    <Container id={id} {...{styleProfile: {type, timeOut}}} onMouseEnter={()=>cancelTimeOut()}>
+         <Span>
+             {message}
+             { removeMe && <div className="btn-close" onClick={()=>close()}><span>&times;</span></div>}
+         </Span>
+    </Container>
+    
+    </span>)
 }
 
 export default ToastCard
