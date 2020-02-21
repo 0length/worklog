@@ -17,6 +17,8 @@ import { toastError } from '../utils/toastModel';
 import localStorageKeys from '../const/localStorageKeys';
 import { workTypes } from '../../reducer/work/types';
 import graphResponseParser from '../utils/graphResParser';
+import { GENERAL_GRAPH } from '../../reducer/types';
+import { generalGraphFailure, generalGraphSuccess } from '../../reducer/actions';
 
 
 const socket$ = webSocket(
@@ -88,7 +90,6 @@ const auth = (action$: any, store: any)=>{
          mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
                 if(payload.error){
-               
                     observer.next(getUserDataFailure(payload.error))
                     observer.next(pushToast([toastError(payload.error==="jwt expired"?"Your Session has Expired":payload.error)]))
                     localStorage.removeItem(localStorageKeys.auth_token);
@@ -113,7 +114,6 @@ const auth = (action$: any, store: any)=>{
                 let allTimeout = data.map((item: any)=>item.timeOut).sort(sortNumber)
                 let aveDelay = allTimeout.reduce(reducer)/data.length
                 let maxDelay = allTimeout[0]
-                // console.log(maxDelay, aveDelay, allTimeout, chunks)
                  return Observable.create((observer: any)=>{
                         chunks.length<2&&observer.next(pushedToast(chunks[0]))
                         timer(0, maxDelay+100).pipe(take(chunks.length-1)).subscribe((x)=>{
@@ -159,6 +159,29 @@ const logout =  (action$: any, store: any)=>{
         })
      )
  }
+
+ const generalGraph =  (action$: any, store: any)=>{
+    return action$.pipe(
+        flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
+            action.query
+            },headers:{authorization:`Bearer ${store.value.user.authToken}`}
+        })),
+         map((data: AjaxResponse) =>data.response), 
+         map((payload: any) =>graphResponseParser(payload)), 
+         mergeMap((payload: any)=>{
+            return Observable.create((observer: any)=>{
+                if(payload.error){
+                    observer.next(generalGraphFailure(payload.error))
+                    observer.next(pushToast([toastError(payload.error==="jwt expired"?"Your Session has Expired":payload.error)]))
+                }
+                if(!payload.error){
+                    observer.next(generalGraphSuccess(payload))
+                }
+            })
+        }),
+     )
+ }
+
  export const rootEpic = 
  (action$: any, store: any)=>
  combineEpics(
@@ -168,7 +191,8 @@ const logout =  (action$: any, store: any)=>{
     setToast,
     cleanerToast,
     workSubsriber,
-    logout
+    logout,
+    generalGraph
  )
  (action$.pipe(
      subscribeOn(queueScheduler)

@@ -1,11 +1,5 @@
+import { GENERAL_GRAPH, GENERAL_GRAPH_SUCCESS, GENERAL_GRAPH_FAILURE } from "./types";
 
-export const FETCH_ARTICLES = 'FETCH_ARTICLES';
-export const FETCH_ARTICLES_SUCCESS = 'FETCH_ARTICLES_SUCCESS';
-export const FETCH_ARTICLES_FAILURE = 'FETCH_ARTICLES_FAILURE';
-
-export const TRANSLATE_ARTICLES = 'TRANSLATE_ARTICLES';
-export const TRANSLATE_ARTICLES_SUCCESS = 'TRANSLATE_ARTICLES_SUCCESS';
-export const TRANSLATE_ARTICLES_FAILURE = 'TRANSLATE_ARTICLES_FAILURE';
 
 export const REQUEST_CSRF_TOKEN = 'REQUEST_CSRF_TOKEN';
 export const REQUEST_CSRF_TOKEN_SUCCESS = 'REQUEST_CSRF_TOKEN_SUCCESS';
@@ -13,36 +7,19 @@ export const REQUEST_CSRF_TOKEN_FAILURE = 'REQUEST_CSRF_TOKEN_FAILURE';
 
 
 
-
-//Fetch Articles
-export const fetchArticles = () => ({
-    type: FETCH_ARTICLES
+export const generalGraph = () => ({
+    type: GENERAL_GRAPH
 });
 
-export const fetchArticlesSuccess = (articles: any) => ({
-    type: FETCH_ARTICLES_SUCCESS,
+export const generalGraphSuccess = (articles: any) => ({
+    type: GENERAL_GRAPH_SUCCESS,
     payload: articles
 });
 
-export const fetchArticlesFailure = (message: any) => ({
-    type: FETCH_ARTICLES_FAILURE,
+export const generalGraphFailure = (message: any) => ({
+    type: GENERAL_GRAPH_FAILURE,
     payload: message
 });
-
-//Translate Curr Articles
-// export const translateArticles = () => ({
-//     type: TRANSLATE_ARTICLES,
-// });
-
-// export const translateArticlesSuccess = (articles) =>({
-//     type: TRANSLATE_ARTICLES_SUCCESS,
-//     payload: articles
-// });
-
-// export const translateArticlesFailure = (message) => ({
-//     type: TRANSLATE_ARTICLES_FAILURE,
-//     payload: message
-// });
 
 //Reload Token
 export const requestCsrfToken = () => ({
