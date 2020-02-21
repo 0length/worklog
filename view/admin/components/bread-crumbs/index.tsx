@@ -31,11 +31,18 @@ const Container = styled.div`
 const Span = styled(styled.span`
 align-self: center;
 text-transform: capitalize;
+font-family: 'Montserrat';
+font-size: 10.5px !important;
+letter-spacing: 0.06em;
+font-weight: 500;
+color: #7b7d82;
 `)`
 &:before {
-    content:'/';
+    font-family: FontAwesome;
+    content:'\f105';
     font-weight: bold;
     padding: 0 0.5vw;
+    font-size: 12px;
 }
 `
 
@@ -53,11 +60,11 @@ const [hierarchy, setHierarchy] = useState<Array<JSX.Element>>([<Span></Span>])
 useEffect(()=>{
     let haveParent: any, temp: any =[]
     if(activeMenu){
-        temp.unshift(<Span>{activeMenu}</Span>)
+        temp.unshift(<Span key={"wl-bc_active"}>{activeMenu}</Span>)
         haveParent = Object.keys(menuData).filter((i: any)=>i===activeMenu)
         if(haveParent.length>0){
             haveParent = menuData[Object.keys(menuData).filter((i: any)=>i===activeMenu)[0]].parent
-            haveParent !== "" && temp.unshift(<Span>{haveParent}</Span>)
+            haveParent !== "" && temp.unshift(<Span key={"wl-bc_root"}>{haveParent}</Span>)
         }
         setHierarchy(temp)
     }

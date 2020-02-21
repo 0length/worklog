@@ -1,4 +1,5 @@
-import { Work, Menu, Group, User, prisma } from '../prisma/src/generated/prisma-client'
+import { Work, Menu, Group, User } from './../global-types'
+import { prisma } from '../prisma/src/generated/prisma-client';
 
 
 const menuSeeder = async ({name, parent_name, sequence}: Menu)=>await prisma.createMenu({name, parent_name, sequence});

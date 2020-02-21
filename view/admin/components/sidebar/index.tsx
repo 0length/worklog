@@ -102,6 +102,9 @@ const SideBar: React.FC<any> = (props)=>{
         transform: translateZ(0);
         -webkit-transform-style: preserve-3d;
         margin-left: 0vw;
+        transition: all 0.5s;
+        opacity:1;
+        max-height: 1000px;
     }
 
     .wl-sidebar__menu-2nd__item{

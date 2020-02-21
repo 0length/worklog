@@ -1,14 +1,8 @@
 import {
-
-    FETCH_ARTICLES,
-    FETCH_ARTICLES_SUCCESS,
-    FETCH_ARTICLES_FAILURE,
-
-    TRANSLATE_ARTICLES,
-    TRANSLATE_ARTICLES_SUCCESS,
-    TRANSLATE_ARTICLES_FAILURE,
-      
-   } from "./actions";
+  GENERAL_GRAPH,
+  GENERAL_GRAPH_FAILURE,
+  GENERAL_GRAPH_SUCCESS
+   } from "./types";
   import { combineReducers, Reducer as R,  CombinedState } from "redux";
 
 import userReducer from "./user";
@@ -101,30 +95,30 @@ import workReducer from "./work";
 }
 
   
-  // const translateArticleReducer = (state = initialTranslateArticleState, action) =>{
-  //   switch (action.type){
-  //     case TRANSLATE_ARTICLES:
-  //       return {
-  //         data:[],
-  //         isLoading: true,
-  //         error: null
-  //       };
-  //     case TRANSLATE_ARTICLES_SUCCESS:
-  //       return {
-  //           data: action.payload,
-  //           isLoading:false,
-  //           error:null
-  //       };
-  //     case TRANSLATE_ARTICLES_FAILURE:
-  //       return{
-  //           data: [],
-  //           isLoading: false,
-  //           error: action.payload
-  //       };
-  //     default:
-  //       return state;
-  //   }
-  // }
+  const generalGraphReducer = (state ={}, action: any) =>{
+    switch (action.type){
+      case GENERAL_GRAPH:
+        return {
+          data:[],
+          isLoading: true,
+          error: null
+        };
+      case GENERAL_GRAPH_SUCCESS:
+        return {
+            data: action.payload,
+            isLoading:false,
+            error:null
+        };
+      case GENERAL_GRAPH_FAILURE:
+        return{
+            data: [],
+            isLoading: false,
+            error: action.payload
+        };
+      default:
+        return state;
+    }
+  }
 
 const csrfReducer = (state: any= null, action: any) =>{
     return tokenTypeReducer(state, action, 'CSRF')
@@ -138,7 +132,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      user: userReducer,
      menu: menuReducer,
      toast: toastReducer,
-     work: workReducer
+     work: workReducer,
+     general: generalGraphReducer
     });
    export default Reducer;
   

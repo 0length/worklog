@@ -6,30 +6,30 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
  .hidden{
-    display: none;
+    max-height: 0;
  }
  .show{
     display: flex;
 }
 
  .active {
-    color: #22B9FF;
+    color: #2384FB;
     & > .wl-sidebar__menu-main__item-toggle {
         & > span {
-            color: #22B9FF;   
+            color: #2384FB;   
         }
     }
 
     .wl-sidebar__menu-nd__item-toggle.active {
         & > span {
-            color: #22B9FF;   
+            color: #2384FB;   
         }
     }
  }
 
  .wl-sidebar__menu-nd__item-toggle.active {
     & > span {
-        color: #22B9FF;   
+        color: #2384FB;   
     }
 }
 `

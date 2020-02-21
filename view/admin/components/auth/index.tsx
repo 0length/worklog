@@ -7,6 +7,7 @@ import SignUp from './SignUp'
 import Forgot from './Forgot'
 
 import { createGlobalStyle } from 'styled-components'
+import { AllMode } from '../../../../global-types';
 
 
 const GlobalStyle = createGlobalStyle`
@@ -92,9 +93,6 @@ const GlobalStyle = createGlobalStyle`
         font-weight: bold;
     }
 `
-interface AllMode {
-    [key: string]: JSX.Element
-}
 
 const Auth: React.FC<any> = (props)=>{
 
