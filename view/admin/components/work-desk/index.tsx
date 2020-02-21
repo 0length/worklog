@@ -1,7 +1,7 @@
 import React from 'react'
 import styled,{ createGlobalStyle } from 'styled-components'
 import Testing from './component/Testing'
-import Work from './component/Work'
+import Work from './component/work'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
