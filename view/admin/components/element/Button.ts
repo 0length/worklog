@@ -11,21 +11,31 @@ const Button = styled(styled.button`
         ${(props: any)=>
             props.styleProfile && props.styleProfile.primary && 
             css`
-            box-shadow: 0 9px 16px 0 rgba(34,185,255,.25) !important;
             background: #00a3ee;
             color: white;
-            `}
+            border: white;
+        `}
+
+        ${(props: any)=>
+            props.styleProfile && props.styleProfile.danger && 
+            css`
+            box-shadow: none;
+            background: #FD27EB;
+            border: white;
+            color: white;
+
+        `}
 
     `)`
 
     &:hover {
-        background: transparent;
-        color: #00abfb;
+        box-shadow: 0 0 5px rgba(33,33,33,.5) !important;
+        // background: transparent;
+        // color: #00abfb;
     }
 
     &:active {
-        background: #00a3ee;
-        color: white;
+        border: 1px solid rgba(33,33,33,.7);
     }
 `
      
