@@ -7,8 +7,9 @@ export const REQUEST_CSRF_TOKEN_FAILURE = 'REQUEST_CSRF_TOKEN_FAILURE';
 
 
 
-export const generalGraph = () => ({
-    type: GENERAL_GRAPH
+export const generalGraph = (param: any) => ({
+    type: GENERAL_GRAPH,
+    query: param
 });
 
 export const generalGraphSuccess = (articles: any) => ({

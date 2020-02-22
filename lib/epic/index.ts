@@ -162,6 +162,7 @@ const logout =  (action$: any, store: any)=>{
 
  const generalGraph =  (action$: any, store: any)=>{
     return action$.pipe(
+        ofType(GENERAL_GRAPH),
         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
             action.query
             },headers:{authorization:`Bearer ${store.value.user.authToken}`}
