@@ -5,11 +5,104 @@ import { getMenu, setActiveMenu } from '../../../../reducer/menu/actions'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
+.wl-sidebar__menu-main{
+    margin: none;
+    list-style: none;
+    box-sizeing: border-box;
+    margin-left: -1vw;
+    
+}
+
+.wl-sidebar__menu-main__item{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    float; none;
+    padding:0;
+    flex-direction: column;
+    margin: 2px 0;
+    transition: background-color .3s;
+
+}
+.wl-sidebar__menu-main__item-toggle{
+    display: flex;
+    flex-grow: 1;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    margin: 0;
+    padding: 1vh 2vw;
+    text-decoration: none;
+    outline: 0;
+    min-height: 3.5vh;
+    margin-left: -1.5vw;
+    z-index:97;
+}
+
+.wl-sidebar__menu__text{
+    display: flex;
+    align-item: center;
+    flex-grow: 1;
+    font-weight: 400;
+    font-size: 1.8vh;
+    color: #595d6e;;
+    text-transform: initial;
+    -webkit-box-align: center;
+    -webkit-box-flex: 1;
+    padding: 0;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+.wl-sidebar__menu-2nd{
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: none;
+    list-style: none;
+    box-sizeing: border-box;
+    transform: translateZ(0);
+    -webkit-transform-style: preserve-3d;
+    margin-left: 0vw;
+    transform: translateY(0);
+}
+
+.wl-sidebar__menu-2nd__item{
+    display flex;
+    float; none;
+    padding:0;
+    flex-direction: column;
+    margin: 2px 0;
+    transition: background-color .3s;
+}
+
+.wl-sidebar__menu-nd__item-toggle{
+    display: flex-box;
+    flex-grow: 1;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    margin: 0;
+    text-decoration: none;
+    outline: 0;
+    min-height: 25px;
+    margin-left: -0.5vw;
+}
+
  .hidden{
-    max-height: 0;
+    transition: all 1ms linear 0s;
+    transition: height 0.5s linear 0s;
+    opacity: 0;
+    height: 0;
  }
  .show{
-    display: flex;
+     transition: all 0.5s;
+     height: 100%;
 }
 
  .active {
@@ -56,12 +149,13 @@ useEffect(()=>{
                     document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle').forEach((item: any)=>item.classList.toggle("active", false))
                     !element.classList.contains("active") ?element.classList.toggle("active", true):element.classList.toggle("active", false)
                     let subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
-                    !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true)&&subMenuClassList.toggle("show", false):subMenuClassList.toggle("hidden", false)&&subMenuClassList.toggle("hidden", true)
+                    !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true):subMenuClassList.toggle("hidden", false)
+                    subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
                  }}>
                 <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
-                <ul className="wl-sidebar__menu-2nd hidden">
+                <ul className="wl-sidebar__menu-2nd show">
                     {
                         props.menu.data.filter((child: any)=>child.parent_name===item.name).map((child: any, idx: any)=>{
                             return(<li 
