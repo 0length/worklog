@@ -29,12 +29,14 @@ const Button = styled(styled.button`
     `)`
 
     &:hover {
-        box-shadow: 0 0 5px rgba(33,33,33,.5) !important;
+        box-shadow: 0 0 5px rgba(33,33,33,.3) !important;
         // background: transparent;
         // color: #00abfb;
     }
 
     &:active {
+        background: transparent;
+        color: black;
         border: 1px solid rgba(33,33,33,.7);
     }
 `
