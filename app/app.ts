@@ -14,6 +14,7 @@ import Reducer from '../reducer'
 import { getfile } from './GDrive/getfile'
 import { postfile } from './GDrive/postfile'
 import { createServer } from 'http'
+import endPoint from '../lib/const/endpoint'
 // import Routes from '../view/portfolio/index'
 // const bodyParser = require('body-parser')
 const { ApolloServer } = require('apollo-server-express')
@@ -50,7 +51,7 @@ const apolloServer = new ApolloServer({
         // require('./GraphQL/comment'),
     ],
     
-    path:'/graphql',
+    path:endPoint.GRAPHQL,
     context: async ({req}:any) =>{
       if(req && req.headers && req.headers.authorization){
         return {
@@ -60,7 +61,7 @@ const apolloServer = new ApolloServer({
     }
 })
 
-app.use('/graphql', csrfProtection, bodyParser.json())
+app.use(endPoint.GRAPHQL, csrfProtection, bodyParser.json())
 apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
@@ -105,8 +106,8 @@ const preloadedState = store.getState();
   })
 })
 const bodyParserencoded = bodyParser.urlencoded({ extended: true })
-app.get("/api/gdrive/*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
-app.post("/api/gdrive",
+app.get(endPoint.GOOGLEDRIVE+"*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
+app.post(endPoint.GOOGLEDRIVE,
 //  csrfProtection,
 bodyParserencoded,
  (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
