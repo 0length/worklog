@@ -1,7 +1,11 @@
 import {
   GENERAL_GRAPH,
   GENERAL_GRAPH_FAILURE,
-  GENERAL_GRAPH_SUCCESS
+  GENERAL_GRAPH_SUCCESS,
+  UPLOAD,
+  UPLOAD_FAILURE,
+  UPLOAD_SUCCESS,
+  UPLOAD_PROGRESS
    } from "./types";
   import { combineReducers, Reducer as R,  CombinedState } from "redux";
 
@@ -120,6 +124,36 @@ import workReducer from "./work";
     }
   }
 
+  const uploadReducer = (state ={}, action: any) =>{
+    switch (action.type){
+      case UPLOAD:
+        return {
+          fileID: "",
+          isLoading: true,
+          error: null
+        };
+      case UPLOAD_SUCCESS:
+        return {
+            fileID: action.payload,
+            isLoading:false,
+            error:null
+        };
+      case UPLOAD_PROGRESS:
+        return {
+          ...state,
+          progress: action.payload
+        };
+      case UPLOAD_FAILURE:
+        return{
+            fileID: "",
+            isLoading: false,
+            error: action.payload
+        };
+      default:
+        return state;
+    }
+  }
+
 const csrfReducer = (state: any= null, action: any) =>{
     return tokenTypeReducer(state, action, 'CSRF')
   }
@@ -133,7 +167,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      menu: menuReducer,
      toast: toastReducer,
      work: workReducer,
-     general: generalGraphReducer
+     general_graph: generalGraphReducer,
+     upload: uploadReducer
     });
    export default Reducer;
   
