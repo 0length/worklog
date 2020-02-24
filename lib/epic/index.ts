@@ -1,11 +1,11 @@
-import { of, queueScheduler, Observable, timer } from 'rxjs';
-import { map, catchError, flatMap, mergeMap, subscribeOn, take, delay, takeUntil } from 'rxjs/operators';
+import { of, queueScheduler, Observable, timer, merge } from 'rxjs';
+import { map, catchError, flatMap, mergeMap, subscribeOn, take, delay, takeUntil, switchMap } from 'rxjs/operators';
 import { webSocket } from "rxjs/webSocket";
 import { combineEpics, ofType } from 'redux-observable';
-import client from '../api/client';
+import client, { AjaxUpdate } from '../api/client';
 import { userTypes } from '../../reducer/user/types';
 import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure } from '../../reducer/user/actions';
-import { AjaxResponse } from 'rxjs/ajax';
+import { AjaxResponse, AjaxRequest } from 'rxjs/ajax';
 import { menuTypes } from '../../reducer/menu/types';
 import { getMenuSuccess, getMenuFailure } from '../../reducer/menu/actions';
 import { toastType } from '../../reducer/toast/types';
@@ -13,12 +13,13 @@ import { pushToast, pushedToast, clearToast } from '../../reducer/toast/action';
 import arrayChunks from '../utils/arrayChunks';
 import sortNumber from '../utils/sortNumber';
 import reducer from '../utils/reducerSum';
-import { toastError } from '../utils/toastModel';
+import { toastError, toastSuccess } from '../utils/toastModel';
 import localStorageKeys from '../const/localStorageKeys';
 import { workTypes } from '../../reducer/work/types';
 import graphResponseParser from '../utils/graphResParser';
-import { GENERAL_GRAPH } from '../../reducer/types';
-import { generalGraphFailure, generalGraphSuccess } from '../../reducer/actions';
+import { GENERAL_GRAPH, UPLOAD } from '../../reducer/types';
+import { generalGraphFailure, generalGraphSuccess, uploadFailure, uploadSuccess, setUploadPercentage } from '../../reducer/actions';
+import endPoint from '../const/endpoint';
 
 
 const socket$ = webSocket(
@@ -31,9 +32,15 @@ const socket$ = webSocket(
 const auth = (action$: any, store: any)=>{ 
      return action$.pipe(
          ofType(userTypes.AUTH),
-         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            action.query
-        }})),
+         flatMap((action: any)=>{
+            return client({
+                service: 'graphql', 
+                csrf: store.value.csrf.token, 
+                graphqlBody: {
+                    query: action.query
+                }
+            })
+        }),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
@@ -56,11 +63,18 @@ const auth = (action$: any, store: any)=>{
  const getMenu = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(menuTypes.GET),
-         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            action.query
-            },headers:{authorization:`Bearer ${store.value.user.authToken}`}
-        })),
-         map((data: AjaxResponse) =>data.response), 
+         flatMap((action: any)=>{
+            return client({
+                service: 'graphql',
+                csrf: store.value.csrf.token, 
+                graphqlBody: {
+                    query: action.query
+                },headers:{
+                    authorization:`Bearer ${store.value.user.authToken}`
+                }
+            })
+        }),
+         map((data: any) =>data.response), 
          map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
@@ -81,10 +95,17 @@ const auth = (action$: any, store: any)=>{
  const getUserData = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(userTypes.GET_USER_DATA),
-         flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            action.query
-            },headers:{authorization:`Bearer ${store.value.user.authToken}`}
-        })),
+         flatMap((action: any)=>{
+            return client({
+                service: 'graphql',
+                csrf: store.value.csrf.token, 
+                graphqlBody: {
+                    query: action.query
+                },headers:{
+                    authorization:`Bearer ${store.value.user.authToken}`
+                }
+            })
+        }),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
@@ -163,10 +184,16 @@ const logout =  (action$: any, store: any)=>{
  const generalGraph =  (action$: any, store: any)=>{
     return action$.pipe(
         ofType(GENERAL_GRAPH),
-        flatMap((action: any)=>client({service: 'graphql', csrf: store.value.csrf.token, graphqlBody: {query: 
-            action.query
-            },headers:{authorization:`Bearer ${store.value.user.authToken}`}
-        })),
+        flatMap((action: any)=>{
+            return client({
+                service: 'graphql',
+                csrf: store.value.csrf.token,
+                graphqlBody: {query: action.query},
+                headers:{
+                    authorization:`Bearer ${store.value.user.authToken}`
+                }
+            })
+        }),
          map((data: AjaxResponse) =>data.response), 
          map((payload: any) =>graphResponseParser(payload)), 
          mergeMap((payload: any)=>{
@@ -183,6 +210,31 @@ const logout =  (action$: any, store: any)=>{
      )
  }
 
+ const upload = (action$: any, store: any)=>{
+    return action$.pipe(
+        ofType(UPLOAD),
+        map(action=>action),
+        mergeMap((action: any)=>{
+           return Observable.create((observer: any)=>{
+               const progressSubscriber = (a: number)=>observer.next(setUploadPercentage(a))
+               const responseSubscriber = (a: AjaxResponse)=>observer.next(uploadSuccess(a))
+               client({service: 'Upload-Image', csrf: store.value.csrf.token, body: action.file[0], headers:{authorization:`Bearer ${store.value.user.authToken}`, 'Content-Type' : action.file[0].type}
+                }, {subscriberProgress: progressSubscriber, subscriberResponse: responseSubscriber})
+                
+            //    if(payload.error){
+                   
+            //        observer.next(pushToast([toastError(payload.error==="jwt expired"?"Your Session has Expired":payload.error)]))
+            //        localStorage.removeItem(localStorageKeys.auth_token);
+            //        localStorage.removeItem(localStorageKeys.username);
+            //    }else{
+            //        observer.next(uploadSuccess(payload))
+            //        observer.next(pushToast([toastSuccess("Upload Success")]))
+               
+            })
+       })
+    )
+}
+
  export const rootEpic = 
  (action$: any, store: any)=>
  combineEpics(
@@ -193,7 +245,8 @@ const logout =  (action$: any, store: any)=>{
     cleanerToast,
     workSubsriber,
     logout,
-    generalGraph
+    generalGraph,
+    upload
  )
  (action$.pipe(
      subscribeOn(queueScheduler)
