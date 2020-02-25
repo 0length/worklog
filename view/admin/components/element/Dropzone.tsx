@@ -72,6 +72,7 @@ const Container = styled.div`
 `
 interface IProps {
     onFilesAdded?: (file: Array<FileList>)=>void
+    progress?: string
 }
 const Dropzone: React.FC<IProps> = (props)=>{
     const [event, setEvent] = useState<string>('none');
@@ -91,8 +92,6 @@ const Dropzone: React.FC<IProps> = (props)=>{
             const array = fileListToArray(files);
             props.onFilesAdded(array);
         }
-        
-
     }
 
     const onDrop = (e: any)=>{
@@ -153,7 +152,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         <LocalStyle />
         {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}
         <input ref={inputRef}  style={{display: 'none'}}type="file" onChange={(e)=>{onFileAdded(e)}} disabled={inputDisable} hidden={true}/>
-        {event === 'Drop' && <div className={""} >Uploading ...</div>}
+        {event === 'Drop' && <div className={""} >Uploading ...{ props.progress &&'('+props.progress+'%)' }</div>}
     </Container>)
 }
 

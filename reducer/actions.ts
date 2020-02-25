@@ -39,7 +39,7 @@ export const requestCsrfTokenFailure = (message: any) => ({
 //
 
 
-export const upload = (param: any) => ({
+export const uploader = (param: any) => ({
     type: UPLOAD,
     file: param
 });

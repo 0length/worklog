@@ -3,7 +3,7 @@ import { Input, Button, Dropzone } from '../../../element'
 import { createGlobalStyle } from 'styled-components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { generalGraph, upload } from './../../../../../../reducer/actions'
+import { generalGraph, uploader } from './../../../../../../reducer/actions'
 import withLayout from '../withLayout'
 
 const LocalStyle = createGlobalStyle`
@@ -55,7 +55,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div className="wl-form-group">
             <label>File for Image : </label>
-            <Dropzone onFilesAdded={props.upload}/>
+            <Dropzone onFilesAdded={props.uploader} progress={props.upload.progress}/>
         </div>
         <div className="wl-form-group">
             <label>Client : </label>
@@ -83,7 +83,7 @@ const mapStateToProps = (state:any) => (state);
 
 const mapDispatchToProps = (dispatch:any) => bindActionCreators({
     generalGraph,
-    upload
+    uploader
 }, dispatch);
 
 export default withLayout(connect(mapStateToProps, mapDispatchToProps)(Form));

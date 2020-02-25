@@ -134,7 +134,7 @@ import workReducer from "./work";
         };
       case UPLOAD_SUCCESS:
         return {
-            fileID: action.payload,
+            fileID: action.payload.data.id,
             isLoading:false,
             error:null
         };

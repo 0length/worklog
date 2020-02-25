@@ -113,7 +113,6 @@ const client = (customOption: AgentOption, s: any = {})=>{
                 ProgressEvent: progressEvent => {
                     const percentage = fixDecimal((progressEvent.loaded / progressEvent.total) * 100);
                     s && s.subscriberProgress&& s.subscriberProgress(percentage)
-                   console.log(progressEvent)
                 },
                 Response: _ajaxResponse => {
                     s && s.subscriberResponse && s.subscriberResponse(_ajaxResponse.response)
