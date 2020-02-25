@@ -80,15 +80,17 @@ const LocalStyle = createGlobalStyle`
 `
 const ActiveAccount: React.FC<any> = (props)=>{
     
-    useEffect(()=>{
-        let bgLiquid = document.getElementsByClassName('wl-header__right-top-bg-liquid')[0]
-        bgLiquid.classList.toggle('slide-up', true)
-    }, [props.togggle])
+    // useEffect(()=>{
+    //     let bgLiquid = document.getElementsByClassName('wl-header__right-top-bg-liquid')[0]
+    //     bgLiquid.classList.toggle('slide-up', true)
+    // }, [props.togggle])
     return (
         <Wrapper>
             <LocalStyle />
             <Container>
-                <img className={"wl-header__right-top-bg-liquid "} src="/static/img/aa-curve.svg" alt=""/>
+                {/*
+                 <img className={"wl-header__right-top-bg-liquid "} src="/static/img/aa-curve.svg" alt=""/> 
+                */}
                 <div className={"wl-header__right-active__account"}>
                     <ul>
                         <li {...{static: "bottom"}}><div>about</div>|<div onClick={()=>{props.logout()}}><i className={"flaticon-logout"}/>&nbsp;&nbsp;&nbsp;logout</div></li>

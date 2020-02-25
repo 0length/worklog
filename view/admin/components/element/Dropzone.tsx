@@ -24,7 +24,7 @@ const LocalStyle = createGlobalStyle`
 
 
 const Container = styled.div`
-    border: 3px dashed #F1F0EF;
+    border: 3px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
     // background: #F1F0EF;
@@ -70,10 +70,15 @@ const Container = styled.div`
         `
     }
 `
-const Dropzone: React.FC<any> = (props)=>{
+interface IProps {
+    onFilesAdded?: (file: Array<FileList>)=>void
+    progress?: string
+}
+const Dropzone: React.FC<IProps> = (props)=>{
     const [event, setEvent] = useState<string>('none');
     const [inputDisable, setinputDisable] = useState<boolean>(false);
     const inputRef = useRef<any>();
+
     const openFileDialog = (e: any)=>{
         if (e.target.disabled) return
         inputRef.current.click()
@@ -83,7 +88,10 @@ const Dropzone: React.FC<any> = (props)=>{
         setEvent('Drop')
         setinputDisable(true)
         console.log(files.item(0))
-
+        if (props.onFilesAdded) {
+            const array = fileListToArray(files);
+            props.onFilesAdded(array);
+        }
     }
 
     const onDrop = (e: any)=>{
@@ -93,6 +101,10 @@ const Dropzone: React.FC<any> = (props)=>{
         setinputDisable(true)
         console.log(files.item(0), files)
 
+        if (props.onFilesAdded) {
+            const array = fileListToArray(files);
+            props.onFilesAdded(array);
+        }
     }
 
     const onDragOver = (e: any)=>{
@@ -140,7 +152,7 @@ const Dropzone: React.FC<any> = (props)=>{
         <LocalStyle />
         {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}
         <input ref={inputRef}  style={{display: 'none'}}type="file" onChange={(e)=>{onFileAdded(e)}} disabled={inputDisable} hidden={true}/>
-        {event === 'Drop' && <div className={""} >Uploading ...</div>}
+        {event === 'Drop' && <div className={""} >Uploading ...{ props.progress &&'('+props.progress+'%)' }</div>}
     </Container>)
 }
 

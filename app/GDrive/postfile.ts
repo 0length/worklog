@@ -1,5 +1,6 @@
 const {google} = require('googleapis');
 import { Request, Response, NextFunction } from 'express'
+
 export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
 
     const drive = google.drive({version: 'v3', auth});
@@ -12,12 +13,21 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
             return httpReq.body
             // return httpReq.busboy.on('file', (fieldname, file, filename)=>file)
         })
-        console.log(file)
+        const ct= httpReq.headers["content-type"]
+      //   await httpReq.on('end', ()=>{
+      //     return httpReq.headers["content-type"]
+      //     // return httpReq.busboy.on('file', (fieldname, file, filename)=>file)
+      // })
+        // console.log(file)
+        if(ct){
+          const result = {data: {success: false, id: null},  error: "header for Content-Type is undefine"} 
+              httpRes.json(result)
+        }
         var fileMetadata = {
-            'name': 'photo2.jpg'
+            'name': new Date().toLocaleTimeString().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`
           };
           var media = {
-            mimeType: 'image/jpeg',
+            mimeType: ct,
             body: file //fs.createReadStream('./app/GDrive/jpg.jpg')
           };
           await drive.files.create({
@@ -27,16 +37,18 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
           }, function (err: any, file: any) {
             if (err) {
               // Handle error
-              console.error(err);
+              // console.error(err);
+              const result = {data: {success: false, id: null}, error: "Server Bussy"} 
+              httpRes.json(result)
             } else {
-              console.log('File Id: ', file.data.id);
+              // console.log('File Id: ', file.data.id);
               const result = {data: {success: true, id: file.data.id}} 
               httpRes.json(result)
             }
           });
 
-          setTimeout(()=>{
-            console.log("req.file", httpReq.body)
-          }, 5000)
+          // setTimeout(()=>{
+          //   console.log("req.file", httpReq.body)
+          // }, 5000)
     
 }
