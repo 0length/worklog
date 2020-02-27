@@ -5,7 +5,8 @@ import {
   UPLOAD,
   UPLOAD_FAILURE,
   UPLOAD_SUCCESS,
-  UPLOAD_PROGRESS
+  UPLOAD_PROGRESS,
+  UPLOAD_RESET
    } from "./types";
   import { combineReducers, Reducer as R,  CombinedState } from "redux";
 
@@ -13,6 +14,7 @@ import userReducer from "./user";
 import menuReducer from "./menu";
 import toastReducer from "./toast";
 import workReducer from "./work";
+import { initUploader } from "./init";
   
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -124,31 +126,59 @@ import workReducer from "./work";
     }
   }
 
-  const uploadReducer = (state ={}, action: any) =>{
+  const uploadReducer = (state:any = initUploader, action: any) =>{
     switch (action.type){
       case UPLOAD:
-        return {
+        const newProcess: any = {}
+        newProcess[action.pid] = {
+          ...state[action.pid],
           fileID: "",
           isLoading: true,
           error: null
-        };
-      case UPLOAD_SUCCESS:
-        return {
-            fileID: action.payload.data.id,
-            isLoading:false,
-            error:null
-        };
-      case UPLOAD_PROGRESS:
+        }
         return {
           ...state,
+          ...newProcess
+        };
+      case UPLOAD_SUCCESS:
+        const newProcessSuccess: any = {}
+        newProcessSuccess[action.pid] = {
+          ...state[action.pid],
+          fileid: action.payload.data.id,
+          isLoading:false,
+          error:null
+        }
+        return {
+          ...state,
+          ...newProcessSuccess
+        };
+      case UPLOAD_PROGRESS:
+        const newProcessProgress: any = {}
+        newProcessProgress[action.pid] = {
+          ...state[action.pid],
           progress: action.payload
+        }
+        return {
+          ...state,
+          ...newProcessProgress
         };
       case UPLOAD_FAILURE:
+        const newProcessFail: any = {}
+        newProcessFail[action.pid] = {
+          ...state[action.pid],
+          fileID: "",
+          isLoading: false,
+          error: action.payload
+        }
         return{
-            fileID: "",
-            isLoading: false,
-            error: action.payload
+          ...state,
+          ...newProcessFail
         };
+        case UPLOAD_RESET:
+          const newProcessReset: any = state
+          // newProcessReset[action.pid] = {}
+          delete newProcessReset[action.pid]
+          return newProcessReset
       default:
         return state;
     }
@@ -167,8 +197,8 @@ const csrfReducer = (state: any= null, action: any) =>{
      menu: menuReducer,
      toast: toastReducer,
      work: workReducer,
-     general_graph: generalGraphReducer,
-     upload: uploadReducer
+     grapher: generalGraphReducer,
+     uploader: uploadReducer
     });
    export default Reducer;
   

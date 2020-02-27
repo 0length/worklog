@@ -107,7 +107,7 @@ interface ClientSubscriber{
 const client = (customOption: AgentOption, s: any = {})=>{
 
     if(s && s.subscriberProgress && s.subscriberResponse){
-        console.log("withUpdate")
+        console.log("withUpdate", cainedOption(customOption), customOption)
         return ajaxWithUpdates(cainedOption(customOption)).subscribe(
             AjaxUpdate.match({
                 ProgressEvent: progressEvent => {

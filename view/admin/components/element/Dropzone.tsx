@@ -27,11 +27,11 @@ const Container = styled.div`
     border: 3px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
-    // background: #F1F0EF;
     height: 100px;
     width: 100%; 
     justify-content: center;
     cursor: pointer;
+
     & > span{
         font-family: 'Montserrat';
         font-size: 10.5px;
@@ -50,10 +50,11 @@ const Container = styled.div`
     ${
         (props: any)=>
         props && props.event ==='DragOver' && css`
-            cursor: grab;
-            transition:background-color 1s;
-            background-color: darkgrey;
-            color: #fff;
+            // cursor: grab;
+            // background-color: darkgrey;
+            background: radial-gradient(circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%), #D4D4D4 0%, transparent 10%, transparent 100%) no-repeat 0 0;
+            color: #55C8FF;
+            border: 3px solid #fff;
         `
     }
     ${
@@ -71,14 +72,19 @@ const Container = styled.div`
     }
 `
 interface IProps {
-    onFilesAdded?: (file: Array<FileList>)=>void
-    progress?: string
+    onFilesAdded?: (file: Array<FileList>, pid: string)=>void
+    progress?: string,
+    pid: string
 }
+
+
 const Dropzone: React.FC<IProps> = (props)=>{
     const [event, setEvent] = useState<string>('none');
+    // const [mouseX, setMouseX] = useState<number>(defaultXY);
+    // const [mouseY, setMouseY] = useState<number>(defaultXY);
+
     const [inputDisable, setinputDisable] = useState<boolean>(false);
     const inputRef = useRef<any>();
-
     const openFileDialog = (e: any)=>{
         if (e.target.disabled) return
         inputRef.current.click()
@@ -90,7 +96,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         console.log(files.item(0))
         if (props.onFilesAdded) {
             const array = fileListToArray(files);
-            props.onFilesAdded(array);
+            props.onFilesAdded(array, props.pid);
         }
     }
 
@@ -103,14 +109,20 @@ const Dropzone: React.FC<IProps> = (props)=>{
 
         if (props.onFilesAdded) {
             const array = fileListToArray(files);
-            props.onFilesAdded(array);
+            props.onFilesAdded(array, props.pid);
         }
     }
 
     const onDragOver = (e: any)=>{
         e.preventDefault()
         setEvent('DragOver')
-        // console.log(files)
+        
+        console.log(e.target)
+
+        e.target.style.setProperty('--mouse-x', e.clientX / innerWidth);
+        e.target.style.setProperty('--mouse-y', e.clientY / innerHeight);    
+        
+        
     }
 
     const onDragLeave = (e: any)=>{
@@ -123,15 +135,15 @@ const Dropzone: React.FC<IProps> = (props)=>{
         
     }
 
-    const onDrag = (e: any)=>{
-        e.preventDefault()
-        setEvent('Drag')
-        // console.log(files)
-        setTimeout(()=>{
-            setEvent('none')
-        }, 3000)
+    // const onDrag = (e: any)=>{
+    //     e.preventDefault()
+    //     setEvent('Drag')
+    //     // console.log(files)
+    //     setTimeout(()=>{
+    //         setEvent('none')
+    //     }, 3000)
         
-    }
+    // }
     
     const fileListToArray = (list: any)=>{
         const array = []
@@ -146,7 +158,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         onDragOver={(e)=>onDragOver(e)}
         onDragLeave={(e)=>onDragLeave(e)}
         onDrop={(e)=>onDrop(e)}
-        onDragStart={(e)=>onDrag(e)}
+        // onDragStart={(e)=>onDrag(e)}
         onClick={(e)=>{openFileDialog(e)}}
     >
         <LocalStyle />

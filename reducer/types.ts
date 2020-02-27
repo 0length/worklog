@@ -6,3 +6,4 @@ export const UPLOAD = 'UPLOAD';
 export const UPLOAD_SUCCESS = 'UPLOAD_SUCCESS';
 export const UPLOAD_PROGRESS = 'UPLOAD_PROGRESS';
 export const UPLOAD_FAILURE = 'UPLOAD_FAILURE';
+export const UPLOAD_RESET = 'UPLOAD_RESET';
