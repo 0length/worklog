@@ -19,8 +19,7 @@ import endPoint from '../lib/const/endpoint'
 // const bodyParser = require('body-parser')
 const { ApolloServer } = require('apollo-server-express')
 // const cors = require('cors')
-const redis = require('redis')
-// const redisClient = redis.createClient()
+
 // const router = express.router();
 
 const app : Application = express();

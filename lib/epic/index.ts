@@ -216,9 +216,11 @@ const logout =  (action$: any, store: any)=>{
         map(action=>action),
         mergeMap((action: any)=>{
            return Observable.create((observer: any)=>{
-               const progressSubscriber = (a: number)=>observer.next(setUploadPercentage(a))
-               const responseSubscriber = (a: AjaxResponse)=>observer.next(uploadSuccess(a))
-               client({service: 'Upload-Image', csrf: store.value.csrf.token, body: action.file[0], headers:{authorization:`Bearer ${store.value.user.authToken}`, 'Content-Type' : action.file[0].type}
+               const progressSubscriber = (a: number)=>observer.next(setUploadPercentage(a, action.pid))
+               const responseSubscriber = (a: AjaxResponse)=>observer.next(uploadSuccess(a, action.pid))
+               const ctype: any = {}
+               ctype['Content-Type'] = action.file[0].type
+               client({service: 'Upload-Image', csrf: store.value.csrf.token, body: action.file[0], headers:{authorization:`Bearer ${store.value.user.authToken}`, ...ctype}
                 }, {subscriberProgress: progressSubscriber, subscriberResponse: responseSubscriber})
                 
             //    if(payload.error){

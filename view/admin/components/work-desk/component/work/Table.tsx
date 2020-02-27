@@ -80,7 +80,7 @@ const LocalStyle = createGlobalStyle`
 // }
 `
 const Table: React.FC<any> = ({data})=>{
-    const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr></tr>])
+    const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr key={"wl_dt__work-tr"+(1)}></tr>])
 
     useEffect(()=>{
         if(data){

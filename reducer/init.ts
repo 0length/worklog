@@ -21,3 +21,7 @@ export const initWork = {
     isLoading: false,
     error: null
 }
+
+export const initUploader = {
+    'uploader-ready': {error: null}
+}

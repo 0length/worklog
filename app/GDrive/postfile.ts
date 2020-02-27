@@ -19,7 +19,7 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
       //     // return httpReq.busboy.on('file', (fieldname, file, filename)=>file)
       // })
         // console.log(file)
-        if(ct){
+        if(!ct){
           const result = {data: {success: false, id: null},  error: "header for Content-Type is undefine"} 
               httpRes.json(result)
         }

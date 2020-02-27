@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Button, Checkbox, Input, ToastCard } from '../element'
 import ToastNotifier from '../toast-notifier'
 
 const SignIn: React.FC<any> = ({setMode, auth, error})=>{
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-
+    const buttonSignIn = useRef<any>();
+    const onEnter = (e: any)=>{
+        if(e.key === 'Enter'){
+        buttonSignIn.current.click()
+        }
+    }
     return(
-    <div className="wl-login__signin">
+    <div className="wl-login__signin" onKeyPressCapture={(e)=>onEnter(e)}>
         <div className="wl-login__head" style={{
             
             // margin: '3rem 0',
@@ -37,7 +42,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
                 }}>Forget Password ?</a> */}
             </div>
             <div className="wl-login__actions" >
-                <Button onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
+                <Button ref={buttonSignIn} onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
             </div>
         </div>
     </div>

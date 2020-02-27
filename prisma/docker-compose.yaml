@@ -30,10 +30,10 @@ services:
     volumes:
       - mongo:/var/lib/mongo
   redis:
-    image: redis
-    container_name: cache_app_me
-    restart: always
-    expose:
-      - 6379
+    container_name: redis_app_me
+    image: 'redis:4-alpine'
+    command: redis-server --requirepass redispassword
+    ports:
+      - '6379:6379'
 volumes:
   mongo:

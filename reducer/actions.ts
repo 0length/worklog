@@ -1,4 +1,4 @@
-import { GENERAL_GRAPH, GENERAL_GRAPH_SUCCESS, GENERAL_GRAPH_FAILURE, UPLOAD, UPLOAD_FAILURE, UPLOAD_SUCCESS, UPLOAD_PROGRESS } from "./types";
+import { GENERAL_GRAPH, GENERAL_GRAPH_SUCCESS, GENERAL_GRAPH_FAILURE, UPLOAD, UPLOAD_FAILURE, UPLOAD_SUCCESS, UPLOAD_PROGRESS, UPLOAD_RESET } from "./types";
 
 
 export const REQUEST_CSRF_TOKEN = 'REQUEST_CSRF_TOKEN';
@@ -39,22 +39,30 @@ export const requestCsrfTokenFailure = (message: any) => ({
 //
 
 
-export const uploader = (param: any) => ({
+export const upload = (param: any, pid: string) => ({
     type: UPLOAD,
-    file: param
+    file: param,
+    pid: pid
 });
 
-export const setUploadPercentage = (payload: any) => ({
+export const setUploadPercentage = (payload: any, pid: string) => ({
     type: UPLOAD_PROGRESS,
-    payload: payload
+    payload: payload,
+    pid: pid
 });
 
-export const uploadSuccess = (payload: any) => ({
+export const uploadSuccess = (payload: any, pid: string) => ({
     type: UPLOAD_SUCCESS,
-    payload: payload
+    payload: payload,
+    pid: pid
 });
 
-export const uploadFailure = (message: any) => ({
+export const uploadFailure = (message: any, pid: string) => ({
     type: UPLOAD_FAILURE,
-    payload: message
+    payload: message,
+    pid: pid
+});
+export const resetUploader = (pid: string) => ({
+    type: UPLOAD_RESET,
+    pid: pid
 });
