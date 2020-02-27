@@ -2,7 +2,7 @@ import React from 'react'
 import { pushToast } from '../../../../../reducer/toast/action';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ToastCard, Dropzone } from '../../element';
+import { ToastCard, Dropzone, TagsInput } from '../../element';
 
 
 const Testing: React.FC<any> = (props)=>{
@@ -24,7 +24,7 @@ const Testing: React.FC<any> = (props)=>{
         //   // setNotification([]);
         // }, 1);
         }}>Push Toast</button>
-      
+      <TagsInput />
     </>)
 }
 const mapStateToProps = (state:any) => (state);

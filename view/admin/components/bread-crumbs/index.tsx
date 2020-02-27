@@ -55,7 +55,7 @@ if(menuList.length>0) {
     menuList.map((item: any, idx: any)=>{menuData[item.name]={parent: item.parent_name}})
 }
 
-const [hierarchy, setHierarchy] = useState<Array<JSX.Element>>([<Span></Span>])
+const [hierarchy, setHierarchy] = useState<Array<JSX.Element>>([<Span  key={"wl-bc_empt"}></Span>])
 
 useEffect(()=>{
     let haveParent: any, temp: any =[]

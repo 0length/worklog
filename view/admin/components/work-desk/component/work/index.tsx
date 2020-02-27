@@ -12,12 +12,12 @@ const StyleWork = createGlobalStyle`
 
 const Work: React.FC<any> = (props)=>{
     const [mode, setMode]= useState<string>('read');
-    
-    const actionTable = [<Button className="btn-add" onClick={()=>setMode('write')}><i className={"fa fa-plus"}/> Add New Work</Button>]
-    const actionForm = [<Button {...{styleProfile: {danger: true}}} className="btn-add" onClick={()=>setMode('read')}><i className={"fa fa-minus"}/> Discard </Button>]
+    const activityName = 'work'
+    const actionTable = [<Button  key={"wl-work_add"} className="btn-add" onClick={()=>setMode('write')}><i className={"fa fa-plus"}/> Add New Work</Button>]
+    const actionForm = [<Button key={"wl-work_back"} {...{styleProfile: {danger: true}}} className="btn-back" onClick={()=>setMode('read')}><i className={"fa fa-minus"}/> Discard </Button>]
     const allMode: AllMode = {
         read :    <Table action={actionTable} data={props.work.uptodate} title={"All Work List"}/>,
-        write:    <Form action={actionForm} data={""} title={"Create New Work Item"}/>
+        write:    <Form action={actionForm} old={null} title={"Create New Work Item"} instanceOf={activityName}/>
     }
 
     const setModeToDom = (modeWant: string, param: string="")=>{
@@ -37,6 +37,8 @@ const Work: React.FC<any> = (props)=>{
 }
 const mapStateToProps = (state:any) => (state);
 
-const mapDispatchToProps = (dispatch:any) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch:any) => bindActionCreators({
+
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Work);
