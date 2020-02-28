@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styled, { css, createGlobalStyle } from 'styled-components'
 
 const LocalStyle = createGlobalStyle`
@@ -20,6 +20,10 @@ const LocalStyle = createGlobalStyle`
     }
   }
 
+  .slide-up {
+    opacity: 1 !important;
+  }
+
 `
 
 
@@ -31,7 +35,8 @@ const Container = styled.div`
     width: 100%; 
     justify-content: center;
     cursor: pointer;
-
+    opacity: 0;
+    transition: opacity 500ms linear 0s;
     & > span{
         font-family: 'Montserrat';
         font-size: 10.5px;
@@ -40,7 +45,6 @@ const Container = styled.div`
         font-weight: 500;
         align-self: center;
     }
-
     ${
         (props: any)=>
         props && props.event ==='Drop' && css`
@@ -79,7 +83,7 @@ interface IProps {
 
 
 const Dropzone: React.FC<IProps> = (props)=>{
-    const [event, setEvent] = useState<string>('none');
+    const [event, setEvent] = useState<string>('');
     // const [mouseX, setMouseX] = useState<number>(defaultXY);
     // const [mouseY, setMouseY] = useState<number>(defaultXY);
 
@@ -144,7 +148,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
     //     }, 3000)
         
     // }
-    
+
     const fileListToArray = (list: any)=>{
         const array = []
         for (var i = 0; i < list.length; i++) {
@@ -153,8 +157,15 @@ const Dropzone: React.FC<IProps> = (props)=>{
         return array
       }
 
+      useEffect(()=>{
+          setTimeout(() => {
+              setEvent('none')
+          }, 500);
+        
+    }, [])
+    
     return(<Container
-        {...{event}}
+        {...{event, className: event ? 'slide-up': ''}}
         onDragOver={(e)=>onDragOver(e)}
         onDragLeave={(e)=>onDragLeave(e)}
         onDrop={(e)=>onDrop(e)}
