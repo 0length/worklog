@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Button, Dropzone } from '../../../element'
+import { Input, Button, Dropzone, TagsInput } from '../../../element'
 import { createGlobalStyle } from 'styled-components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -65,7 +65,8 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-tag"} className="wl-form-group">
             <label>Tag : </label>
-            <Input value={p} onChange={(e)=>setP(e.target.value)}/>
+            <TagsInput valueGetter={setP}/>
+            {/* <Input value={p} onChange={(e)=>setP(e.target.value)}/> */}
         </div>
         <div key={"wl_fr__work-cap"}className="wl-form-group">
             <label>Simple Caption : </label>

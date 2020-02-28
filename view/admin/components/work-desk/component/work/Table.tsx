@@ -65,14 +65,7 @@ const LocalStyle = createGlobalStyle`
     font-size: 8px;
 }
 
-.tag {
-    background: rgba(44, 44, 44, 0.07);
-    display: inline-block;
-    margin: 5px;
-    border-radius: 4px;
-    padding: 5px;
-    color: #62605a !important;
-}
+
 
 // .btn-add {
 //     float: right;

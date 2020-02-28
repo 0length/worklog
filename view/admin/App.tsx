@@ -33,6 +33,14 @@ const { user } = props
     // -webkit-text-stroke: 0.1em #b8bac3;
   }
 
+  .tag {
+    background: rgba(44, 44, 44, 0.07);
+    display: inline-block;
+    margin: 5px;
+    border-radius: 4px;
+    padding: 5px;
+    color: #62605a !important;
+}
   `;
 
   useEffect(()=>{
