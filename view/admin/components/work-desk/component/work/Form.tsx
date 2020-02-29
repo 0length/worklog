@@ -82,7 +82,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
             <label>Finish Date : </label>
-            <Input value={date} onChange={(e)=>setDate(e.target.value)}/>
+            <Input value={date} onChange={(e)=>setDate(e.target.value)} />
         </div>
         <div key={"wl_fr__work-desc"} className="wl-form-group">
             <label>Long Description : </label>

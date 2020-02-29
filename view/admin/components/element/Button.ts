@@ -12,7 +12,7 @@ const Button = styled(styled.button`
             props.styleProfile && props.styleProfile.primary && 
             css`
             background: #00a3ee;
-            color: white;
+            color: #F4F4F4;
             border: white;
         `}
 
@@ -29,9 +29,15 @@ const Button = styled(styled.button`
     `)`
 
     &:hover {
-        box-shadow: 0 0 5px rgba(33,33,33,.3) !important;
+        box-shadow: 0 0 5px rgba(33,33,33,.5) !important;
         // background: transparent;
         // color: #00abfb;
+        ${(props: any)=>
+            props.styleProfile && props.styleProfile.primary && 
+            css`
+            background: #00A3F0;
+            color: white;
+        `}
     }
 
     &:active {
