@@ -11,12 +11,12 @@ const redisClient = Redis.createClient({
     //   ca   : [ stringValueOfCaCertFile ]
     // }
   });
-  const RedisSetter = (key: string, value: string)=>{
-    redisClient.set(key, value, function(err) {
+  const Set = (key: string, value: string)=>{
+    redisClient.set(key, value, function(err: any) {
         if (err) { 
         throw err; /* in production, handle errors more gracefully */
         } else {
-            redisClient.get('some-key',function(err,value) {
+            redisClient.get(key,function(err: any,value: any) {
             if (err) {
             throw err;
             } else {
@@ -27,12 +27,12 @@ const redisClient = Redis.createClient({
     });
   }
 
-  const RedisIncre = (key: string)=>{
-    redisClient.incr(key,function(err) {
+  const Incre = (key: string)=>{
+    redisClient.incr(key,function(err: any) {
         if (err) { 
         throw err; /* in production, handle errors more gracefully */
         } else {
-            redisClient.get('some-key',function(err,value) {
+            redisClient.get(key,function(err: any,value: any) {
             if (err) {
             throw err;
             } else {
@@ -43,4 +43,9 @@ const redisClient = Redis.createClient({
     });
   }
   
-export default redisClient
+  const Cache = {
+    Set,
+    Incre
+  }
+
+export default Cache
