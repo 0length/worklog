@@ -21,7 +21,7 @@ To install the project you need to have `node` and `npm`
     ...
     ```
 2. from the root of the project: 
-    - ```npm install <package-name0> <package-name1> <package-name2> .etc --global``` to install  (prisma-cli, ???) dependencies gobally
+    - ```npm install <package-name0> <package-name1> <package-name2> .etc --global``` to install  (prisma@1.28.3, typescript, ts-node, tslint) dependencies gobally
     - ```npm install``` to install all dependencies locally
     
 3. Build the database service using docker and docker-composer
