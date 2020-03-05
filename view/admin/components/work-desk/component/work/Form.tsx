@@ -30,30 +30,30 @@ const LocalStyle = createGlobalStyle`
     }
 `
 const Form: React.FC<any> = (props) =>{
-    
+
     const [name, setName] = useState<string>('')
     const [p, setP] = useState<string>('')
-    const [simple_caption, setSimpleCaption] = useState<string>('')
+    const [caption, setCaption] = useState<string>('')
     const [file, setFile] = useState<string>('')
     const [client, SetClient] = useState<string>('')
     const [date, setDate] = useState<string>('')
     const [desc, setDesc] = useState<string>('')
     const [pid, setPid] = useState<string>('')
 
-    
+
         useEffect(()=>{
             const activityName = props.data?props.instanceOf+'-edit-':props.instanceOf+'-create-'
            if( name ){
-               setPid(activityName+name.split(" ").join("-")) 
-           } 
+               setPid(activityName+name.split(" ").join("-"))
+           }
         }, [name])
 
         useEffect(()=>{
             // console.log
            if( props.uploader && props.uploader[pid] && props.uploader[pid].fileid){
-               setFile(props.uploader[pid].fileid) 
+               setFile(props.uploader[pid].fileid)
                props.resetUploader(pid)
-           } 
+           }
         }, [props.uploader[pid]])
 
     return(<div className="wl-work_form">
@@ -70,7 +70,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-cap"}className="wl-form-group">
             <label>Simple Caption : </label>
-            <Input value={simple_caption} onChange={(e)=>setSimpleCaption(e.target.value)} />
+            <Input value={caption} onChange={(e)=>setCaption(e.target.value)} />
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <label>File for Image : </label>
@@ -88,23 +88,21 @@ const Form: React.FC<any> = (props) =>{
             <label>Long Description : </label>
             <Input value={desc} onChange={(e)=>setDesc(e.target.value)}/>
         </div>
-        
         <div key={"wl_fr__work-action"} className="wl-form-group">
-        
-            <Button onClick={()=>{props.generalGraph(`mutation { createWork(name: "${name}", p: "${p}") { name } } } `)}}>Save</Button>
+            <Button onClick={()=>{props.generalGraph(`
+            mutation { createWork(name: "${name}", p: "${p}") { name } } }
+            `)}}>Save</Button>
             &nbsp;
             <Button onClick={()=>{props.setMode('read')}}>Discard</Button>
-
         </div>
     </div>)
-    
 }
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) => bindActionCreators({
     generalGraph,
     upload,
     resetUploader
-}, dispatch);
+}, dispatch)
 
-export default withLayout(connect(mapStateToProps, mapDispatchToProps)(Form));
+export default withLayout(connect(mapStateToProps, mapDispatchToProps)(Form))

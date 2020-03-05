@@ -22,29 +22,29 @@ flex-direction: column;
 
 
 interface ToastNotificationData {
-    message: string;
-    timeOut: number;
-    type: string;
-    created_at: string;
+    message: string
+    timeOut: number
+    type: string
+    created_at: string
 }
 interface ToastNotifDomData{
-    [key: string]: JSX.Element;
+    [key: string]: JSX.Element
 }
 interface ToastNotifierProps{
-    notification: Array<ToastNotificationData>
+    notification: ToastNotificationData[]
 }
-//todo connect redux store Toast
+    //todo connect redux store Toast
 const ToastNotifier: React.FC<any> = (props)=>{
     const notification = props.toast.data
     const [notifDom, setNotifDom] = useState<ToastNotifDomData>({})
     const removeMe = (key: string)=> {
-        let temp = notifDom
+        const temp = notifDom
         delete temp[key]
         lastLength = lastLength-1
         return setNotifDom({...temp})
     }
 
-        let lastLength=0 
+        let lastLength=0
 
     useEffect(()=>{
         // if(lastLength<notification.length){
@@ -59,7 +59,7 @@ const ToastNotifier: React.FC<any> = (props)=>{
         //     lastLength = notification.length
         //     // console.log('after', lastLength)
         // }
-        
+
         // console.log(notification.length)
     }, [notification])
 
@@ -75,10 +75,10 @@ const ToastNotifier: React.FC<any> = (props)=>{
             </Wrapper>}
     </>)
 }
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
-    }, dispatch);
+    }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(ToastNotifier)
 

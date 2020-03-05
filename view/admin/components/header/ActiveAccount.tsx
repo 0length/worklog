@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import styled, { createGlobalStyle } from 'styled-components';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import styled, { createGlobalStyle } from 'styled-components'
 import { logout } from './../../../../reducer/user/actions'
 
 const Wrapper = styled.div`
@@ -56,14 +56,12 @@ const LocalStyle = createGlobalStyle`
             min-height: 30px;
             text-align: center;
             border-bottom: 1px solid #80D6FF;
-            
+
         }
         li:hover {
 
-        
         }
         li:active{
-            
         }
         li[static^="bottom"] {
             div{
@@ -79,7 +77,6 @@ const LocalStyle = createGlobalStyle`
   }
 `
 const ActiveAccount: React.FC<any> = (props)=>{
-    
     // useEffect(()=>{
     //     let bgLiquid = document.getElementsByClassName('wl-header__right-top-bg-liquid')[0]
     //     bgLiquid.classList.toggle('slide-up', true)
@@ -89,7 +86,7 @@ const ActiveAccount: React.FC<any> = (props)=>{
             <LocalStyle />
             <Container>
                 {/*
-                 <img className={"wl-header__right-top-bg-liquid "} src="/static/img/aa-curve.svg" alt=""/> 
+                 <img className={"wl-header__right-top-bg-liquid "} src="/static/img/aa-curve.svg" alt=""/>
                 */}
                 <div className={"wl-header__right-active__account"}>
                     <ul>
@@ -101,11 +98,11 @@ const ActiveAccount: React.FC<any> = (props)=>{
     )
 }
 
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
         logout
-    }, dispatch);
+    }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveAccount);
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveAccount)

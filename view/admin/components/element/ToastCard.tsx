@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import styled, { css, createGlobalStyle } from "styled-components";
+import styled, { css, createGlobalStyle } from "styled-components"
 
 let removeMeTimeout: any
 
@@ -55,7 +55,7 @@ ${
 
     &::after {
         position: absolute;
-        left: 0;        
+        left: 0;
         content : "";
         margin-top: 2.03rem;
         border-bottom:2px solid #260026;
@@ -67,7 +67,8 @@ ${
                 border-bottom:3px solid #034DA7;
                 `
         }
-        
+
+
         ${
             (props: any)=>
             props.styleProfile && props.styleProfile.type === "success" &&
@@ -75,7 +76,7 @@ ${
                 border-bottom:3px solid #159588;
                 `
         }
-        
+
         ${
             (props: any)=>
             props.styleProfile && props.styleProfile.type === "warning" &&
@@ -83,7 +84,7 @@ ${
                 border-bottom:3px solid #AA7300;
                 `
         }
-        
+
         ${
             (props: any)=>
             props.styleProfile && props.styleProfile.type === "danger" &&
@@ -98,14 +99,14 @@ ${
                 css`
                 width: var(--${props.id});
                 opacity: var(--${props.id}opacity);
-                transition: width ${props.styleProfile.timeOut}ms linear 0s;     
-                // transition: opacity 1000ms ease-out 3s;     
+                transition: width ${props.styleProfile.timeOut}ms linear 0s;
+                // transition: opacity 1000ms ease-out 3s;
                 `
         }
 
     }
 }
-`;
+`
 const Span = styled.span`
 align-self: center;
 flex-grow: 1;
@@ -121,68 +122,69 @@ const LocalStyle = createGlobalStyle`
    left: -2.75rem;
    top: -1rem;
    height: 100%;
-    
    span {
     margin: 0;
    }
 }
 `
 interface NotificationData {
-    message: string;
-    timeOut: number;
-    type: string;
-    created_at: string;
-    removeMe?:  (id: string) => void;
-    idx: number;
+    message: string
+    timeOut: number
+    type: string
+    created_at: string
+    removeMe?:  (id: string) => void
+    idx: number
 }
 const ToastCard: React.FC<NotificationData>=(props)=>{
-    let {message, timeOut, type, removeMe, idx, created_at} = props;
-    !created_at?created_at=new Date().toString():!idx.toString()?idx=Math.floor((Math.random() * 10)):!type?type="info":!message?message="Hi. I'm a Toast.":""
-    const id = btoa((created_at+idx).replace(/ /g,"_"));
-    
+    let {message, timeOut, type, removeMe, idx, created_at} = props
+    !created_at?created_at=new Date().toString():
+    !idx.toString()?idx=Math.floor((Math.random() * 10)):
+    !type?type="info":!message?message="Hi. I'm a Toast.":null
+    const id = btoa((created_at+idx).replace(/ /g,"_"))
+
     const timer = ()=>{
         const item = document.getElementById(id)
-        setTimeout(()=>{
-            item && item.setAttribute('style', `--${id}: 100%`);
-        }, 10)
-        
-        setTimeout(()=>{
-            item && item.setAttribute('style', `--${id}: 0%`);
-        }, 100)
+        if(item){
+            setTimeout(()=>{
+                item.setAttribute('style', `--${id}: 100%`)
+            }, 10)
+            setTimeout(()=>{
+                item.setAttribute('style', `--${id}: 0%`)
+            }, 100)
+        }
+
     }
 
     const close = ()=>{
         removeMe && removeMe(id)
     }
-    
     useEffect(()=>{
         if(timeOut)
         {
-
             timer()
             removeMeTimeout = setTimeout(()=>{
                 removeMe && removeMe(id)
             }, timeOut+500)
         }
-    }, []);
+    }, [])
 
     const cancelTimeOut = ()=>{
         clearTimeout(removeMeTimeout)
         const item = document.getElementById(id)
-        item && item.setAttribute('style', `transition: none;`);
+        item && item.setAttribute('style', `transition: none;`)
     }
 
     return (<span>
         <LocalStyle />
         {/* <i className="flaticon-warning"></i> &nbsp; */}
-        
+
     <Container id={id} {...{styleProfile: {type, timeOut}}} onMouseEnter={()=>cancelTimeOut()}>
          <Span>
              {message}
              { removeMe && <div className="btn-close" onClick={()=>close()}><span>&times;</span></div>}
          </Span>
     </Container>
-    
+
     </span>)
 }
 

@@ -47,7 +47,7 @@ const TagsInput: React.FC<any> = ({valueGetter})=>{
     }
 
     const removeTag = (param: string|number)=>{
-            let temp = tags
+            const temp = tags
             typeof param === 'string' && temp.splice(temp.indexOf(param), 1)
             typeof param === 'number' && temp.splice(param, 1)
 

@@ -1,14 +1,14 @@
-import endPoint from "../const/endpoint";
-import { Observable, Subscriber } from 'rxjs';
-import { ajax, AjaxRequest, AjaxResponse } from 'rxjs/ajax';
-import { map } from 'rxjs/operators';
-import { ofType, unionize } from 'unionize';
-import fixDecimal from "../utils/fixDecimal";
+import endPoint from "../const/endpoint"
+import { Observable, Subscriber } from 'rxjs'
+import { ajax, AjaxRequest, AjaxResponse } from 'rxjs/ajax'
+import { map } from 'rxjs/operators'
+import { ofType, unionize } from 'unionize'
+import fixDecimal from "../utils/fixDecimal"
 
 interface PE extends Event {
-    readonly lengthComputable: boolean;
-    readonly loaded: number;
-    readonly total: number;
+    readonly lengthComputable: boolean
+    readonly loaded: number
+    readonly total: number
 }
 
 export const AjaxUpdate = unionize(
@@ -36,8 +36,8 @@ export const ajaxWithUpdates = (request: AjaxRequest): Observable<AjaxUpdateType
         });
         const subscription = ajax$
             .pipe(map(ajaxResponse => AjaxUpdate.Response(ajaxResponse)))
-            .subscribe(subscriber);
-        return () => subscription.unsubscribe();
+            .subscribe(subscriber)
+        return () => subscription.unsubscribe()
     });
 
 

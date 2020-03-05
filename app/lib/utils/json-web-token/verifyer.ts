@@ -1,16 +1,16 @@
-import { i, s, a } from "./generator";
+import { i, s, a } from "./generator"
 
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-let publicKEY  = fs.readFileSync('./app/lib/common-keys/jwt/public.key', 'utf8');
+import jwt from 'jsonwebtoken'
+import fs from 'fs'
+const publicKEY  = fs.readFileSync('./app/lib/common-keys/jwt/public.key', 'utf8')
 
-var verifyOptions = {
+const verifyOptions = {
     issuer:  i,
     subject:  s,
     audience:  a,
     expiresIn:  "12h",
     algorithm:  ["RS256"]
-   };
+   }
 
 function getUserId(context: any){
     const Authorization = context.token

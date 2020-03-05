@@ -1,10 +1,10 @@
-import { prisma } from "../../../prisma/src/generated/prisma-client";
+import { prisma } from "../../../prisma/src/generated/prisma-client"
 import { getUserId } from "../utils/json-web-token/verifyer"
 
 
 export const getAccess = async (context: any)=>{
-    const email = getUserId(context) 
-    // const email = await getUserId(context).then((email:any)=>email).catch((err:any)=>err) 
+    const email = getUserId(context)
+    // const email = await getUserId(context).then((email:any)=>email).catch((err:any)=>err)
     const  user  = await prisma.user({email})
     if(!user){
         throw new Error('No such user found')
@@ -14,7 +14,7 @@ export const getAccess = async (context: any)=>{
         throw new Error('No access for this user')
     }
     const Group = await prisma.group({name: group})
-    let access = JSON.parse(Group!.access)
+    const access = JSON.parse(Group!.access)
     if(!access){
         throw new Error('Nothing to access for this user')
     }
