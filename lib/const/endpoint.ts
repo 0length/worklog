@@ -1,10 +1,13 @@
-const GOOGLEDRIVE = '/api/gdrive/'
-const GRAPHQL = '/graphql'
+const GOOGLEDRIVE: string = '/api/gdrive/'
+const GRAPHQL: string = '/graphql'
 
-const endPoint = {
+interface EndPoint {
+    [key: string]: string
+}
+
+const endPoint: EndPoint= {
     GOOGLEDRIVE,
     GRAPHQL,
-
 }
 
 export default endPoint

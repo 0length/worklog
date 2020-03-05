@@ -32,7 +32,7 @@ const Container = styled.div`
     display: flex;
     border-radius: 3px;
     height: 100px;
-    width: 100%; 
+    width: 100%;
     justify-content: center;
     cursor: pointer;
     opacity: 0;
@@ -76,18 +76,18 @@ const Container = styled.div`
     }
 `
 interface IProps {
-    onFilesAdded?: (file: Array<FileList>, pid: string)=>void
+    onFilesAdded?: (file: FileList[], pid: string)=>void
     progress?: string,
     pid: string
 }
 
 
 const Dropzone: React.FC<IProps> = (props)=>{
-    const [event, setEvent] = useState<string>('');
+    const [event, setEvent] = useState<string>('')
     // const [mouseX, setMouseX] = useState<number>(defaultXY);
     // const [mouseY, setMouseY] = useState<number>(defaultXY);
 
-    const [inputDisable, setinputDisable] = useState<boolean>(false);
+    const [inputDisable, setinputDisable] = useState<boolean>(false)
     const inputRef = useRef<any>();
     const openFileDialog = (e: any)=>{
         if (e.target.disabled) return
@@ -97,10 +97,10 @@ const Dropzone: React.FC<IProps> = (props)=>{
         const files = e.target.files
         setEvent('Drop')
         setinputDisable(true)
-        console.log(files.item(0))
+        // console.log(files.item(0))
         if (props.onFilesAdded) {
-            const array = fileListToArray(files);
-            props.onFilesAdded(array, props.pid);
+            const array = fileListToArray(files)
+            props.onFilesAdded(array, props.pid)
         }
     }
 
@@ -109,24 +109,20 @@ const Dropzone: React.FC<IProps> = (props)=>{
         setEvent('Drop')
         const files = e.dataTransfer.files
         setinputDisable(true)
-        console.log(files.item(0), files)
+        // console.log(files.item(0), files)
 
         if (props.onFilesAdded) {
-            const array = fileListToArray(files);
-            props.onFilesAdded(array, props.pid);
+            const array = fileListToArray(files)
+            props.onFilesAdded(array, props.pid)
         }
     }
 
     const onDragOver = (e: any)=>{
         e.preventDefault()
         setEvent('DragOver')
-        
-        console.log(e.target)
-
-        e.target.style.setProperty('--mouse-x', e.clientX / innerWidth);
-        e.target.style.setProperty('--mouse-y', e.clientY / innerHeight);    
-        
-        
+        // console.log(e.target)
+        e.target.style.setProperty('--mouse-x', e.clientX / innerWidth)
+        e.target.style.setProperty('--mouse-y', e.clientY / innerHeight)
     }
 
     const onDragLeave = (e: any)=>{
@@ -136,7 +132,6 @@ const Dropzone: React.FC<IProps> = (props)=>{
         setTimeout(()=>{
             setEvent('none')
         }, 3000)
-        
     }
 
     // const onDrag = (e: any)=>{
@@ -146,12 +141,12 @@ const Dropzone: React.FC<IProps> = (props)=>{
     //     setTimeout(()=>{
     //         setEvent('none')
     //     }, 3000)
-        
+
     // }
 
     const fileListToArray = (list: any)=>{
         const array = []
-        for (var i = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
           array.push(list.item(i))
         }
         return array
@@ -160,10 +155,10 @@ const Dropzone: React.FC<IProps> = (props)=>{
       useEffect(()=>{
           setTimeout(() => {
               setEvent('none')
-          }, 500);
-        
+          }, 500)
+
     }, [])
-    
+
     return(<Container
         {...{event, className: event ? 'slide-up': ''}}
         onDragOver={(e)=>onDragOver(e)}

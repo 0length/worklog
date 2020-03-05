@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { Work } from "../../../../../../global-types"
-import { Button } from '../../../element';
-import endPoint from '../../../../../../lib/const/endpoint';
-import { createGlobalStyle } from "styled-components";
-import withLayout from "../withLayout";
+import { Button } from '../../../element'
+import endPoint from '../../../../../../lib/const/endpoint'
+import { createGlobalStyle } from "styled-components"
+import withLayout from "../withLayout"
 
 const LocalStyle = createGlobalStyle`
 
@@ -15,7 +15,7 @@ const LocalStyle = createGlobalStyle`
     border-spacing: 0 !important;
     width: 100%;
     border: 1px solid #ebedf2;
-    border-radius: 4px; 
+    border-radius: 4px;
 }
 
 .table-work td, .table-work th{
@@ -73,27 +73,35 @@ const LocalStyle = createGlobalStyle`
 // }
 `
 const Table: React.FC<any> = ({data})=>{
-    const [tbody, setTbody] = useState<Array<JSX.Element>>([<tr key={"wl_dt__work-tr"+(1)}></tr>])
+    const [tbody, setTbody] = useState<JSX.Element[]>([<tr key={"wl_dt__work-tr"+(1)}></tr>])
 
     useEffect(()=>{
         if(data){
-            let temp: Array<JSX.Element> = []
+            const temp: JSX.Element[] = []
             data.map((item: Work, idx: number)=>{
                 temp.push( <tr key={"wl_dt__work-tr"+(idx+1)}>
                     <td key={"wl_dt__work-no"+(idx+1)}>{idx+1}</td>
                     <td key={"wl_dt__work-name"+(idx+1)}>{item.name}</td>
-                    <td key={"wl_dt__work-p"+(idx+1)}>{JSON.parse(item.p).map((item: string, idx: number)=>(<a key={idx} className="tag">{item}</a>))}</td>
+                    <td key={"wl_dt__work-p"+(idx+1)}>{
+                        JSON.parse(item.p).map((tag: string, iTag: number)=>
+                        (<a key={'w-'+item.name+'-tag-'+iTag} className="tag">{tag}</a>))
+                    }</td>
                     <td key={"wl_dt__work-author"+(idx+1)}>{item.author_name}</td>
                     <td key={"wl_dt__work-cap"+(idx+1)} className="text">{item.simple_caption.substr(0, 50)+'...'}</td>
-                    <td key={"wl_dt__work-img"+(idx+1)}><img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} /></td>
+                    <td key={"wl_dt__work-img"+(idx+1)}>
+                        <img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} />
+                    </td>
                     <td key={"wl_dt__work-client"+(idx+1)}>{item.client}</td>
                     <td key={"wl_dt__work-date"+(idx+1)}>{item.completed_at}</td>
                     <td key={"wl_dt__work-desc"+(idx+1)} className="longtext">{item.long_desc.substr(0, 150)+'...'}</td>
                     <td key={"wl_dt__work-like"+(idx+1)}>{item.interisting_count}</td>
-                    <td key={"wl_dt__work-act"+(idx+1)}><Button><i className={"fa fa-lg fa-trash-o"}/></Button><Button><i className={"flaticon-edit"}/></Button></td>
+                    <td key={"wl_dt__work-act"+(idx+1)}>
+                        <Button><i className={"fa fa-lg fa-trash-o"}/></Button>
+                        <Button><i className={"flaticon-edit"}/></Button>
+                    </td>
                 </tr>)
             })
-            setTbody(temp);   
+            setTbody(temp)
         }
     }, [data])
     return(

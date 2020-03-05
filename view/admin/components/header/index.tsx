@@ -24,13 +24,13 @@ const Header: React.FC<any> = (props) =>{
         z-index: 97;
     }
     `
-    
+
     return (
         <div className="wl-header wl-grid wl-header--fixed">
             <LocalStyle />
             <Right />
         </div>
-    );
+    )
 }
 
-export default Header;
+export default Header

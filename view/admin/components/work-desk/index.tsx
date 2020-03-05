@@ -5,7 +5,6 @@ import Work from './component/work'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-const GlobalStyle = createGlobalStyle``
 const Wrapper = styled.div`
     display: flex;
     position: absolute;
@@ -29,10 +28,10 @@ const WorkDesk: React.FC<any> = (props)=>{
         {HighOrder[activeMenu]}
     </Wrapper>)
 }
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
-    }, dispatch);
+    }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkDesk);
+export default connect(mapStateToProps, mapDispatchToProps)(WorkDesk)

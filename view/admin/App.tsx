@@ -1,20 +1,19 @@
 import React, { JSXElementConstructor, useState, useEffect } from 'react'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Header from './components/header'
-import { createGlobalStyle } from 'styled-components';
-import { pushToast } from '../../reducer/toast/action';
-import { startSubscribeWork } from '../../reducer/work/actions';
-import SideBar from './components/sidebar';
-import WorkDesk from './components/work-desk';
-import BreadCrumbs from './components/bread-crumbs';
-import ToastNotifier from './components/toast-notifier';
-import { toastSuccess } from '../../lib/utils/toastModel';
+import { createGlobalStyle } from 'styled-components'
+import { pushToast } from '../../reducer/toast/action'
+import { startSubscribeWork } from '../../reducer/work/actions'
+import SideBar from './components/sidebar'
+import WorkDesk from './components/work-desk'
+import BreadCrumbs from './components/bread-crumbs'
+import ToastNotifier from './components/toast-notifier'
+import { toastSuccess } from '../../lib/utils/toastModel'
 
 export const App: React.FC<any> = (props)=>{
-const { user } = props
-    const [notification, setNotification] = useState<Array<any>>([])
-    const WELCOME_MESSAGE = "Welcome back Mr. " 
+    const { user } = props
+    const WELCOME_MESSAGE = "Welcome back Mr. "
 
   const GlobalStyle = createGlobalStyle`
   .wl-grid {
@@ -41,7 +40,7 @@ const { user } = props
     padding: 5px;
     color: #62605a !important;
 }
-  `;
+  `
 
   useEffect(()=>{
     if(user && user.userData){
@@ -49,16 +48,7 @@ const { user } = props
       props.pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)])
     }
   }, [user.userData])
-  
-  // useEffect(()=>{
-    
 
-    // notification.pop()
-    // notification.push({message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 3000, type: "danger", created_at: new Date+""})
-  //    useEffect(()=>{
-  //   setTimeout(()=>{notification.push({message: "Ini adalah uji coba tapi jangan di coba-coba.", timeOut: 3000, type: "danger", created_at: new Date+""})}, 1000)
-  // }, [notification])
-    
   return (
     <div className="App">
         <GlobalStyle />
@@ -68,14 +58,14 @@ const { user } = props
         <WorkDesk />
         <ToastNotifier />
     </div>
-  );
+  )
 }
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       startSubscribeWork,
       pushToast,
-    }, dispatch);
+    }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App)

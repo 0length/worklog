@@ -3,9 +3,9 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import csurf from 'csurf';
-import { createStore } from 'redux';
-import * as React from 'react';
+import csurf from 'csurf'
+import { createStore } from 'redux'
+import * as React from 'react'
 import * as ReactDOMServer from 'react-dom/server'
 import { StaticRouter as Router } from 'react-router-dom'
 import gdrive from './lib/utils/google-drive'
@@ -17,12 +17,12 @@ import { createServer } from 'http'
 import endPoint from '../lib/const/endpoint'
 // import Routes from '../view/portfolio/index'
 // const bodyParser = require('body-parser')
-const { ApolloServer } = require('apollo-server-express')
+import {ApolloServer} from 'apollo-server-express'
 // const cors = require('cors')
 
 // const router = express.router();
 
-const app : Application = express();
+const app : Application = express()
 
 const csrfProtection = csurf({
     cookie: true
@@ -40,21 +40,20 @@ app.use(cookieParser())
 // app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 // app.use(compression())
-const apolloServer = new ApolloServer({ 
+const apolloServer = new ApolloServer({
     modules: [
-        require('./GraphQL/user'),  
+        require('./GraphQL/user'),
         require('./GraphQL/work'),
         require('./GraphQL/menu'),
         require('./GraphQL/group'),
         require('./GraphQL/post'),
         // require('./GraphQL/comment'),
     ],
-    
-    path:endPoint.GRAPHQL,
+    ...{path: endPoint.GRAPHQL},
     context: async ({req}:any) =>{
       if(req && req.headers && req.headers.authorization){
         return {
-          token: req.headers.authorization,  
+          token: req.headers.authorization,
         }
       }return { token: ":(" }
     }
@@ -64,13 +63,13 @@ app.use(endPoint.GRAPHQL, csrfProtection, bodyParser.json())
 apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
-    const csrf_token = req.csrfToken()
-    // res.cookie('XSRF-TOKEN', csrf_token)
+    const CSRF_TOKEN = req.csrfToken()
+    // res.cookie('XSRF-TOKEN', CSRF_TOKEN)
 // const { name = 'Marvelous Wololo' } = req.query
 // const initialState = { initialArticleState, initialTranslateArticleState}
-const store = createStore(Reducer, {csrf: { token: csrf_token}})
+const store = createStore(Reducer, {csrf: { token: CSRF_TOKEN}})
 const componentStream  = ReactDOMServer.renderToNodeStream(React.createElement(Admin, {store}, null))
-const preloadedState = store.getState();
+const preloadedState = store.getState()
   const htmlStart : string = `
   <!doctype html>
     <html>
@@ -107,13 +106,13 @@ const preloadedState = store.getState();
 const bodyParserencoded = bodyParser.urlencoded({ extended: true })
 app.get(endPoint.GOOGLEDRIVE+"*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
 app.post(endPoint.GOOGLEDRIVE,
-//  csrfProtection,
+ csrfProtection,
 bodyParserencoded,
  (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
 
 
-const httpServer = createServer(app);
-apolloServer.installSubscriptionHandlers(httpServer);
+const httpServer = createServer(app)
+apolloServer.installSubscriptionHandlers(httpServer)
 httpServer.listen({port: 3000}, () =>(
     console.log(`🚀 Server ready at http://localhost:3000`, apolloServer.subscriptionsPath)
 ))

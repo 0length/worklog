@@ -19,7 +19,7 @@ const Right: React.FC<any> = (props)=>{
         padding-right: 25px;
         margin-left:auto;
       }
-    
+
       .wl-header__right-wrapper {
         cursor: pointer;
         display: -webkit-box;
@@ -29,7 +29,7 @@ const Right: React.FC<any> = (props)=>{
         -ms-flex-align: stretch;
         align-items: stretch;
       }
-    
+
       .wl-header__right-icon {
         color: #727A7E;
         font-weight: 300;
@@ -50,7 +50,7 @@ const Right: React.FC<any> = (props)=>{
           background-color: #f5f6fc
 
       }
-      
+
       .wl-header__right-icon__translate {
             background-color: #fff;
             width: 33px;
@@ -64,9 +64,9 @@ const Right: React.FC<any> = (props)=>{
     }
 
       .wl-header__right-icon__translate img{
-        -webkit-filter: drop-shadow(1px 1px 0 white)
+        -webkit-filter: drop-shadow(1px 1px 0 white);
         drop-shadow(-1px -1px 0 white);
-        filter: drop-shadow(1px 1px 0 white) 
+        filter: drop-shadow(1px 1px 0 white);
         drop-shadow(-1px -1px 0 white);
       }
 
@@ -87,7 +87,7 @@ const Right: React.FC<any> = (props)=>{
         color: white;
         transition:  color 0.5s .3s;
         transition:  background-color .5s .1s;
-        background-color: #22b9ff;   
+        background-color: #22b9ff;
     }
 
     .wl-header__right-icon__quckpanel {
@@ -106,7 +106,7 @@ const Right: React.FC<any> = (props)=>{
       color: white;
       transition:  color 0.5s .3s;
       transition:  background-color .5s .1s;
-      background-color: #fbce44;   
+      background-color: #fbce44;
   }
     `
     return (
@@ -118,7 +118,8 @@ const Right: React.FC<any> = (props)=>{
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__translate"><img src="/static/plugins/custom-icon/icon/translate.png"/></span></div>
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__profile " onClick={()=>setToggleAA(!toggleAA)}><i className="flaticon2-user-outline-symbol"/></span></div>
              <div className="wl-header__right-wrapper"><span className="wl-header__right-icon wl-header__right-icon__quckpanel "><i className="flaticon2-cube-1"/></span></div>
-            {/* <Input {...{styleProfile: {}}} onChange={(e:any)=>{setQuery(e.target.value)}} type="text" placeholder="Search" name="search-bar" /> */}
+            {/* <Input {...{styleProfile: {}}}
+            onChange={(e:any)=>{setQuery(e.target.value)}} type="text" placeholder="Search" name="search-bar" /> */}
             {toggleAA && <ActiveAccount {...{toggle: toggleAA}}/>}
         </div>
     )
