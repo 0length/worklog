@@ -59,11 +59,15 @@ const Checkbox: React.FC<any> = (props)=>{
 
    return (
     <Label>
-        <Input name={props.name} type="checkbox" {...{value: activate.toString()}}/><span onClick={()=>{setActivate(!activate)}}>{props.children}</span>
+        <Input
+        name={props.name}
+        type="checkbox"
+        {...{value: activate.toString()}}
+    />
+        <span onClick={()=>{setActivate(!activate)}}>{props.children}</span>
         <Span {...{active: activate}} onClick={()=>{setActivate(!activate)}}></Span>
     </Label>
     )
 }
- 
-     
+
 export default Checkbox

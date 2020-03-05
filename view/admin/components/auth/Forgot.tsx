@@ -11,11 +11,28 @@ const Forgot: React.FC<any> = ({setMode}) => {
             <div className="kt-login__form">
                 <form className="kt-form" action="">
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true, last: true}}} type="text" placeholder="Email" name="email" id="kt_email" />
+                        <Input
+                            {...{styleProfile: {auth:true, last: true}}}
+                            type="text"
+                            placeholder="Email"
+                            name="email"
+                            id="kt_email"
+                        />
                     </div>
                     <div className="kt-login__actions">
-                        <Button id="kt_login_forgot_submit" className="btn btn-brand btn-pill btn-elevate">Request</Button>
-                        <Button onClick={()=>{setMode('SignIn')}} id="kt_login_forgot_cancel" className="btn btn-outline-brand btn-pill">Cancel</Button>
+                        <Button
+                            id="kt_login_forgot_submit"
+                            className="btn btn-brand btn-pill btn-elevate"
+                        >
+                            Request
+                        </Button>
+                        <Button
+                            onClick={()=>{setMode('SignIn')}}
+                            id="kt_login_forgot_cancel"
+                            className="btn btn-outline-brand btn-pill"
+                        >
+                            Cancel
+                        </Button>
                     </div>
                 </form>
             </div>

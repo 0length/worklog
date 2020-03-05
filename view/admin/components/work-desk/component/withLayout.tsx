@@ -1,5 +1,5 @@
 import React from 'react'
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components"
 
 const LocalStyle = createGlobalStyle`
 .wl-workdesk__container{
@@ -10,7 +10,7 @@ const LocalStyle = createGlobalStyle`
     border: 1px solid #ebedf2;
     background: #fff;
     box-shadow: 0 0 40px 0 rgba(82,63,105,.1);
-    border-radius: 4px; 
+    border-radius: 4px;
     width: 96%;
     & > .wl-workdesk__header{
         display: flex;
@@ -20,10 +20,10 @@ const LocalStyle = createGlobalStyle`
             font-family: Poppins,Helvetica,sans-serif;
             font-size: 1.2rem;
             font-weight: 500;
-            color: #48465b;
+            color: #212529;
             display: block;
             align-self: center;
-            padding-left: 5vw;
+            padding-left: 2.5vw;
         }
 
         & > .action {

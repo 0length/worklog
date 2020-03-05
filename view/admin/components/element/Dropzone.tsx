@@ -88,7 +88,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
     // const [mouseY, setMouseY] = useState<number>(defaultXY);
 
     const [inputDisable, setinputDisable] = useState<boolean>(false)
-    const inputRef = useRef<any>();
+    const inputRef = useRef<any>()
     const openFileDialog = (e: any)=>{
         if (e.target.disabled) return
         inputRef.current.click()
@@ -169,7 +169,14 @@ const Dropzone: React.FC<IProps> = (props)=>{
     >
         <LocalStyle />
         {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}
-        <input ref={inputRef}  style={{display: 'none'}}type="file" onChange={(e)=>{onFileAdded(e)}} disabled={inputDisable} hidden={true}/>
+        <input
+            ref={inputRef}
+            style={{display: 'none'}}
+            type="file"
+            onChange={(e)=>{onFileAdded(e)}}
+            disabled={inputDisable}
+            hidden={true}
+        />
         {event === 'Drop' && <div className={""} >Uploading ...{ props.progress &&'('+props.progress+'%)' }</div>}
     </Container>)
 }

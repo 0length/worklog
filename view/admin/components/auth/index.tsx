@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { auth } from '../../../../reducer/user/actions';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { auth } from '../../../../reducer/user/actions'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import Forgot from './Forgot'
 
 import { createGlobalStyle } from 'styled-components'
-import { AllMode } from '../../../../global-types';
+import { AllMode } from '../../../../global-types'
 
 
 const GlobalStyle = createGlobalStyle`
@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     input:-webkit-autofill,
-    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:hover,
     input:-webkit-autofill:focus,
     textarea:-webkit-autofill,
     textarea:-webkit-autofill:hover,
@@ -40,7 +40,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-box-shadow: none;
     transition: background-color 5000s ease-in-out 0s;
     }
-    
+
     body {
         font-family: Poppins,Helvetica,sans-serif;
         font-size: 1rem;
@@ -57,8 +57,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body {
-        color: 
-        #646c9a;
+        color: #646c9a;
     }
     button,input{
         overflow: visible;
@@ -77,7 +76,7 @@ const GlobalStyle = createGlobalStyle`
         -ms-flex: 1;
         flex: 1;
     }
-    
+
     .wl-login__head{
         margin: 3rem 0;
         text-align: center
@@ -97,15 +96,14 @@ const GlobalStyle = createGlobalStyle`
 const Auth: React.FC<any> = (props)=>{
 
     const {
-        auth,
         user
-        } = props;
+        } = props
     const {error} = user
-    const [mode, setMode]= useState<string>('SignIn');
+    const [mode, setMode]= useState<string>('SignIn')
     const allMode: AllMode = {
-        SignIn :    <SignIn setMode={setMode} auth={auth} error={error}/>,
-        SignUp :    <SignUp setMode={setMode} auth={auth} error={error}/>,
-        Forgot :    <Forgot setMode={setMode} auth={auth} error={error}/>
+        SignIn :    <SignIn setMode={setMode} auth={props.auth} error={error}/>,
+        SignUp :    <SignUp setMode={setMode} auth={props.auth} error={error}/>,
+        Forgot :    <Forgot setMode={setMode} auth={props.auth} error={error}/>
     }
 
     const setModeToDom = (modeWant: string)=>{
@@ -113,17 +111,19 @@ const Auth: React.FC<any> = (props)=>{
     }
 
     useEffect(()=>{
-        setModeToDom(mode)    
+        setModeToDom(mode)
     }, [mode])
 
     return(
-        <div className="wl-grid__item  wl-grid__item--order-tablet-and-mobile-2  wl-grid wl-grid--hor wl-login__aside" style={{
-            flex: '0 0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '2rem',
-            background:'#fff',
-            width: '600px',
+        <div
+            className="wl-grid__item  wl-grid__item--order-tablet-and-mobile-2  wl-grid wl-grid--hor wl-login__aside"
+            style={{
+                flex: '0 0 auto',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '2rem',
+                background:'#fff',
+                width: '600px',
         }}>
             <GlobalStyle />
             <div className="wl-login__wrapper" style={{
@@ -164,17 +164,23 @@ const Auth: React.FC<any> = (props)=>{
                     <span className="wl-login__account-msg">
                         Don't have an account yet ?
                     </span>&nbsp;&nbsp;
-                    <a onClick={()=>{mode === "SignIn"?setMode('SignUp'):setMode('SignIn')}} id="kt_login_signup" className="wl-login__account-link">{mode === "SignUp"?"Sign In!":"Sign Up!"}</a>
+                    <a
+                        onClick={()=>{mode === "SignIn"?setMode('SignUp'):setMode('SignIn')}}
+                        id="kt_login_signup"
+                        className="wl-login__account-link"
+                    >
+                        {mode === "SignUp"?"Sign In!":"Sign Up!"}
+                    </a>
                 </div>
             </div>
         </div>
     )
 }
-const mapStateToProps = (state: any) => (state);
+const mapStateToProps = (state: any) => (state)
 
 const mapDispatchToProps = (dispatch: any) =>
     bindActionCreators({
       auth
-    }, dispatch);
+    }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth)

@@ -24,18 +24,18 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-bo
 `
 
 const TagsInput: React.FC<any> = ({valueGetter})=>{
-    const [tags, setTags] = useState<Array<string>>([])
+    const [tags, setTags] = useState<string[]>([])
     const [dom, setdom] = useState<any>([])
 
     const addTag = (text: string)=>{
-        let temp = tags
+        const temp = tags
         temp[tags.length||0] = text
         setTags([...temp])
     }
 
     const pressMatch = (e: any)=>{
-        console.log(e);
-        
+        // console.log(e)
+
         if(e.key === 'Enter' && e.target.value && tags.indexOf(e.target.value) === -1){
             addTag(e.target.value)
             e.target.value = ""
@@ -48,7 +48,9 @@ const TagsInput: React.FC<any> = ({valueGetter})=>{
 
     const removeTag = (param: string|number)=>{
             const temp = tags
+            // tslint:disable-next-line: no-unused-expression
             typeof param === 'string' && temp.splice(temp.indexOf(param), 1)
+            // tslint:disable-next-line: no-unused-expression
             typeof param === 'number' && temp.splice(param, 1)
 
             setTags([...temp])

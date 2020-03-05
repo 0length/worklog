@@ -90,7 +90,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-action"} className="wl-form-group">
             <Button onClick={()=>{props.generalGraph(`
-            mutation { createWork(name: "${name}", p: "${p}") { name } } }
+                mutation { createWork(name: "${name}", p: "${p}") { name } } }
             `)}}>Save</Button>
             &nbsp;
             <Button onClick={()=>{props.setMode('read')}}>Discard</Button>

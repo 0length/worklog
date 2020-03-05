@@ -13,20 +13,48 @@ const SignUp: React.FC<any> = ({setMode, auth, error}) => {
                 <h3 className="wl-login__title">Sign Up</h3>
                 <div className="wl-login__desc">Enter your details to create your account:</div>
             </div>
-            {error && <ToastCard message={error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
+            {error && <ToastCard message={error} timeOut={0}  idx={0} created_at={new Date()+""} type="danger"/>}
             <div className="wl-login__form">
                 {/* <form className="wl-form" action=""> */}
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setName(e.target.value)}} value={name} type="text" placeholder="Fullname" name="fullname" />
+                        <Input
+                            {...{styleProfile: {auth:true}}}
+                            onChange={(e: any)=>{setName(e.target.value)}}
+                            value={name}
+                            type="text"
+                            placeholder="Fullname"
+                            name="fullname"
+                        />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setUsername(e.target.value)}} value={username} type="text" placeholder="Username" name="username" />
+                        <Input
+                            {...{styleProfile: {auth:true}}}
+                            onChange={(e: any)=>{setUsername(e.target.value)}}
+                            value={username}
+                            type="text"
+                            placeholder="Username"
+                            name="username"
+                        />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />
+                        <Input
+                            {...{styleProfile: {auth:true}}}
+                            onChange={(e: any)=>{setEmail(e.target.value)}}
+                            value={email}
+                            type="text"
+                            placeholder="Email"
+                            name="email"
+                        />
                     </div>
                     <div className="form-group">
-                        <Input {...{styleProfile: {auth:true}}} onChange={(e: any)=>{setPassword(e.target.value)}} value={password} type="password" placeholder="Password" name="password" />
+                        <Input
+                            {...{styleProfile: {auth:true}}}
+                            onChange={(e: any)=>{setPassword(e.target.value)}}
+                            value={password}
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                        />
                     </div>
                     <div className="form-group">
                         <Input {...{styleProfile: {auth:true, last: true}}} value={password} className="form-control-last" type="password" placeholder="Confirm Password" name="rpassword" />

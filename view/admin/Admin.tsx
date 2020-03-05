@@ -8,4 +8,4 @@ const Admin: React.FC <Props> = (props)=>(
 <Provider store={props.store}>
     <Main/>
 </Provider>)
-export default Admin;
+export default Admin
