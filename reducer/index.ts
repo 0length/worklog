@@ -7,22 +7,22 @@ import {
   UPLOAD_SUCCESS,
   UPLOAD_PROGRESS,
   UPLOAD_RESET
-   } from "./types";
-  import { combineReducers, Reducer as R,  CombinedState } from "redux";
+  } from "./types"
+  import { combineReducers, Reducer as R,  CombinedState } from "redux"
 
-import userReducer from "./user";
-import menuReducer from "./menu";
-import toastReducer from "./toast";
-import workReducer from "./work";
-import { initUploader } from "./init";
-  
+import userReducer from "./user"
+import menuReducer from "./menu"
+import toastReducer from "./toast"
+import workReducer from "./work"
+import { initUploader } from "./init"
+
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
-  
+
   // const rootReducer = combineReducers({
   //   ui
   // });
-  
+
   // export default rootReducer;
 
 
@@ -30,20 +30,19 @@ import { initUploader } from "./init";
        data: [],
       isLoading: false,
       error: null,
-  };
-  
+  }
+
   export const initialTranslateArticleState = {
       data: [],
       isLoading: false,
       error: null  ,
-  };
+  }
 
   export const initialUserData= {
     user: {name: "", email: "", password: ""},
     acces_token: ""
-    
   }
-  
+
 
   const authentications = (state: any, action: any, authType: any)=>{
     switch (action.type){
@@ -52,22 +51,22 @@ import { initUploader } from "./init";
             token: "",
             isLoading: true,
             error: null
-        };
+        }
         case `${authType}_SUCCESS`:
         return {
             token: action.payload.token,
             isLoading:false,
             user: action.payload.user,
             error:null
-        };
+        }
         case `${authType}_FAILURE`:
         return{
             token: "",
             isLoading: false,
             error: action.payload
-        };
+        }
         default:
-        return state;
+        return state
     }
   }
 
@@ -82,25 +81,25 @@ import { initUploader } from "./init";
             token: "",
             isLoading: true,
             error: null
-        };
+        }
         case `REQUEST_${tokenType}_TOKEN_SUCCESS`:
         return {
             token: action.payload,
             isLoading:false,
             error:null
-        };
+        }
         case `REQUEST_${tokenType}_TOKEN_FAILURE`:
         return{
             token: "",
             isLoading: false,
             error: action.payload
-        };
+        }
         default:
-        return state;
+        return state
     }
 }
 
-  
+
   const generalGraphReducer = (state ={}, action: any) =>{
     switch (action.type){
       case GENERAL_GRAPH:
@@ -108,21 +107,21 @@ import { initUploader } from "./init";
           data:[],
           isLoading: true,
           error: null
-        };
+        }
       case GENERAL_GRAPH_SUCCESS:
         return {
             data: action.payload,
             isLoading:false,
             error:null
-        };
+        }
       case GENERAL_GRAPH_FAILURE:
         return{
             data: [],
             isLoading: false,
             error: action.payload
-        };
+        }
       default:
-        return state;
+        return state
     }
   }
 
@@ -139,7 +138,7 @@ import { initUploader } from "./init";
         return {
           ...state,
           ...newProcess
-        };
+        }
       case UPLOAD_SUCCESS:
         const newProcessSuccess: any = {}
         newProcessSuccess[action.pid] = {
@@ -151,7 +150,7 @@ import { initUploader } from "./init";
         return {
           ...state,
           ...newProcessSuccess
-        };
+        }
       case UPLOAD_PROGRESS:
         const newProcessProgress: any = {}
         newProcessProgress[action.pid] = {
@@ -161,7 +160,7 @@ import { initUploader } from "./init";
         return {
           ...state,
           ...newProcessProgress
-        };
+        }
       case UPLOAD_FAILURE:
         const newProcessFail: any = {}
         newProcessFail[action.pid] = {
@@ -173,25 +172,25 @@ import { initUploader } from "./init";
         return{
           ...state,
           ...newProcessFail
-        };
+        }
         case UPLOAD_RESET:
           const newProcessReset: any = state
           // newProcessReset[action.pid] = {}
           delete newProcessReset[action.pid]
           return newProcessReset
       default:
-        return state;
+        return state
     }
   }
 
 const csrfReducer = (state: any= null, action: any) =>{
     return tokenTypeReducer(state, action, 'CSRF')
   }
-  
+
 
 
    export const Reducer: R<CombinedState<any>> =combineReducers({
-     //authReducer, 
+     // authReducer,
      csrf: csrfReducer,
      user: userReducer,
      menu: menuReducer,
@@ -199,6 +198,5 @@ const csrfReducer = (state: any= null, action: any) =>{
      work: workReducer,
      grapher: generalGraphReducer,
      uploader: uploadReducer
-    });
-   export default Reducer;
-  
+    })
+   export default Reducer

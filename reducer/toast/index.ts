@@ -1,17 +1,17 @@
-import { toastType } from "./types";
-import { initMenu } from "../init";
+import { toastType } from "./types"
+import { initMenu } from "../init"
 
 const toastReducer = (state = {data:[]}, action: any)=>{
 
     switch (action.type){
         case toastType.SET:
-        return {...state};
+        return {...state}
         case toastType.SETED:
-        return {data : [...state.data, ...action.recieve]};
+        return {data : [...state.data, ...action.recieve]}
         case toastType.CLEAR:
-        return {data:[]};
+        return {data:[]}
         default:
-        return state;
+        return state
     }
 }
 

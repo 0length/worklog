@@ -1,6 +1,6 @@
-const SET = 'SET';
-const SETED = 'SETED';
-const CLEAR = 'CLEAR';
+const SET = 'SET'
+const SETED = 'SETED'
+const CLEAR = 'CLEAR'
 
 
 const toastType = {
@@ -9,6 +9,6 @@ const toastType = {
     CLEAR
 }
 
-export { 
+export {
     toastType
 }

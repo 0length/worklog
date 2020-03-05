@@ -27,7 +27,7 @@ const socket$ = webSocket(
         url:"ws://localhost:3000/graphql",
         protocol: "graphql-ws",
     }
-  );
+  )
 
 const auth = (action$: any, store: any)=>{
      return action$.pipe(
@@ -46,8 +46,8 @@ const auth = (action$: any, store: any)=>{
          mergeMap((payload: any)=>{
              return Observable.create((observer: any)=>{
                 if(payload.token&&payload.user){
-                    localStorage.setItem(localStorageKeys.auth_token, payload.token);
-                    localStorage.setItem(localStorageKeys.username, btoa(payload.user.username));
+                    localStorage.setItem(localStorageKeys.auth_token, payload.token)
+                    localStorage.setItem(localStorageKeys.username, btoa(payload.user.username))
                     observer.next(authSuccess(payload))
                 }else{
                     observer.next(authFailure(payload.error==="Not Found" || payload.error==="Invalid Password"?"Invalid Username or Password":payload.error))
