@@ -22,6 +22,8 @@
     "./node_modules/@types/node/index.d.ts",
     "./node_modules/@types/*",
     "**/*.spec.ts",
+    "./jest.config.js",
+    "./prisma/src/*",
 ]
 }
 // {
