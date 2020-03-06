@@ -136,9 +136,11 @@ interface NotificationData {
     idx: number
 }
 const ToastCard: React.FC<NotificationData>=(props)=>{
-    let {message, timeOut, type, removeMe, idx, created_at} = props
+    let {message, type, idx, created_at} = props
+    const { removeMe, timeOut } = props
     !created_at?created_at=new Date().toString():
     !idx.toString()?idx=Math.floor((Math.random() * 10)):
+    // tslint:disable-next-line: no-unused-expression
     !type?type="info":!message?message="Hi. I'm a Toast.":null
     const id = btoa((created_at+idx).replace(/ /g,"_"))
 
@@ -156,6 +158,7 @@ const ToastCard: React.FC<NotificationData>=(props)=>{
     }
 
     const close = ()=>{
+        // tslint:disable-next-line: no-unused-expression
         removeMe && removeMe(id)
     }
     useEffect(()=>{
@@ -163,7 +166,7 @@ const ToastCard: React.FC<NotificationData>=(props)=>{
         {
             timer()
             removeMeTimeout = setTimeout(()=>{
-                removeMe && removeMe(id)
+                close()
             }, timeOut+500)
         }
     }, [])
@@ -171,6 +174,7 @@ const ToastCard: React.FC<NotificationData>=(props)=>{
     const cancelTimeOut = ()=>{
         clearTimeout(removeMeTimeout)
         const item = document.getElementById(id)
+        // tslint:disable-next-line: no-unused-expression
         item && item.setAttribute('style', `transition: none;`)
     }
 

@@ -13,19 +13,19 @@ const Wrapper = styled.div`
     background:#F5F5F5;
     // box-shadow: 0 0 40px 0 rgba(82,63,105,.1);
     box-shadow: 0 0 100px 100pc #fff;
-    border-radius: 3px; 
+    border-radius: 3px;
     width: 83vw;
     height: 5vh;
 `
 
 const Container = styled.div`
     // background-color: #f5f5f5;
-    border: 0px solid rgba(245, 245, 245, 1); 
-    border-radius: 4px; 
+    border: 0px solid rgba(245, 245, 245, 1);
+    border-radius: 4px;
     display: flex;
     margin: 0.5vh 1.5vw;
     align-items: stretch;
-    
+
 `
 
 const Span = styled(styled.span`
@@ -55,15 +55,17 @@ if(menuList.length>0) {
     menuList.map((item: any, idx: any)=>{menuData[item.name]={parent: item.parent_name}})
 }
 
-const [hierarchy, setHierarchy] = useState<Array<JSX.Element>>([<Span  key={"wl-bc_empt"}></Span>])
+const [hierarchy, setHierarchy] = useState<JSX.Element[]>([<Span  key={"wl-bc_empt"}></Span>])
 
 useEffect(()=>{
-    let haveParent: any, temp: any =[]
+    let haveParent: any
+    const temp: any =[]
     if(activeMenu){
         temp.unshift(<Span key={"wl-bc_active"}>{activeMenu}</Span>)
         haveParent = Object.keys(menuData).filter((i: any)=>i===activeMenu)
         if(haveParent.length>0){
             haveParent = menuData[Object.keys(menuData).filter((i: any)=>i===activeMenu)[0]].parent
+            // tslint:disable-next-line: no-unused-expression
             haveParent !== "" && temp.unshift(<Span key={"wl-bc_root"}>{haveParent}</Span>)
         }
         setHierarchy(temp)
@@ -76,11 +78,11 @@ useEffect(()=>{
         </Container>
     </Wrapper>)
 }
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
     setActiveMenu
-    }, dispatch);
+    }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(BreadCrumbs);
+export default connect(mapStateToProps, mapDispatchToProps)(BreadCrumbs)

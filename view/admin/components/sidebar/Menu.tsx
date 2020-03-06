@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
     box-sizeing: border-box;
     margin-left: -1vw;
-    
+
 }
 
 .wl-sidebar__menu-main__item{
@@ -109,20 +109,20 @@ const GlobalStyle = createGlobalStyle`
     color: #2384FB;
     & > .wl-sidebar__menu-main__item-toggle {
         & > span {
-            color: #2384FB;   
+            color: #2384FB;
         }
     }
 
     .wl-sidebar__menu-nd__item-toggle.active {
         & > span {
-            color: #2384FB;   
+            color: #2384FB;
         }
     }
  }
 
  .wl-sidebar__menu-nd__item-toggle.active {
     & > span {
-        color: #2384FB;   
+        color: #2384FB;
     }
 }
 `
@@ -131,25 +131,31 @@ const Menu: React.FC<any> = (props)=>{
 const [dom, setDom] = useState<JSX.Element>(<></>)
 
 useEffect(()=>{
+    // tslint:disable-next-line: no-unused-expression
     props.user && props.user.authToken && props.getMenu(`{ menus { name, parent_name, sequence } }`)
 },[props.user.authToken])
 
 useEffect(()=>{
     if(props.menu.data.length>0){
-        let menuDom = props.menu.data.filter((item: any)=>item.parent_name==="").map((item: any, idx: any) => {
-            return (<li 
+        const menuDom = props.menu.data.filter((item: any)=>item.parent_name==="").map((item: any, idx: any) => {
+            return (
+            <li
                 key={`sidebar-menu-${item.parent_name}-${item.sequence}`}
                 className={"wl-sidebar__menu-main__item "+item.name}
             >
                 <div className="wl-sidebar__menu-main__item-toggle" onClick={(e: any)=>{
-                    //todo: create function for this
-                    props.setActiveMenu(item.name);
-                    let element: any = document.querySelectorAll('.wl-sidebar__menu-main__item.'+item.name)[0]
-                    document.querySelectorAll('.wl-sidebar__menu-main__item').forEach((item: any)=>item.classList.toggle("active", false))
-                    document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle').forEach((item: any)=>item.classList.toggle("active", false))
-                    !element.classList.contains("active") ?element.classList.toggle("active", true):element.classList.toggle("active", false)
-                    let subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
-                    !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true):subMenuClassList.toggle("hidden", false)
+                    // todo: create function for this
+                    props.setActiveMenu(item.name)
+                    const element: any = document.querySelectorAll('.wl-sidebar__menu-main__item.'+item.name)[0]
+                    document.querySelectorAll('.wl-sidebar__menu-main__item')
+                        .forEach((a: any)=>a.classList.toggle("active", false))
+                    document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle')
+                        .forEach((a: any)=>a.classList.toggle("active", false))
+                    !element.classList.contains("active") ?element.classList.toggle("active", true)
+                        :element.classList.toggle("active", false)
+                    const subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
+                    !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true)
+                        :subMenuClassList.toggle("hidden", false)
                     subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
                  }}>
                 <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
@@ -157,26 +163,27 @@ useEffect(()=>{
                 </div>
                 <ul className="wl-sidebar__menu-2nd show">
                     {
-                        props.menu.data.filter((child: any)=>child.parent_name===item.name).map((child: any, idx: any)=>{
-                            return(<li 
+                        props.menu.data.filter((child: any)=>child.parent_name===item.name)
+                            .map((child: any)=>{
+                            return(<li
                                 key={`sidebar-menu-${item.sequence}-${child.sequence}`}
                                 className="wl-sidebar__menu-2nd__item"
                             >
                                     <div className={"wl-sidebar__menu-nd__item-toggle "+child.name} onClick={(e: any)=>{
                                         props.setActiveMenu(child.name)
-                                        let element: any = document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle.'+child.name)[0]
-                                        document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle').forEach((item: any)=>item.classList.toggle("active", false))
-                                        element.classList.contains("active") ?element.classList.toggle("active", false):element.classList.toggle("active", true)
+                                        const element: any = document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle.'+child.name)[0]
+                                        document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle')
+                                            .forEach((a: any)=>a.classList.toggle("active", false))
+                                        element.classList.contains("active") ?element.classList.toggle("active", false)
+                                            :element.classList.toggle("active", true)
                                     }}>
                                     &nbsp;&nbsp;&nbsp;
                                         <span className="wl-sidebar__menu__text">{child.name}</span>
                                     </div>
                             </li>)
                         })
-                        
                     }
                 </ul>
-                
             </li>)
         })
         setDom(menuDom)
@@ -185,11 +192,11 @@ useEffect(()=>{
     return (<ul className="wl-sidebar__menu-main"><GlobalStyle />{dom}</ul>)
 }
 
-const mapStateToProps = (state:any) => (state);
+const mapStateToProps = (state:any) => (state)
 
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
         getMenu,
         setActiveMenu
-    }, dispatch);
+    }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)

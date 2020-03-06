@@ -5,6 +5,7 @@ import Header from './components/header'
 import { createGlobalStyle } from 'styled-components'
 import { pushToast } from '../../reducer/toast/action'
 import { startSubscribeWork } from '../../reducer/work/actions'
+import { startSubscribePost } from '../../reducer/post/actions'
 import SideBar from './components/sidebar'
 import WorkDesk from './components/work-desk'
 import BreadCrumbs from './components/bread-crumbs'
@@ -45,6 +46,7 @@ export const App: React.FC<any> = (props)=>{
   useEffect(()=>{
     if(user && user.userData){
       props.startSubscribeWork({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n   name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}\n}\n"}})
+      props.startSubscribePost({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  posts {\n   title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }\n}\n"}})
       props.pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)])
     }
   }, [user.userData])
@@ -65,6 +67,7 @@ const mapStateToProps = (state:any) => (state)
 const mapDispatchToProps = (dispatch:any) =>
     bindActionCreators({
       startSubscribeWork,
+      startSubscribePost,
       pushToast,
     }, dispatch)
 

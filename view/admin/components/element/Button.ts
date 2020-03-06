@@ -9,7 +9,7 @@ const Button = styled(styled.button`
         padding: 0.25em 1em;
         cursor: pointer;
         ${(props: any)=>
-            props.styleProfile && props.styleProfile.primary && 
+            props.styleProfile && props.styleProfile.primary &&
             css`
             background: #00a3ee;
             color: #F4F4F4;
@@ -17,7 +17,7 @@ const Button = styled(styled.button`
         `}
 
         ${(props: any)=>
-            props.styleProfile && props.styleProfile.danger && 
+            props.styleProfile && props.styleProfile.danger &&
             css`
             box-shadow: none;
             background: #FD27EB;
@@ -33,7 +33,7 @@ const Button = styled(styled.button`
         // background: transparent;
         // color: #00abfb;
         ${(props: any)=>
-            props.styleProfile && props.styleProfile.primary && 
+            props.styleProfile && props.styleProfile.primary &&
             css`
             background: #00A3F0;
             color: white;
@@ -46,7 +46,5 @@ const Button = styled(styled.button`
         border: 1px solid rgba(33,33,33,.7);
     }
 `
-     
- 
-     
+
 export default Button

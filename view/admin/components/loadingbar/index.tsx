@@ -35,12 +35,12 @@ const { isLoading } = user
         }
     }, [isLoading])
 
-    return(<Wrapper><div className="wl-loadingbar"/></Wrapper>)    
+    return(<Wrapper><div className="wl-loadingbar"/></Wrapper>)
 }
-const mapStateToProps = (state: any) => (state);
+const mapStateToProps = (state: any) => (state)
 
 const mapDispatchToProps = (dispatch: any) =>
     bindActionCreators({
-    }, dispatch);
+    }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadingBar)

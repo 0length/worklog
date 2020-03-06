@@ -5,7 +5,7 @@ import ToastNotifier from '../toast-notifier'
 const SignIn: React.FC<any> = ({setMode, auth, error})=>{
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const buttonSignIn = useRef<any>();
+    const buttonSignIn = useRef<any>()
     const onEnter = (e: any)=>{
         if(e.key === 'Enter'){
         buttonSignIn.current.click()
@@ -14,19 +14,40 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
     return(
     <div className="wl-login__signin" onKeyPressCapture={(e)=>onEnter(e)}>
         <div className="wl-login__head" style={{
-            
             // margin: '3rem 0',
             // textAlign: 'center'
         }}>
             <h3 className="wl-login__title">Sign In To Admin</h3>
         </div>
-        {error && <ToastCard message={error === 'jwt expired'?'Your Session has Expired':error} timeOut={0}  idx={0} created_at={new Date+""} type="danger"/>}
+        {
+            error && <ToastCard
+                        message={error === 'jwt expired'?'Your Session has Expired':error}
+                        timeOut={0}
+                        idx={0}
+                        created_at={new Date()+""}
+                        type="danger"/>
+        }
         <div className="wl-login__form">
             <div className="form-group">
-                <Input {...{styleProfile: {auth:true}}} onChange={(e:any)=>{setEmail(e.target.value)}} value={email} type="text" placeholder="Email" name="email" />
+                <Input
+                    {...{styleProfile: {auth:true}}}
+                    onChange={(e:any)=>{setEmail(e.target.value)}}
+                    value={email}
+                    type="text"
+                    placeholder="Email"
+                    name="email"
+                />
             </div>
             <div className="form-group">
-                <Input {...{styleProfile: {auth:true, last: true}}} onChange={(e: any)=>{setPassword(e.target.value)}} value={password} className="form-control-last" type="password" placeholder="Password" name="password" />
+                <Input
+                    {...{styleProfile: {auth:true, last: true}}}
+                    onChange={(e: any)=>{setPassword(e.target.value)}}
+                    value={password}
+                    className="form-control-last"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                />
             </div>
             <div className="wl-login__extra" style={{
                 marginTop: '2rem',

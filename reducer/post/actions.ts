@@ -1,12 +1,12 @@
-import { workTypes } from "./types"
+import { postTypes } from "./types"
 
-export const startSubscribeWork = (param: any) => ({
-    type: workTypes.START_SUBSCRIBE_WORKS,
+export const startSubscribePost = (param: any) => ({
+    type: postTypes.START_SUBSCRIBE_POSTS,
     query: param
 })
 
-export const subscribeWorkSuccess = (payload: any) =>({
-    type: workTypes.SUBSRIBE_WORK_IS_RUNNING,
+export const subscribePostSuccess = (payload: any) =>({
+    type: postTypes.SUBSRIBE_POST_IS_RUNNING,
     payload
 })
 

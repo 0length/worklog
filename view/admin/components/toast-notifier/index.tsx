@@ -33,7 +33,7 @@ interface ToastNotifDomData{
 interface ToastNotifierProps{
     notification: ToastNotificationData[]
 }
-    //todo connect redux store Toast
+
 const ToastNotifier: React.FC<any> = (props)=>{
     const notification = props.toast.data
     const [notifDom, setNotifDom] = useState<ToastNotifDomData>({})

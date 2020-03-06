@@ -1,5 +1,5 @@
-import { menuTypes } from "./types";
-import { initMenu } from "../init";
+import { menuTypes } from "./types"
+import { initMenu } from "../init"
 
 const menuReducer = (state = initMenu, action: any)=>{
 
@@ -9,27 +9,27 @@ const menuReducer = (state = initMenu, action: any)=>{
             ...state,
             isLoading: true,
             error: null,
-        };
+        }
         case menuTypes.GET_SUCCESS:
         return {
             ...state,
             isLoading: false,
             error: null,
             data: [...new Set([ ...action.payload,...state.data])]
-        };
+        }
         case menuTypes.GET_FAILURE:
         return{
             ...state,
             isLoading: false,
             error: action.payload
-        };
+        }
         case menuTypes.SET_MENU_ACTIVE:
             return {
                 ...state,
                 active:action.payload
-            };
+            }
         default:
-        return state;
+        return state
     }
 }
 

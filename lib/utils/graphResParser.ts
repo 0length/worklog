@@ -1,18 +1,19 @@
+import { User, Work, Menu, Group, Post, Comment } from "../../global-types"
 
 interface GraphResponse {
     data: Data
-    errors?: Array<Error|any>
+    errors?: Error[]|any[]
 }
 
 interface Data {
-    [index: string]: Array<any>;
+    [index: string]: User[]|Work[]|Menu[]|Group[]|Post[]|Comment[]|any
 }
 
 interface Error {
-    message: string;
-    locations?: any;
-    path?: any;
-    extentions?: any;
+    message: string
+    locations?: any
+    path?: any
+    extentions?: any
 }
 
 const graphResponseParser = (payload: GraphResponse)=>{

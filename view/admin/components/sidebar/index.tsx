@@ -7,7 +7,7 @@ import Menu from './Menu'
 
 const SideBar: React.FC<any> = (props)=>{
     // const [menuDom, setMenuDom] = useState<JSX.Element>(<li></li>)
-    
+
     const LocalStyle = createGlobalStyle`
 
     .wl-sidebar {

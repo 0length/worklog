@@ -1,43 +1,43 @@
-import { workTypes } from "./types"
+import { postTypes } from "./types"
 import { initItem } from "../init"
 
-const workReducer = (state = initItem, action: any)=>{
+const postReducer = (state = initItem, action: any)=>{
 
     switch (action.type){
-        case workTypes.GET:
+        case postTypes.GET:
         return {
             ...state,
             isLoading: true,
             error: null,
         }
-        case workTypes.GET_SUCCESS:
+        case postTypes.GET_SUCCESS:
         return {
             ...state,
             isLoading: false,
             error: null,
             data: [...new Set([ ...action.payload,...state.data])]
         }
-        case workTypes.GET_FAILURE:
+        case postTypes.GET_FAILURE:
         return{
             ...state,
             isLoading: false,
             error: action.payload
         }
-        case workTypes.SET_WORK_ACTIVE:
+        case postTypes.SET_POST_ACTIVE:
             return {
                 ...state,
                 active:action.payload
             }
-        case workTypes.SUBSRIBE_WORK_IS_RUNNING:
+        case postTypes.SUBSRIBE_POST_IS_RUNNING:
             return {
                 ...state,
                 uptodate: [...new Set([ ...state.uptodate, ...action.payload])]
             }
-            case workTypes.START_SUBSCRIBE_WORKS:
+            case postTypes.START_SUBSCRIBE_POSTS:
             return {
                 ...state,
             }
-            case workTypes.STOP_SUBSCRIBE_WORKS:
+            case postTypes.STOP_SUBSCRIBE_POSTS:
             return{
                 ...state,
                 uptodate: []
@@ -47,4 +47,4 @@ const workReducer = (state = initItem, action: any)=>{
     }
 }
 
-export default workReducer
+export default postReducer
