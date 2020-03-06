@@ -15,7 +15,7 @@ export const initMenu = {
     active: "dashboard"
 }
 
-export const initWork = {
+export const initItem = {
     uptodate: [],
     data: [],
     isLoading: false,

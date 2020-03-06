@@ -4,6 +4,7 @@ import Testing from './component/Testing'
 import Work from './component/work'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Post from './component/post'
 
 const Wrapper = styled.div`
     display: flex;
@@ -19,6 +20,7 @@ interface HighOrderType {
 
 const HighOrder:  HighOrderType= {
     'work': <Work/>,
+    'post': <Post/>,
     'testing' : <Testing />
 }
 

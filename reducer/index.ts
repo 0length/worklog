@@ -15,6 +15,7 @@ import menuReducer from "./menu"
 import toastReducer from "./toast"
 import workReducer from "./work"
 import { initUploader } from "./init"
+import postReducer from "./post"
 
   // import { combineReducers } from "redux";
   // import ui from "./UIReducer";
@@ -196,6 +197,7 @@ const csrfReducer = (state: any= null, action: any) =>{
      menu: menuReducer,
      toast: toastReducer,
      work: workReducer,
+     post: postReducer,
      grapher: generalGraphReducer,
      uploader: uploadReducer
     })

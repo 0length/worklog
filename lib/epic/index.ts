@@ -20,6 +20,7 @@ import graphResponseParser from '../utils/graphResParser'
 import { GENERAL_GRAPH, UPLOAD } from '../../reducer/types'
 import { generalGraphFailure, generalGraphSuccess, uploadFailure, uploadSuccess, setUploadPercentage } from '../../reducer/actions'
 import endPoint from '../const/endpoint'
+import { postTypes } from '../../reducer/post/types'
 
 
 const socket$ = webSocket(
@@ -155,6 +156,8 @@ const auth = (action$: any, store: any)=>{
          mergeMap((action: any) =>{
             return Observable.create((observer: any)=>{
                 socket$.subscribe(({payload}: any)=>{
+                    const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
+                    payload && payload.data && payload.data[key] &&
                     observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: graphResponseParser(payload)})
                 })
                 socket$.next(action.query)
@@ -162,10 +165,29 @@ const auth = (action$: any, store: any)=>{
             }).pipe(
                 takeUntil(action$.pipe(ofType(workTypes.STOP_SUBSCRIBE_WORKS)))
             )
-        }),
-         catchError((error: any) =>of(getMenuFailure(error.message)))
+        })
      )
  }
+
+ const postSubsriber = (action$: any, store: any)=>{
+    return action$.pipe(
+        ofType(postTypes.START_SUBSCRIBE_POSTS),
+        mergeMap((action: any) =>{
+           return Observable.create((observer: any)=>{
+               socket$.subscribe(({payload}: any)=>{
+                const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
+                payload && payload.data && payload.data[key] &&
+                observer.next({type: postTypes.SUBSRIBE_POST_IS_RUNNING, payload: graphResponseParser(payload)})
+               })
+               socket$.next(action.query)
+               console.log(action.query)
+           }).pipe(
+               takeUntil(action$.pipe(ofType(postTypes.STOP_SUBSCRIBE_POSTS)))
+           )
+       })
+    )
+}
+
 
  const cleanerToast =  (action$: any, store: any)=>{
    return action$.pipe(
@@ -255,6 +277,7 @@ const logout =  (action$: any, store: any)=>{
     setToast,
     cleanerToast,
     workSubsriber,
+    postSubsriber,
     logout,
     generalGraph,
     upload
