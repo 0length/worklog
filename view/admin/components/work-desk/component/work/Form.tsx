@@ -74,7 +74,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <label>File for Image : </label>
-            {name && <Dropzone onFilesAdded={props.upload} progress={props.uploader.progress} pid={pid}/>}
+            {name && <Dropzone onFilesAdded={props.upload} progress={props.uploader[pid] && props.uploader[pid].progress} pid={pid}/>}
         </div>
         <div key={"wl_fr__work-client"} className="wl-form-group">
             <label>Client : </label>
