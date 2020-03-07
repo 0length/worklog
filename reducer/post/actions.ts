@@ -6,7 +6,7 @@ export const startSubscribePost = (param: any) => ({
 })
 
 export const subscribePostSuccess = (payload: any) =>({
-    type: postTypes.SUBSRIBE_POST_IS_RUNNING,
+    type: postTypes.SUBSCRIBE_POSTS_IS_RUNNING,
     payload
 })
 

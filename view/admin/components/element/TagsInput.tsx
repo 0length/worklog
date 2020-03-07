@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Styled from 'styled-components'
 import Input from './Input'
 import Button from './Button'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 const Span = styled.span`
 display: block;
+cursor: text;
 width: 100%;
 // height: calc(1.5em + 1.3rem + 2px);
 padding: .65rem 1rem;
@@ -25,7 +26,12 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-bo
 
 const TagsInput: React.FC<any> = ({valueGetter})=>{
     const [tags, setTags] = useState<string[]>([])
-    const [dom, setdom] = useState<any>([])
+    const [dom, setdom] = useState<JSX.Element[]>([])
+
+    const inputRef = useRef<any>()
+    const focus = ()=>{
+        inputRef.current.focus()
+    }
 
     const addTag = (text: string)=>{
         const temp = tags
@@ -65,11 +71,13 @@ setdom(tags.map((item, index)=>{
 }, [tags])
 
 return (<div>
-    <Span >
-  {
-        dom
-  }  <input onKeyUp={(e)=>pressMatch(e)} style={{border: 'none'}}/>
-</Span></div>)
+    <Span onClick={()=>focus()}>
+        {
+            dom
+        }
+        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{border: 'none'}}/>
+    </Span>
+</div>)
 }
 
 export default TagsInput

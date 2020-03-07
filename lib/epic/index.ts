@@ -16,9 +16,17 @@ import reducer from '../utils/reducerSum'
 import { toastError, toastSuccess } from '../utils/toastModel'
 import localStorageKeys from '../const/localStorageKeys'
 import { workTypes } from '../../reducer/work/types'
-import graphResponseParser from '../utils/graphResParser'
+import graphResponseParser, { HaveError } from '../utils/graphResParser'
 import { GENERAL_GRAPH, UPLOAD } from '../../reducer/types'
-import { generalGraphFailure, generalGraphSuccess, uploadFailure, uploadSuccess, setUploadPercentage } from '../../reducer/actions'
+import {
+    generalGraphFailure,generalGraphSuccess,
+    uploadFailure,
+    uploadSuccess,
+    setUploadPercentage,
+    unsubscribe,
+    GeneralGrap
+} from '../../reducer/actions'
+
 import endPoint from '../const/endpoint'
 import { postTypes } from '../../reducer/post/types'
 
@@ -120,8 +128,7 @@ const auth = (action$: any, store: any)=>{
                     observer.next(getUserDataSuccess(payload))
                 }
              })
-        }),
-         catchError((error: any) =>of(getUserDataFailure(error.message)))
+        })
      )
  }
 
@@ -140,54 +147,34 @@ const auth = (action$: any, store: any)=>{
                         // tslint:disable-next-line: no-unused-expression
                         chunks.length<2&&observer.next(pushedToast(chunks[0]))
                         timer(0, maxDelay+100).pipe(take(chunks.length-1)).subscribe((x)=>{
-                            const delay = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[0]
-                            setTimeout(observer.next(pushedToast(chunks[x])), delay+3000)
+                            const d = chunks[x].map((item: any)=>item.timeOut).sort(sortNumber)[0]
+                            setTimeout(observer.next(pushedToast(chunks[x])), d+3000)
                         })
                     })
-        }),
-         catchError((error: any) =>of(clearToast()))
-     )
- }
-
-
- const workSubsriber = (action$: any, store: any)=>{
-     return action$.pipe(
-         ofType(workTypes.START_SUBSCRIBE_WORKS),
-         mergeMap((action: any) =>{
-            return Observable.create((observer: any)=>{
-                socket$.subscribe(({payload}: any)=>{
-                    const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
-                    payload && payload.data && payload.data[key] &&
-                    observer.next({type: workTypes.SUBSRIBE_WORK_IS_RUNNING, payload: graphResponseParser(payload)})
-                })
-                socket$.next(action.query)
-                console.log(action.query)
-            }).pipe(
-                takeUntil(action$.pipe(ofType(workTypes.STOP_SUBSCRIBE_WORKS)))
-            )
         })
      )
  }
 
- const postSubsriber = (action$: any, store: any)=>{
-    return action$.pipe(
-        ofType(postTypes.START_SUBSCRIBE_POSTS),
-        mergeMap((action: any) =>{
-           return Observable.create((observer: any)=>{
-               socket$.subscribe(({payload}: any)=>{
-                const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
-                payload && payload.data && payload.data[key] &&
-                observer.next({type: postTypes.SUBSRIBE_POST_IS_RUNNING, payload: graphResponseParser(payload)})
-               })
-               socket$.next(action.query)
-               console.log(action.query)
-           }).pipe(
-               takeUntil(action$.pipe(ofType(postTypes.STOP_SUBSCRIBE_POSTS)))
-           )
-       })
-    )
-}
 
+ const subscriber = (action$: any, store: any)=>{
+     return action$.pipe(
+         ofType(workTypes.START_SUBSCRIBE_WORKS, postTypes.START_SUBSCRIBE_POSTS),
+         mergeMap((action: any) =>{
+            return Observable.create((observer: any)=>{
+                socket$.subscribe(({payload}: any)=>{
+                    const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
+                    // tslint:disable-next-line: no-unused-expression
+                    payload && payload.data && payload.data[key] &&
+                    // tslint:disable-next-line: max-line-length
+                    observer.next({type: `SUBSCRIBE_${key.toUpperCase()}_IS_RUNNING`, payload: graphResponseParser(payload)})
+                })
+                socket$.next(action.query)
+            }).pipe(
+                takeUntil(action$.pipe(ofType(unsubscribe)))
+            )
+        })
+     )
+ }
 
  const cleanerToast =  (action$: any, store: any)=>{
    return action$.pipe(
@@ -219,9 +206,9 @@ const logout =  (action$: any, store: any)=>{
                 }
             })
         }),
-         map((data: AjaxResponse) =>data.response),
-         map((payload: any) =>graphResponseParser(payload)),
-         mergeMap((payload: any)=>{
+        map((data: AjaxResponse) =>data.response),
+        map((payload: any) =>graphResponseParser(payload)),
+        mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
                 if(payload.error){
                     observer.next(generalGraphFailure(payload.error))
@@ -230,6 +217,7 @@ const logout =  (action$: any, store: any)=>{
                 }
                 if(!payload.error){
                     observer.next(generalGraphSuccess(payload))
+                    observer.next(pushToast([toastSuccess("Success")]))
                 }
             })
         }),
@@ -276,8 +264,8 @@ const logout =  (action$: any, store: any)=>{
     getUserData,
     setToast,
     cleanerToast,
-    workSubsriber,
-    postSubsriber,
+    subscriber,
+    // postSubsriber,
     logout,
     generalGraph,
     upload

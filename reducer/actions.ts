@@ -4,7 +4,8 @@ import {
     GENERAL_GRAPH_FAILURE,
     UPLOAD, UPLOAD_FAILURE,
     UPLOAD_SUCCESS, UPLOAD_PROGRESS,
-    UPLOAD_RESET
+    UPLOAD_RESET,
+    STOP_ALL_SUBSCRIBE
 } from "./types"
 
 
@@ -12,7 +13,10 @@ export const REQUEST_CSRF_TOKEN = 'REQUEST_CSRF_TOKEN'
 export const REQUEST_CSRF_TOKEN_SUCCESS = 'REQUEST_CSRF_TOKEN_SUCCESS'
 export const REQUEST_CSRF_TOKEN_FAILURE = 'REQUEST_CSRF_TOKEN_FAILURE'
 
-
+export interface GeneralGrap{
+    type: string
+    query: any
+}
 
 export const generalGraph = (param: any) => ({
     type: GENERAL_GRAPH,
@@ -72,4 +76,8 @@ export const uploadFailure = (message: any, pid: string) => ({
 export const resetUploader = (pid: string) => ({
     type: UPLOAD_RESET,
     pid
+})
+
+export const unsubscribe = () => ({
+    type: STOP_ALL_SUBSCRIBE,
 })

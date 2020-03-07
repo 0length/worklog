@@ -6,7 +6,7 @@ export const startSubscribeWork = (param: any) => ({
 })
 
 export const subscribeWorkSuccess = (payload: any) =>({
-    type: workTypes.SUBSRIBE_WORK_IS_RUNNING,
+    type: workTypes.SUBSCRIBE_WORKS_IS_RUNNING,
     payload
 })
 

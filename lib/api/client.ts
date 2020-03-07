@@ -110,14 +110,14 @@ interface ClientSubscriber{
     subscriberResponse?: (response: any)=>void
 }
 
-const client = (customOption: AgentOption, s: any = {})=>{
+const client: any = (customOption: AgentOption, s: ClientSubscriber = {})=>{
 
     if(s && s.subscriberProgress && s.subscriberResponse){
         console.log("withUpdate", cainedOption(customOption), customOption)
         return ajaxWithUpdates(cainedOption(customOption)).subscribe(
             AjaxUpdate.match({
                 ProgressEvent: progressEvent => {
-                    const percentage = fixDecimal((progressEvent.loaded / progressEvent.total) * 100);
+                    const percentage = fixDecimal((progressEvent.loaded / progressEvent.total) * 100)
                     // tslint:disable-next-line: no-unused-expression
                     s && s.subscriberProgress&& s.subscriberProgress(percentage)
                 },

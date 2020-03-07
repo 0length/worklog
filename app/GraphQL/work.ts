@@ -70,7 +70,7 @@ export const resolvers = {
                 }
 
                 // tslint:disable-next-line: max-line-length
-                const createdWork =  await prisma.createWork({name, p, author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
+                const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
                 workSubject.next(workSub())
                 return createdWork
             }
@@ -91,7 +91,7 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length no-unused-expression
                 !name && !p && !simple_caption && !img_url && !client && !website && !completed_at && !long_desc && !interisting_count && !social_links ? ()=>{throw new Error("nothing to update")}:!name?name=workWhereName.name:!p?p=workWhereName.p:!simple_caption?simple_caption=workWhereName.simple_caption:!img_url?img_url=workWhereName.img_url:!client?client=workWhereName.client:!website?website=workWhereName.website: !completed_at?completed_at=workWhereName.completed_at: !long_desc?long_desc=workWhereName.long_desc: !interisting_count?interisting_count=workWhereName.interisting_count: !social_links?social_links=workWhereName.social_links:null
                 // tslint:disable-next-line: max-line-length
-                const updatedWork = await prisma.updateWork({data:{name, p, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},where:{name:where.name}})
+                const updatedWork = await prisma.updateWork({data:{name, p: p.split("'").join('"'), simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},where:{name:where.name}})
                 workSubject.next(workSub())
                 return updatedWork
             }

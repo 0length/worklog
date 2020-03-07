@@ -65,7 +65,7 @@ export const resolvers = {
                 throw new Error(`Already Exist`)
                 }
                 // tslint:disable-next-line: max-line-length
-                const createdPost = await prisma.createPost({title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links})
+                const createdPost = await prisma.createPost({title, p: p.split("'").join('"'), author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links})
                 postSubject.next(postSub())
                 return createdPost
             }
@@ -82,7 +82,7 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length no-unused-expression
                 !title&& !p&& !author_name&& !img_url&& !text_content&& !published_at&& !view_cont&& !interisting_count&& !social_links? ()=>{throw new Error("nothing to update")}:!title?title=postWhereName.title:!p?p=postWhereName.p:!author_name?author_name=postWhereName.author_name:!img_url?img_url=postWhereName.img_url:!text_content?text_content=postWhereName.text_content:!published_at?published_at=postWhereName.published_at: !view_cont?view_cont=postWhereName.view_cont: !interisting_count?interisting_count=postWhereName.interisting_count: !social_links?social_links=postWhereName.social_links:null
                 // tslint:disable-next-line: max-line-length
-                const updatedPost = await prisma.updatePost({data:{title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links},where:{title:where.title}})
+                const updatedPost = await prisma.updatePost({data:{title, p: p.split("'").join('"'), author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links},where:{title:where.title}})
                 postSubject.next(postSub())
                 return updatedPost
             }

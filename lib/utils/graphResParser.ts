@@ -16,6 +16,10 @@ interface Error {
     extentions?: any
 }
 
+export interface HaveError {
+    error: Error
+}
+
 const graphResponseParser = (payload: GraphResponse)=>{
     if(payload.errors){return {error: payload.errors[0].message}}
     if(!payload.errors){return payload.data[Object.keys(payload.data)[0]]}
