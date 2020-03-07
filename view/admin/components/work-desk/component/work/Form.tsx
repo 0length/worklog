@@ -37,6 +37,7 @@ const Form: React.FC<any> = (props) =>{
     const [file, setFile] = useState<string>('')
     const [client, SetClient] = useState<string>('')
     const [date, setDate] = useState<string>('')
+    const [site, setSite] = useState<string>('')
     const [desc, setDesc] = useState<string>('')
     const [pid, setPid] = useState<string>('')
 
@@ -89,7 +90,7 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-action"} className="wl-form-group">
             <Button onClick={()=>{props.generalGraph(`
-                mutation { createWork(name: "${name}", p: "${p}") { name } } }
+                mutation { createWork(name: "${name}", p: "${JSON.stringify(p).split('"').join("'")}", simple_caption: "${caption}", img_url: "${file}", client: "${client}", website: "${site}", completed_at: "${date}", long_desc: "${desc}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }
             `)}}>Save</Button>
             &nbsp;
             <Button onClick={()=>{props.setMode('read')}}>Discard</Button>
