@@ -28,20 +28,20 @@ const workReducer = (state = initItem, action: any)=>{
                 ...state,
                 active:action.payload
             }
-        case workTypes.SUBSRIBE_WORK_IS_RUNNING:
+        case workTypes.SUBSCRIBE_WORKS_IS_RUNNING:
             return {
                 ...state,
-                uptodate: [...new Set([ ...state.uptodate, ...action.payload])]
+                uptodate: [...action.payload]
             }
             case workTypes.START_SUBSCRIBE_WORKS:
             return {
                 ...state,
             }
-            case workTypes.STOP_SUBSCRIBE_WORKS:
-            return{
-                ...state,
-                uptodate: []
-            }
+            // case workTypes.STOP_SUBSCRIBE_WORKS:
+            // return{
+            //     ...state,
+            //     uptodate: []
+            // }
         default:
         return state
     }

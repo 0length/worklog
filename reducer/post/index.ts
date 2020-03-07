@@ -28,20 +28,20 @@ const postReducer = (state = initItem, action: any)=>{
                 ...state,
                 active:action.payload
             }
-        case postTypes.SUBSRIBE_POST_IS_RUNNING:
+        case postTypes.SUBSCRIBE_POSTS_IS_RUNNING:
             return {
                 ...state,
-                uptodate: [...new Set([ ...state.uptodate, ...action.payload])]
+                uptodate: [...action.payload]
             }
             case postTypes.START_SUBSCRIBE_POSTS:
             return {
                 ...state,
             }
-            case postTypes.STOP_SUBSCRIBE_POSTS:
-            return{
-                ...state,
-                uptodate: []
-            }
+            // case postTypes.STOP_SUBSCRIBE_POSTS:
+            // return{
+            //     ...state,
+            //     uptodate: []
+            // }
         default:
         return state
     }
