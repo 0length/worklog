@@ -176,26 +176,6 @@ const auth = (action$: any, store: any)=>{
      )
  }
 
-//  const postSubsriber = (action$: any, store: any)=>{
-//     return action$.pipe(
-//         ofType(postTypes.START_SUBSCRIBE_POSTS),
-//         mergeMap((action: any) =>{
-//            return Observable.create((observer: any)=>{
-//                socket$.subscribe(({payload}: any)=>{
-//                 const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
-//                 payload && payload.data && payload.data[key] &&
-//                 observer.next({type: postTypes.SUBSRIBE_POST_IS_RUNNING, payload: graphResponseParser(payload)})
-//                })
-//                socket$.next(action.query)
-//                console.log(action.query)
-//            }).pipe(
-//                takeUntil(action$.pipe(ofType(postTypes.STOP_SUBSCRIBE_POSTS)))
-//            )
-//        })
-//     )
-// }
-
-
  const cleanerToast =  (action$: any, store: any)=>{
    return action$.pipe(
        ofType(toastType.SETED),

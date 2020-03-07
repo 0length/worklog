@@ -110,7 +110,7 @@ interface ClientSubscriber{
     subscriberResponse?: (response: any)=>void
 }
 
-const client: AjaxResponse|void|any = (customOption: AgentOption, s: any = {})=>{
+const client: any = (customOption: AgentOption, s: ClientSubscriber = {})=>{
 
     if(s && s.subscriberProgress && s.subscriberResponse){
         console.log("withUpdate", cainedOption(customOption), customOption)
