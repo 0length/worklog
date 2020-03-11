@@ -9,8 +9,8 @@ The project to managing what project did take and finish in the past. This proje
 
 ## Prerequirement
 - docker and docker composer
-- prisma cli
 - nodejs and npm/yarn
+- globally node modules for (prisma@1.28.3, typescript, ts-node, tslint, and jest)
 
 ## Install
 
