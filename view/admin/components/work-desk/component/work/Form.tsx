@@ -31,6 +31,7 @@ const LocalStyle = createGlobalStyle`
 `
 const Form: React.FC<any> = (props) =>{
 
+    // rodo: change state type to {value and isValid}
     const [name, setName] = useState<string>('')
     const [p, setP] = useState<string>('')
     const [caption, setCaption] = useState<string>('')
