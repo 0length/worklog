@@ -79,6 +79,8 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     margin: 2px 0;
     transition: background-color .3s;
+    transition: all 1ms linear 0s;
+    transition: height 0.5s linear 0s;
 }
 
 .wl-sidebar__menu-nd__item-toggle{
@@ -95,10 +97,9 @@ const GlobalStyle = createGlobalStyle`
 }
 
  .hidden{
-    transition: all 1ms linear 0s;
-    transition: height 0.5s linear 0s;
     opacity: 0;
     height: 0;
+    overflow: hidden;
  }
  .show{
      transition: all 0.5s;
