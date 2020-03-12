@@ -15,7 +15,7 @@ const menuReducer = (state = initMenu, action: any)=>{
             ...state,
             isLoading: false,
             error: null,
-            data: [...new Set([ ...action.payload,...state.data])]
+            data: [ ...action.payload,...initMenu.data]
         }
         case menuTypes.GET_FAILURE:
         return{

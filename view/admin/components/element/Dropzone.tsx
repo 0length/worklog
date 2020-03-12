@@ -24,6 +24,12 @@ const LocalStyle = createGlobalStyle`
     opacity: 1 !important;
   }
 
+  .progress-ring__circle {
+    transition: 0.35s stroke-dashoffset;
+    // axis compensation
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
 `
 
 
@@ -84,11 +90,12 @@ interface IProps {
 
 const Dropzone: React.FC<IProps> = (props)=>{
     const [event, setEvent] = useState<string>('')
-    // const [mouseX, setMouseX] = useState<number>(defaultXY);
-    // const [mouseY, setMouseY] = useState<number>(defaultXY);
-
     const [inputDisable, setinputDisable] = useState<boolean>(false)
+    const radius = 22
+    const cycx= radius+8
+    const circumference = radius * 2 * Math.PI
     const inputRef = useRef<any>()
+
     const openFileDialog = (e: any)=>{
         if (e.target.disabled) return
         inputRef.current.click()
@@ -134,15 +141,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         }, 3000)
     }
 
-    // const onDrag = (e: any)=>{
-    //     e.preventDefault()
-    //     setEvent('Drag')
-    //     // console.log(files)
-    //     setTimeout(()=>{
-    //         setEvent('none')
-    //     }, 3000)
 
-    // }
 
     const fileListToArray = (list: any)=>{
         const array = []
@@ -177,7 +176,26 @@ const Dropzone: React.FC<IProps> = (props)=>{
             disabled={inputDisable}
             hidden={true}
         />
-        {event === 'Drop' && <div className={""} >Uploading ...{ props.progress &&'('+props.progress+'%)' }</div>}
+        {event === 'Drop' && props.progress &&  <div className={""} >
+            <svg
+                className="progress-ring"
+                width="120"
+                height="120">
+                <circle
+                    className="progress-ring__circle"
+                    stroke="black"
+                    stroke-width="4"
+                    fill="transparent"
+                    r={radius}
+                    cx={cycx}
+                    cy={cycx}
+                    strokeDasharray={`${circumference} ${circumference}`}
+                    strokeDashoffset={props.progress?(circumference-parseFloat(props.progress)/100*circumference):0}
+                />
+                <text  x="50%" y="50%" text-anchor="middle">{ props.progress }% Done</text>
+            </svg>
+            </div>
+        }
     </Container>)
 }
 

@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getMenu, setActiveMenu } from '../../../../reducer/menu/actions'
 import { createGlobalStyle } from 'styled-components'
+import { Menu } from '../../../../global-types'
 
 const GlobalStyle = createGlobalStyle`
 .wl-sidebar__menu-main{
@@ -72,33 +73,10 @@ const GlobalStyle = createGlobalStyle`
     transform: translateY(0);
 }
 
-.wl-sidebar__menu-2nd__item{
-    display flex;
-    float; none;
-    padding:0;
-    flex-direction: column;
-    margin: 2px 0;
-    transition: background-color .3s;
-}
-
-.wl-sidebar__menu-nd__item-toggle{
-    display: flex-box;
-    flex-grow: 1;
-    -webkit-box-align: stretch;
-    -ms-flex-align: stretch;
-    align-items: stretch;
-    margin: 0;
-    text-decoration: none;
-    outline: 0;
-    min-height: 25px;
-    margin-left: -0.5vw;
-}
-
  .hidden{
-    transition: all 1ms linear 0s;
-    transition: height 0.5s linear 0s;
     opacity: 0;
     height: 0;
+    overflow: hidden;
  }
  .show{
      transition: all 0.5s;
@@ -137,9 +115,24 @@ useEffect(()=>{
 
 useEffect(()=>{
     if(props.menu.data.length>0){
-        const menuDom = props.menu.data.filter((item: any)=>item.parent_name==="").map((item: any, idx: any) => {
-            return (
-            <li
+        // tslint:disable-next-line: max-line-length
+        // const menuParsed = props.menu.data.map((oriItem: Menu, idx: number, ori: any)=>{ const item: any = oriItem;item.children = ori.filter((f: Menu)=>f.parent_name === item.name);return item})
+        const temp: any[] =[]
+        props.menu.data.forEach((item: any) =>{ temp.push(item)})
+        let menuData= [...temp]
+        menuData.reverse().forEach((itm, idx) => {
+            const children = menuData.filter(f => f.parent_name === itm.name)
+            menuData[idx] = {...itm, children}
+        })
+        menuData =  menuData.reverse().filter((item)=>!item.parent_name)
+        const sortBySquence = (curr: any, next: any)=>{
+            curr.children ? curr = curr.children.sort(sortBySquence):null
+            return Number(curr.sequence) - Number(next.sequence)
+        }
+        menuData = menuData.sort(sortBySquence)
+        const menu2Dom = (item: any, idx: any) => {
+            const html =
+            (<li
                 key={`sidebar-menu-${item.parent_name}-${item.sequence}`}
                 className={"wl-sidebar__menu-main__item "+item.name}
             >
@@ -149,43 +142,32 @@ useEffect(()=>{
                     const element: any = document.querySelectorAll('.wl-sidebar__menu-main__item.'+item.name)[0]
                     document.querySelectorAll('.wl-sidebar__menu-main__item')
                         .forEach((a: any)=>a.classList.toggle("active", false))
-                    document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle')
-                        .forEach((a: any)=>a.classList.toggle("active", false))
                     !element.classList.contains("active") ?element.classList.toggle("active", true)
                         :element.classList.toggle("active", false)
+                        console.log(element.querySelector('.wl-sidebar__menu-2nd'))
+                        if(element.querySelector('.wl-sidebar__menu-2nd')){
                     const subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
                     !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true)
                         :subMenuClassList.toggle("hidden", false)
                     subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
+                        }
                  }}>
                 <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
-                <ul className="wl-sidebar__menu-2nd show">
                     {
-                        props.menu.data.filter((child: any)=>child.parent_name===item.name)
-                            .map((child: any)=>{
-                            return(<li
-                                key={`sidebar-menu-${item.sequence}-${child.sequence}`}
-                                className="wl-sidebar__menu-2nd__item"
-                            >
-                                    <div className={"wl-sidebar__menu-nd__item-toggle "+child.name} onClick={(e: any)=>{
-                                        props.setActiveMenu(child.name)
-                                        const element: any = document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle.'+child.name)[0]
-                                        document.querySelectorAll('.wl-sidebar__menu-nd__item-toggle')
-                                            .forEach((a: any)=>a.classList.toggle("active", false))
-                                        element.classList.contains("active") ?element.classList.toggle("active", false)
-                                            :element.classList.toggle("active", true)
-                                    }}>
-                                    &nbsp;&nbsp;&nbsp;
-                                        <span className="wl-sidebar__menu__text">{child.name}</span>
-                                    </div>
-                            </li>)
-                        })
+                         item.children && item.children.length > 0 && <ul className="wl-sidebar__menu-2nd hidden">
+                    {
+                        item.children && item.children.length > 0 && item.children
+                            .map(menu2Dom)
                     }
-                </ul>
+                   </ul>
+                   }
             </li>)
-        })
+            return html
+
+        }
+        const menuDom: any = menuData.map(menu2Dom)
         setDom(menuDom)
     }
 },[props.menu.data])

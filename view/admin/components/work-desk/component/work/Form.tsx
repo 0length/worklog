@@ -31,6 +31,7 @@ const LocalStyle = createGlobalStyle`
 `
 const Form: React.FC<any> = (props) =>{
 
+    // rodo: change state type to {value and isValid}
     const [name, setName] = useState<string>('')
     const [p, setP] = useState<string>('')
     const [caption, setCaption] = useState<string>('')
@@ -74,7 +75,12 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <label>File for Image : </label>
-            {name && <Dropzone onFilesAdded={props.upload} progress={props.uploader[pid] && props.uploader[pid].progress} pid={pid}/>}
+            {name && <Dropzone
+                        onFilesAdded={props.upload}
+                        progress={props.uploader[pid] && props.uploader[pid].progress}
+                        pid={pid}
+                    />
+            }
         </div>
         <div key={"wl_fr__work-client"} className="wl-form-group">
             <label>Client : </label>
