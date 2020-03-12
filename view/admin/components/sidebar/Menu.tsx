@@ -116,9 +116,22 @@ useEffect(()=>{
 useEffect(()=>{
     if(props.menu.data.length>0){
         // tslint:disable-next-line: max-line-length
-        const menuParsed = props.menu.data.map((oriItem: Menu, idx: number, ori: any)=>{ const item: any = oriItem;item.children = ori.filter((f: Menu)=>f.parent_name === item.name);return item})
+        // const menuParsed = props.menu.data.map((oriItem: Menu, idx: number, ori: any)=>{ const item: any = oriItem;item.children = ori.filter((f: Menu)=>f.parent_name === item.name);return item})
+        const temp: any[] =[]
+        props.menu.data.forEach((item: any) =>{ temp.push(item)})
+        let menuData= [...temp]
+        menuData.reverse().forEach((itm, idx) => {
+            const children = menuData.filter(f => f.parent_name === itm.name)
+            menuData[idx] = {...itm, children}
+        })
+        menuData =  menuData.reverse().filter((item)=>!item.parent_name)
+        const sortBySquence = (curr: any, next: any)=>{
+            curr.children ? curr = curr.children.sort(sortBySquence):null
+            return Number(curr.sequence) - Number(next.sequence)
+        }
+        menuData = menuData.sort(sortBySquence)
         const menu2Dom = (item: any, idx: any) => {
-            const html = item.parent_name!=="setted" &&
+            const html =
             (<li
                 key={`sidebar-menu-${item.parent_name}-${item.sequence}`}
                 className={"wl-sidebar__menu-main__item "+item.name}
@@ -131,28 +144,30 @@ useEffect(()=>{
                         .forEach((a: any)=>a.classList.toggle("active", false))
                     !element.classList.contains("active") ?element.classList.toggle("active", true)
                         :element.classList.toggle("active", false)
+                        console.log(element.querySelector('.wl-sidebar__menu-2nd'))
+                        if(element.querySelector('.wl-sidebar__menu-2nd')){
                     const subMenuClassList = element.querySelector('.wl-sidebar__menu-2nd').classList
                     !subMenuClassList.contains("hidden")?subMenuClassList.toggle("hidden", true)
                         :subMenuClassList.toggle("hidden", false)
                     subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
+                        }
                  }}>
                 <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
                     {
-                         item.children && <ul className="wl-sidebar__menu-2nd show">
+                         item.children && item.children.length > 0 && <ul className="wl-sidebar__menu-2nd hidden">
                     {
-                        item.children && item.children
+                        item.children && item.children.length > 0 && item.children
                             .map(menu2Dom)
                     }
                    </ul>
                    }
             </li>)
-            item.parent_name = "setted"
             return html
 
         }
-        const menuDom = menuParsed.map(menu2Dom)
+        const menuDom: any = menuData.map(menu2Dom)
         setDom(menuDom)
     }
 },[props.menu.data])
