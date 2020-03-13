@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createGlobalStyle } from 'styled-components'
-import Menu from './Menu'
+import Menu from './Menu2'
 
 
 
