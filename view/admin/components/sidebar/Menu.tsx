@@ -125,9 +125,10 @@ useEffect(()=>{
             menuData[idx] = {...itm, children}
         })
         menuData =  menuData.reverse().filter((item)=>!item.parent_name)
-        const sortBySquence = (curr: any, next: any)=>{
-            curr.children ? curr = curr.children.sort(sortBySquence):null
-            return Number(curr.sequence) - Number(next.sequence)
+        const sortBySquence = (a: any, b: any)=>{
+            // a.children.length>0 ? a = a.children.sort(sortBySquence):null
+            b.children.length>0 ? b = b.children.sort(sortBySquence):null
+            return parseInt(a.sequence) - parseInt(b.sequence)
         }
         menuData = menuData.sort(sortBySquence)
         const menu2Dom = (item: any, idx: any) => {
