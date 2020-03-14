@@ -10,7 +10,12 @@ export const initMenu = {
     error: null,
     data: [
         // {name: "dashboard", parent_name: "", sequence:"0"},
-        {name: "testing", parent_name: "work", sequence:"5"}
+        {name: "testing", parent_name: "work", sequence:"0"},
+        {name: "apa_ge", parent_name: "work", sequence:"1"},
+        {name: "kos", parent_name: "work", sequence:"3"},
+        {name: "jos", parent_name: "work", sequence:"2"}
+
+
     ],
     active: "dashboard"
 }
@@ -24,4 +29,8 @@ export const initItem = {
 
 export const initUploader = {
     'uploader-ready': {error: null}
+}
+
+export const initLang = {
+    'code': 'en'
 }

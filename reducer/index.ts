@@ -6,7 +6,8 @@ import {
   UPLOAD_FAILURE,
   UPLOAD_SUCCESS,
   UPLOAD_PROGRESS,
-  UPLOAD_RESET
+  UPLOAD_RESET,
+  CHANGE_LANGUAGE
   } from "./types"
   import { combineReducers, Reducer as R,  CombinedState } from "redux"
 
@@ -14,7 +15,7 @@ import userReducer from "./user"
 import menuReducer from "./menu"
 import toastReducer from "./toast"
 import workReducer from "./work"
-import { initUploader } from "./init"
+import { initUploader, initLang } from "./init"
 import postReducer from "./post"
 
   // import { combineReducers } from "redux";
@@ -188,7 +189,16 @@ const csrfReducer = (state: any= null, action: any) =>{
     return tokenTypeReducer(state, action, 'CSRF')
   }
 
-
+  const languageReducer = (state =initLang, action: any) =>{
+    switch (action.type){
+      case CHANGE_LANGUAGE:
+        return {
+            code: action.payload,
+        }
+      default:
+        return state
+    }
+  }
 
    export const Reducer: R<CombinedState<any>> =combineReducers({
      // authReducer,
@@ -199,6 +209,7 @@ const csrfReducer = (state: any= null, action: any) =>{
      work: workReducer,
      post: postReducer,
      grapher: generalGraphReducer,
-     uploader: uploadReducer
+     uploader: uploadReducer,
+     language: languageReducer
     })
    export default Reducer
