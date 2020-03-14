@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { generalGraph, upload, resetUploader } from './../../../../../../reducer/actions'
 import withLayout from '../withLayout'
+import language from '../../../../../../lib/lang'
 
 
 const LocalStyle = createGlobalStyle`
@@ -13,18 +14,24 @@ const LocalStyle = createGlobalStyle`
         background: #FAFAFA;
     }
     .wl-form-group {
-        margin-bottom: 2rem;
-        label {
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        & >.label {
             font-family: Poppins,Helvetica,sans-serif;
-            text-align: right;
             font-size: 1rem;
             font-weight: 400;
             display: inline-block;
-            margin-bottom: .5rem;
+            width: 15%;
+            &>span {
+                float: right;
+                padding: 0 7%;
+            }
         }
 
-        input {
-            display: inline;
+        & > input, & > .input {
+            width: 80%;
+            float: right;
             background: #fff;
         }
     }
@@ -32,7 +39,8 @@ const LocalStyle = createGlobalStyle`
 const Form: React.FC<any> = (props) =>{
 
     // rodo: change state type to {value and isValid}
-    const [name, setName] = useState<string>('')
+    const [name, setName] = useState<any>({value:'', isValid: false, error: language[props.language.code].form.error.min5char})
+
     const [p, setP] = useState<string>('')
     const [caption, setCaption] = useState<string>('')
     const [file, setFile] = useState<string>('')
@@ -45,10 +53,10 @@ const Form: React.FC<any> = (props) =>{
 
         useEffect(()=>{
             const activityName = props.data?props.instanceOf+'-edit-':props.instanceOf+'-create-'
-           if( name ){
-               setPid(activityName+name.split(" ").join("-"))
+           if( name.value ){
+               setPid(activityName+name.value.split(" ").join("-"))
            }
-        }, [name])
+        }, [name.value])
 
         useEffect(()=>{
             // console.log
@@ -61,21 +69,22 @@ const Form: React.FC<any> = (props) =>{
     return(<div className="wl-work_form">
         <LocalStyle />
         <div key={"wl_fr__work-name"} className="wl-form-group">
-        <label>Name : </label>
-        {<span style={{color:"#FD27EB", float: 'right', fontFamily: 'Monserat'}} >The Name already in use</span>}
-            <Input value={name} onChange={(e)=>setName(e.target.value)}/>
+        <div className="label"><label>Name  </label><span>:</span></div>
+        {/* {<span style={{color:"#FD27EB", float: 'right', fontFamily: 'Monserat'}} >The Name already in use</span>} */}
+            <Input value={name.value} onChange={(e)=>setName({...name, value: e.target.value})}/>
         </div>
         <div key={"wl_fr__work-tag"} className="wl-form-group">
-            <label>Tag : </label>
-            <TagsInput valueGetter={setP}/>
+            <div className="label"><label>Tags  </label><span>:</span></div>
+            <TagsInput valueGetter={setP} className='input'/>
         </div>
         <div key={"wl_fr__work-cap"}className="wl-form-group">
-            <label>Simple Caption : </label>
+            <div className="label"><label>Simple Caption  </label><span>:</span></div>
             <Input value={caption} onChange={(e)=>setCaption(e.target.value)} />
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
-            <label>File for Image : </label>
-            {name && <Dropzone
+            <div className="label"><label>File for Image  </label><span>:</span></div>
+            {name.value && <Dropzone
+                        className="input"
                         onFilesAdded={props.upload}
                         progress={props.uploader[pid] && props.uploader[pid].progress}
                         pid={pid}
@@ -83,20 +92,21 @@ const Form: React.FC<any> = (props) =>{
             }
         </div>
         <div key={"wl_fr__work-client"} className="wl-form-group">
-            <label>Client : </label>
+            <div className="label"><label>Client  </label><span>:</span></div>
+            
             <Input value={client} onChange={(e)=>SetClient(e.target.value)}/>
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
-            <label>Finish Date : </label>
+            <div className="label"><label>Finish Date  </label><span>:</span></div>
             <Input value={date} onChange={(e)=>setDate(e.target.value)} />
         </div>
         <div key={"wl_fr__work-desc"} className="wl-form-group">
-            <label>Long Description : </label>
+            <div className="label"><label>Long Description  </label><span>:</span></div>
             <Input value={desc} onChange={(e)=>setDesc(e.target.value)}/>
         </div>
         <div key={"wl_fr__work-action"} className="wl-form-group">
             <Button onClick={()=>{props.generalGraph(`
-                mutation { createWork(name: "${name}", p: "${JSON.stringify(p).split('"').join("'")}", simple_caption: "${caption}", img_url: "${file}", client: "${client}", website: "${site}", completed_at: "${date}", long_desc: "${desc}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }
+                mutation { createWork(name: "${name.value}", p: "${JSON.stringify(p).split('"').join("'")}", simple_caption: "${caption}", img_url: "${file}", client: "${client}", website: "${site}", completed_at: "${date}", long_desc: "${desc}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }
             `)}}>Save</Button>
             &nbsp;
             <Button onClick={()=>{props.setMode('read')}}>Discard</Button>
