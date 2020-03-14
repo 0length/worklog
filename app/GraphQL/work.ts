@@ -71,7 +71,9 @@ export const resolvers = {
 
                 // tslint:disable-next-line: max-line-length
                 const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
+                setTimeout(() => {
                 workSubject.next(workSub())
+                }, 1000)
                 return createdWork
             }
             if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
