@@ -37,7 +37,7 @@ const Container = styled.div`
     border: 3px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
-    height: 100px;
+    height: 60px;
     width: 100%;
     justify-content: center;
     cursor: pointer;
@@ -45,11 +45,13 @@ const Container = styled.div`
     transition: opacity 500ms linear 0s;
     & > span{
         font-family: 'Montserrat';
-        font-size: 10.5px;
+        font-size: 14px;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 600;
         align-self: center;
+        color: white;
+        -webkit-text-stroke: 1px black;
     }
     ${
         (props: any)=>
@@ -83,8 +85,9 @@ const Container = styled.div`
 `
 interface IProps {
     onFilesAdded?: (file: FileList[], pid: string)=>void
-    progress?: string,
+    progress?: string
     pid: string
+    className?: string
 }
 
 
@@ -159,12 +162,13 @@ const Dropzone: React.FC<IProps> = (props)=>{
     }, [])
 
     return(<Container
-        {...{event, className: event ? 'slide-up': ''}}
+        {...{event, className: event ? (props.className?props.className:'')+' slide-up': props.className?props.className:''}}
         onDragOver={(e)=>onDragOver(e)}
         onDragLeave={(e)=>onDragLeave(e)}
         onDrop={(e)=>onDrop(e)}
         // onDragStart={(e)=>onDrag(e)}
         onClick={(e)=>{openFileDialog(e)}}
+        
     >
         <LocalStyle />
         {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}
@@ -184,7 +188,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                 <circle
                     className="progress-ring__circle"
                     stroke="black"
-                    stroke-width="4"
+                    strokeWidth="4"
                     fill="transparent"
                     r={radius}
                     cx={cycx}
@@ -192,7 +196,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                     strokeDasharray={`${circumference} ${circumference}`}
                     strokeDashoffset={props.progress?(circumference-parseFloat(props.progress)/100*circumference):0}
                 />
-                <text  x="50%" y="50%" text-anchor="middle">{ props.progress }% Done</text>
+                <text  x="50%" y="50%" textAnchor="middle">{ props.progress }% Done</text>
             </svg>
             </div>
         }

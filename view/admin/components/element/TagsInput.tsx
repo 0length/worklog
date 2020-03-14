@@ -9,7 +9,7 @@ display: block;
 cursor: text;
 width: 100%;
 // height: calc(1.5em + 1.3rem + 2px);
-padding: .65rem 1rem;
+padding: .25rem 1rem;
 font-size: 1rem;
 font-weight: 400;
 line-height: 1.5;
@@ -24,7 +24,7 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
 `
 
-const TagsInput: React.FC<any> = ({valueGetter})=>{
+const TagsInput: React.FC<any> = ({valueGetter, className})=>{
     const [tags, setTags] = useState<string[]>([])
     const [dom, setdom] = useState<JSX.Element[]>([])
 
@@ -65,19 +65,18 @@ const TagsInput: React.FC<any> = ({valueGetter})=>{
 useEffect(()=>{
     valueGetter(tags)
 setdom(tags.map((item, index)=>{
-            return <a key={"tag"+index} className="tag">{item}</a>
+            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}</a>
         }))
 
 }, [tags])
 
-return (<div>
-    <Span onClick={()=>focus()}>
+return (
+    <Span className={className} onClick={()=>focus()}>
         {
             dom
         }
-        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{border: 'none'}}/>
-    </Span>
-</div>)
+        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{border: 0, height: '30px', lineHeight: '1.5'}}/>
+    </Span>)
 }
 
 export default TagsInput

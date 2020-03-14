@@ -52,7 +52,7 @@ const activeMenu = props.menu.active
 const menuList = props.menu.data
 const menuData: any = {}
 if(menuList.length>0) {
-    menuList.map((item: any, idx: any)=>{menuData[item.name]={parent: item.parent_name}})
+    menuList.forEach((item: any, idx: any)=>{menuData[item.name]={parent: item.parent_name}})
 }
 
 const [hierarchy, setHierarchy] = useState<JSX.Element[]>([<Span  key={"wl-bc_empt"}></Span>])
@@ -61,6 +61,7 @@ useEffect(()=>{
     let haveParent: any
     const temp: any =[]
     if(activeMenu){
+        console.log(menuList)
         temp.unshift(<Span key={"wl-bc_active"}>{activeMenu}</Span>)
         haveParent = Object.keys(menuData).filter((i: any)=>i===activeMenu)
         if(haveParent.length>0){
