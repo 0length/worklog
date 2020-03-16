@@ -42,7 +42,7 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
     const pressMatch = (e: any)=>{
         // console.log(e)
 
-        if(e.key === 'Enter' && e.target.value && tags.indexOf(e.target.value) === -1){
+        if((e.key === 'Enter' || e.key === 'Space')&& e.target.value && tags.indexOf(e.target.value) === -1){
             addTag(e.target.value)
             e.target.value = ""
         }
@@ -65,7 +65,7 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
 useEffect(()=>{
     valueGetter(tags)
 setdom(tags.map((item, index)=>{
-            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}</a>
+            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}<i className="wl-icon__close" onClick={()=>removeTag(item)}/></a>
         }))
 
 }, [tags])
@@ -75,7 +75,7 @@ return (
         {
             dom
         }
-        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{border: 0, height: '30px', lineHeight: '1.5'}}/>
+        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{outline: 'none', border: 0, height: '30px', lineHeight: '1.5'}}/>
     </Span>)
 }
 
