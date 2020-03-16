@@ -14,6 +14,7 @@ const LocalStyle = createGlobalStyle`
         background: #FAFAFA;
     }
     .wl-form-group {
+        position: relative;
         margin-bottom: 3rem;
         display: flex;
         align-items: center;
@@ -34,12 +35,29 @@ const LocalStyle = createGlobalStyle`
             float: right;
             background: #fff;
         }
+        & > .wl-invalid__feedback {
+            position: absolute;
+            left: 15%;
+            top: 100%;
+            width: 82%;
+            text-align: right;
+        }
     }
 `
+export interface FormInput {
+    value: string
+    isValid: boolean
+    error: string
+}
 const Form: React.FC<any> = (props) =>{
 
     // rodo: change state type to {value and isValid}
-    const [name, setName] = useState<any>({value:'', isValid: false, error: language[props.language.code].form.error.min5char})
+    const [name, setName] = useState<FormInput>(
+        {
+            value:'',
+            isValid: false,
+            error: language[props.language.code].form.error.min5char
+        })
 
     const [p, setP] = useState<string>('')
     const [caption, setCaption] = useState<string>('')
@@ -72,6 +90,7 @@ const Form: React.FC<any> = (props) =>{
         <div className="label"><label>Name  </label><span>:</span></div>
         {/* {<span style={{color:"#FD27EB", float: 'right', fontFamily: 'Monserat'}} >The Name already in use</span>} */}
             <Input value={name.value} onChange={(e)=>setName({...name, value: e.target.value})}/>
+            <div className="wl-invalid__feedback">{name.error}</div>
         </div>
         <div key={"wl_fr__work-tag"} className="wl-form-group">
             <div className="label"><label>Tags  </label><span>:</span></div>
@@ -94,7 +113,7 @@ const Form: React.FC<any> = (props) =>{
         <div key={"wl_fr__work-client"} className="wl-form-group">
             <div className="label"><label>Client  </label><span>:</span></div>
             
-            <Input value={client} onChange={(e)=>SetClient(e.target.value)}/>
+            <Input value={client} onChange={(e)=>setClient(e.target.value)}/>
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
             <div className="label"><label>Finish Date  </label><span>:</span></div>
