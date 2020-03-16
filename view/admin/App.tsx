@@ -39,8 +39,47 @@ export const App: React.FC<any> = (props)=>{
     margin: 5px;
     border-radius: 4px;
     padding: 5px;
-    color: #62605a !important;
-}
+    color: black !important;
+    font-family: Poppins,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    & > .wl-icon__close {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    & > .wl-icon__close:after {
+      font-family:Flaticon2;
+      font-style:normal;
+      font-weight:400;
+      font-variant:normal;
+      line-height:1;
+      text-decoration:inherit;
+      text-rendering:optimizeLegibility;
+      text-transform:none;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-font-smoothing:antialiased;
+      font-smoothing:antialiased;
+      content:"";
+      font-size:.6rem;
+      color:#a2a5b9;
+     }
+     & > .wl-icon__close:hover:after {
+      color:#5B6079;
+    }
+  }
+
+  .wl-invalid__feedback {
+    display: block;
+    width: 100%;
+    margin-top: .25rem;
+    margin-top: .15rem;
+    font-size: 80%;
+    color: #fd27eb;
+  }
+
+
+
   `
 
   useEffect(()=>{

@@ -27,10 +27,14 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-bo
 const TagsInput: React.FC<any> = ({valueGetter, className})=>{
     const [tags, setTags] = useState<string[]>([])
     const [dom, setdom] = useState<JSX.Element[]>([])
+    const [focus, setFocus] = useState<boolean>(false)
 
     const inputRef = useRef<any>()
-    const focus = ()=>{
+    const handleTofocus = ()=>{
         inputRef.current.focus()
+        console.log(inputRef.current.__proto__)
+        inputRef.current.onblur = ()=>setFocus(false)
+        setFocus(true)
     }
 
     const addTag = (text: string)=>{
@@ -40,9 +44,9 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
     }
 
     const pressMatch = (e: any)=>{
-        // console.log(e)
+        // console.log(e.key)
 
-        if(e.key === 'Enter' && e.target.value && tags.indexOf(e.target.value) === -1){
+        if((e.key === 'Enter' || e.key === ' ')&& e.target.value && tags.indexOf(e.target.value) === -1){
             addTag(e.target.value)
             e.target.value = ""
         }
@@ -65,17 +69,17 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
 useEffect(()=>{
     valueGetter(tags)
 setdom(tags.map((item, index)=>{
-            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}</a>
+            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}<i className="wl-icon__close" onClick={()=>removeTag(item)}/></a>
         }))
 
 }, [tags])
 
 return (
-    <Span className={className} onClick={()=>focus()}>
+    <Span className={className} style={ focus?{border: '1px solid #A3C5FC'}:undefined} onClick={()=>handleTofocus()}>
         {
             dom
         }
-        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{border: 0, height: '30px', lineHeight: '1.5'}}/>
+        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{outline: 'none', border: 0, height: '30px', lineHeight: '1.5'}}/>
     </Span>)
 }
 
