@@ -66,7 +66,7 @@ const Container = styled.div`
             // background-color: darkgrey;
             background: radial-gradient(circle at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%), #D4D4D4 0%, transparent 10%, transparent 100%) no-repeat 0 0;
             color: #55C8FF;
-            border: 3px solid #fff;
+            border: 3px solid #A3C5FC;
         `
     }
     ${
