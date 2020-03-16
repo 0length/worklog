@@ -4,6 +4,7 @@ import Checkbox from './Checkbox'
 import ToastCard from './ToastCard'
 import Dropzone from './Dropzone'
 import TagsInput from './TagsInput'
+import Textarea from './Textarea'
 
 export {
     Button,
@@ -11,6 +12,7 @@ export {
     Input,
     ToastCard,
     Dropzone,
-    TagsInput
+    TagsInput,
+    Textarea
 }
 

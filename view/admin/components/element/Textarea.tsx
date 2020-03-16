@@ -18,8 +18,9 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-bo
 `)`
 &:focus {
     color: #495057;
-    background-color: #5fccff;
+    // background-color: #5fccff;
     outline: 0;
+    border: 1px solid #A3C5FC;
 }
 
 &::placeholder {
