@@ -5,6 +5,7 @@ import ToastCard from './ToastCard'
 import Dropzone from './Dropzone'
 import TagsInput from './TagsInput'
 import Textarea from './Textarea'
+import DatePicker from './DatePicker'
 
 export {
     Button,
@@ -13,6 +14,7 @@ export {
     ToastCard,
     Dropzone,
     TagsInput,
-    Textarea
+    Textarea,
+    DatePicker
 }
 
