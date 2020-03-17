@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Button, Dropzone, TagsInput } from '../../../element'
+import { Input, Button, Dropzone, TagsInput, Textarea, DatePicker } from '../../../element'
 import { createGlobalStyle } from 'styled-components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -23,17 +23,20 @@ const LocalStyle = createGlobalStyle`
             font-size: 1rem;
             font-weight: 400;
             display: inline-block;
-            width: 15%;
+            width: 17%;
             &>span {
                 float: right;
                 padding: 0 7%;
             }
         }
 
-        & > input, & > .input {
+        & > input, & > .input  {
             width: 80%;
             float: right;
             background: #fff;
+        }
+        & > .input.dropzone  {
+            width: 85%;
         }
         & > .wl-invalid__feedback {
             position: absolute;
@@ -42,7 +45,27 @@ const LocalStyle = createGlobalStyle`
             width: 82%;
             text-align: right;
         }
+        & > .react-datepicker-wrapper > .react-datepicker__input-container > input{
+            display: block;
+            width: 100%;
+            // height: calc(1.5em + 1.3rem + 2px);
+            padding: .65rem 1rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #e2e5ec;
+            border-radius: 4px;
+            -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+            transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+        }
     }
+
+
 `
 export interface FormInput {
     value: string
@@ -51,7 +74,7 @@ export interface FormInput {
 }
 const Form: React.FC<any> = (props) =>{
 
-    // rodo: change state type to {value and isValid}
+    // Todo: Debounce typeng validate messegae change
     const [name, setName] = useState<FormInput>(
         {
             value:'',
@@ -62,12 +85,16 @@ const Form: React.FC<any> = (props) =>{
     const [p, setP] = useState<string>('')
     const [caption, setCaption] = useState<string>('')
     const [file, setFile] = useState<string>('')
-    const [client, SetClient] = useState<string>('')
-    const [date, setDate] = useState<string>('')
+    const [client, setClient] = useState<string>('')
+    const [date, setDate] = useState<FormInput>(
+        {
+            value:'1970/01/01',
+            isValid: false,
+            error: language[props.language.code].form.error.noselected
+        })
     const [site, setSite] = useState<string>('')
     const [desc, setDesc] = useState<string>('')
     const [pid, setPid] = useState<string>('')
-
 
         useEffect(()=>{
             const activityName = props.data?props.instanceOf+'-edit-':props.instanceOf+'-create-'
@@ -84,13 +111,21 @@ const Form: React.FC<any> = (props) =>{
            }
         }, [props.uploader[pid]])
 
+        const handleOnSubmit = ()=>{
+            props.generalGraph(`
+            mutation { createWork(name: "${name.value}", p: "${JSON.stringify(p).split('"').join("'")}", simple_caption: "${caption}", img_url: "${file}", client: "${client}", website: "${site}", completed_at: "${date}", long_desc: "${desc}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }
+        `)
+        }
     return(<div className="wl-work_form">
         <LocalStyle />
         <div key={"wl_fr__work-name"} className="wl-form-group">
         <div className="label"><label>Name  </label><span>:</span></div>
-        {/* {<span style={{color:"#FD27EB", float: 'right', fontFamily: 'Monserat'}} >The Name already in use</span>} */}
-            <Input value={name.value} onChange={(e)=>setName({...name, value: e.target.value})}/>
-            <div className="wl-invalid__feedback">{name.error}</div>
+            <Input
+                value={name.value}
+                style={{fontWeight: 'bold'}}
+                onChange={(e)=>setName({...name, value: e.target.value})}
+            />
+            {<div className="wl-invalid__feedback">{name.error}</div>}
         </div>
         <div key={"wl_fr__work-tag"} className="wl-form-group">
             <div className="label"><label>Tags  </label><span>:</span></div>
@@ -103,7 +138,7 @@ const Form: React.FC<any> = (props) =>{
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <div className="label"><label>File for Image  </label><span>:</span></div>
             {name.value && <Dropzone
-                        className="input"
+                        className="input dropzone"
                         onFilesAdded={props.upload}
                         progress={props.uploader[pid] && props.uploader[pid].progress}
                         pid={pid}
@@ -112,21 +147,23 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-client"} className="wl-form-group">
             <div className="label"><label>Client  </label><span>:</span></div>
-            
             <Input value={client} onChange={(e)=>setClient(e.target.value)}/>
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
             <div className="label"><label>Finish Date  </label><span>:</span></div>
-            <Input value={date} onChange={(e)=>setDate(e.target.value)} />
+            <DatePicker
+                className='input'
+                selected={new Date(date.value)}
+                onChange={(d: Date)=>setDate({value: d.toISOString().split('T')[0], isValid: true, error: ""})}
+            />
+            {<div className="wl-invalid__feedback">{date.error}</div>}
         </div>
         <div key={"wl_fr__work-desc"} className="wl-form-group">
             <div className="label"><label>Long Description  </label><span>:</span></div>
-            <Input value={desc} onChange={(e)=>setDesc(e.target.value)}/>
+            <Textarea className="input" value={desc} onChange={(e)=>setDesc(e.target.value)}/>
         </div>
         <div key={"wl_fr__work-action"} className="wl-form-group">
-            <Button onClick={()=>{props.generalGraph(`
-                mutation { createWork(name: "${name.value}", p: "${JSON.stringify(p).split('"').join("'")}", simple_caption: "${caption}", img_url: "${file}", client: "${client}", website: "${site}", completed_at: "${date}", long_desc: "${desc}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }
-            `)}}>Save</Button>
+            <Button onClick={()=>handleOnSubmit()}>Save</Button>
             &nbsp;
             <Button onClick={()=>{props.setMode('read')}}>Discard</Button>
         </div>
