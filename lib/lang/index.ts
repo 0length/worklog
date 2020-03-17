@@ -1,5 +1,5 @@
 import en from './en'
-const language = {
+const language: any = {
     en
 }
 
