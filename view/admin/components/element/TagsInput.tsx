@@ -32,7 +32,6 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
     const inputRef = useRef<any>()
     const handleTofocus = ()=>{
         inputRef.current.focus()
-        console.log(inputRef.current.__proto__)
         inputRef.current.onblur = ()=>setFocus(false)
         setFocus(true)
     }
@@ -69,17 +68,42 @@ const TagsInput: React.FC<any> = ({valueGetter, className})=>{
 useEffect(()=>{
     valueGetter(tags)
 setdom(tags.map((item, index)=>{
-            return <a key={"tag"+index} className="tag" style={{margin: '3px 5px'}}>{item}<i className="wl-icon__close" onClick={()=>removeTag(item)}/></a>
+            return <a
+                key={"tag"+index}
+                className="tag"
+                style={{margin: '3px 5px'}}
+            >
+                {item}
+                <i
+                    className="wl-icon__close"
+                    onClick={()=>removeTag(item)}
+                />
+            </a>
         }))
 
 }, [tags])
 
 return (
-    <Span className={className} style={ focus?{border: '1px solid #A3C5FC'}:undefined} onClick={()=>handleTofocus()}>
+    <Span
+        className={className}
+        style={ focus?{border: '1px solid #A3C5FC'}:undefined}
+        onClick={()=>handleTofocus()}
+    >
         {
             dom
         }
-        <input ref={inputRef} onKeyUp={(e)=>pressMatch(e)} style={{outline: 'none', border: 0, height: '30px', lineHeight: '1.5'}}/>
+        <input
+            ref={inputRef}
+            onKeyUp={(e)=>pressMatch(e)}
+            style={
+                {
+                    outline: 'none',
+                    border: 0,
+                    height: '30px',
+                    lineHeight: '1.5'
+                }
+            }
+        />
     </Span>)
 }
 

@@ -47,7 +47,14 @@ const Table: React.FC<any> = (props)=>{
                         <Button onClick={()=>{props.generalGraph(`
                             mutation { deleteWork(where: {name: "${item.name}"}) { name } }
                         `)}}><i className={"fa fa-lg fa-trash-o"}/></Button>
-                        <Button><i className={"flaticon-edit"}/></Button>
+                        <Button onClick={
+                            ()=>{
+                                props.generic.setSelectedItem(item)
+                                props.generic.setMode('update')
+                            }
+                        }>
+                            <i className={"flaticon-edit"}/>
+                        </Button>
                     </td>
                 </tr>)
             })

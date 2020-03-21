@@ -94,7 +94,7 @@ const LocalStyle = createGlobalStyle`
 `
 
 const withLayout = (Page: React.FC<any>)=>(props: any)=>{
-    const {title, action, data, instanceOf}= props
+    const {title, action, data, instanceOf, generic}= props
     return(<div className="wl-workdesk__container">
     <LocalStyle />
     <div className={"wl-workdesk__header"}>
@@ -103,7 +103,7 @@ const withLayout = (Page: React.FC<any>)=>(props: any)=>{
         {action}
     </span>
     </div>
-    <Page {...{data, instanceOf}}/>
+    <Page {...{data, instanceOf, generic}}/>
     </div>)
 }
 

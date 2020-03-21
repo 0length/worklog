@@ -16,21 +16,26 @@ export const REQUEST_CSRF_TOKEN_FAILURE = 'REQUEST_CSRF_TOKEN_FAILURE'
 export interface GeneralGrap{
     type: string
     query: any
+    pid: string
 }
 
-export const generalGraph = (param: any) => ({
+export const generalGraph = (param: any, pid: string) => ({
     type: GENERAL_GRAPH,
-    query: param
+    query: param,
+    pid
+
 })
 
-export const generalGraphSuccess = (payload: any) => ({
+export const generalGraphSuccess = (payload: any, pid: string) => ({
     type: GENERAL_GRAPH_SUCCESS,
-    payload
+    payload,
+    pid
 })
 
-export const generalGraphFailure = (message: any) => ({
+export const generalGraphFailure = (message: any, pid: string) => ({
     type: GENERAL_GRAPH_FAILURE,
-    payload: message
+    payload: message,
+    pid
 })
 
 // Reload Token
@@ -73,7 +78,7 @@ export const uploadFailure = (message: any, pid: string) => ({
     payload: message,
     pid
 })
-export const resetUploader = (pid: string) => ({
+export const killUploader = (pid: string) => ({
     type: UPLOAD_RESET,
     pid
 })

@@ -15,7 +15,7 @@ import userReducer from "./user"
 import menuReducer from "./menu"
 import toastReducer from "./toast"
 import workReducer from "./work"
-import { initUploader, initLang } from "./init"
+import { initUploader, initLang, initGeneralGraph } from "./init"
 import postReducer from "./post"
 
   // import { combineReducers } from "redux";
@@ -102,25 +102,43 @@ import postReducer from "./post"
 }
 
 
-  const generalGraphReducer = (state ={}, action: any) =>{
+  const generalGraphReducer = (state:any =initGeneralGraph, action: any) =>{
     switch (action.type){
       case GENERAL_GRAPH:
-        return {
+        const newProcess: any = {}
+        newProcess[action.pid] = {
+          ...state[action.pid],
           data:[],
           isLoading: true,
           error: null
         }
-      case GENERAL_GRAPH_SUCCESS:
         return {
-            data: action.payload,
-            isLoading:false,
-            error:null
+          ...state,
+          ...newProcess
+        }
+      case GENERAL_GRAPH_SUCCESS:
+        const toSuccess: any = {}
+        toSuccess[action.pid] = {
+          ...state[action.pid],
+          data: action.payload,
+          isLoading:false,
+          error:null
+        }
+        return {
+          ...state,
+          ...toSuccess
         }
       case GENERAL_GRAPH_FAILURE:
+        const toFailure: any = {}
+        toFailure[action.pid] = {
+          ...state[action.pid],
+          daya: "",
+          isLoading: false,
+          error: action.payload
+        }
         return{
-            data: [],
-            isLoading: false,
-            error: action.payload
+          ...state,
+          ...toFailure
         }
       default:
         return state
@@ -142,8 +160,8 @@ import postReducer from "./post"
           ...newProcess
         }
       case UPLOAD_SUCCESS:
-        const newProcessSuccess: any = {}
-        newProcessSuccess[action.pid] = {
+        const toSuccess: any = {}
+        toSuccess[action.pid] = {
           ...state[action.pid],
           fileid: action.payload.data.id,
           isLoading:false,
@@ -151,21 +169,21 @@ import postReducer from "./post"
         }
         return {
           ...state,
-          ...newProcessSuccess
+          ...toSuccess
         }
       case UPLOAD_PROGRESS:
-        const newProcessProgress: any = {}
-        newProcessProgress[action.pid] = {
+        const inProgress: any = {}
+        inProgress[action.pid] = {
           ...state[action.pid],
           progress: action.payload
         }
         return {
           ...state,
-          ...newProcessProgress
+          ...inProgress
         }
       case UPLOAD_FAILURE:
-        const newProcessFail: any = {}
-        newProcessFail[action.pid] = {
+        const toFailure: any = {}
+        toFailure[action.pid] = {
           ...state[action.pid],
           fileID: "",
           isLoading: false,
@@ -173,7 +191,7 @@ import postReducer from "./post"
         }
         return{
           ...state,
-          ...newProcessFail
+          ...toFailure
         }
         case UPLOAD_RESET:
           const newProcessReset: any = state

@@ -73,7 +73,7 @@ export const resolvers = {
                 const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
                 setTimeout(() => {
                 workSubject.next(workSub())
-                }, 1000)
+                }, 1500)
                 return createdWork
             }
             if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
@@ -94,7 +94,9 @@ export const resolvers = {
                 !name && !p && !simple_caption && !img_url && !client && !website && !completed_at && !long_desc && !interisting_count && !social_links ? ()=>{throw new Error("nothing to update")}:!name?name=workWhereName.name:!p?p=workWhereName.p:!simple_caption?simple_caption=workWhereName.simple_caption:!img_url?img_url=workWhereName.img_url:!client?client=workWhereName.client:!website?website=workWhereName.website: !completed_at?completed_at=workWhereName.completed_at: !long_desc?long_desc=workWhereName.long_desc: !interisting_count?interisting_count=workWhereName.interisting_count: !social_links?social_links=workWhereName.social_links:null
                 // tslint:disable-next-line: max-line-length
                 const updatedWork = await prisma.updateWork({data:{name, p: p.split("'").join('"'), simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},where:{name:where.name}})
-                workSubject.next(workSub())
+                setTimeout(() => {
+                    workSubject.next(workSub())
+                    }, 1500)
                 return updatedWork
             }
             if(access.work.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
@@ -108,7 +110,9 @@ export const resolvers = {
                     throw new Error(`Work with ${name} is doesn't exists`)
                 }
                 const deletedWork = await prisma.deleteWork({name})
-                workSubject.next(workSub())
+                setTimeout(() => {
+                    workSubject.next(workSub())
+                    }, 1500)
                 return deletedWork
             }
             if(access.work.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
