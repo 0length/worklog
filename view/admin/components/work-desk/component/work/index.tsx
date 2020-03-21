@@ -12,15 +12,18 @@ const StyleWork = createGlobalStyle`
 
 const Work: React.FC<any> = (props)=>{
 
-    const [mode, setMode]= useState<string>('read')
     const activityName = 'work'
-    const actionTable = [<Button  key={"wl-work_add"} className="btn-add" onClick={()=>setMode('write')}><i className={"fa fa-plus"}/> Add New Work</Button>]
-    const actionForm = [<Button key={"wl-work_back"}
+    const [ mode, setMode ]= useState<string>( 'read' )
+    const [ selectedItem, setSelectedItem ]= useState<Work>()
+
+    const actionTable = [<Button  key={"wl-work_add"} className="btn-add" onClick={()=>setMode('create')}><i className={"fa fa-plus"}/> Add New Work</Button>]
+    const actionForm = [ <Button key={"wl-work_back"}
     {...{styleProfile: {danger: true}}} className="btn-back"
-    onClick={()=>setMode('read')}><i className={"fa fa-minus"}/> Discard </Button>]
+    onClick={ () => setMode( 'read' ) } > <i className={"fa fa-minus"}/> Discard </Button> ]
     const allMode: AllMode = {
-        read :    <Table action={actionTable} data={props.work.uptodate} title={"All Work List"}/>,
-        write:    <Form action={actionForm} old={null} title={"Create New Work Item"} instanceOf={activityName}/>
+        read :  <Table action={actionTable} generic={{setMode: setMode, setSelectedItem: setSelectedItem}} data={props.work.uptodate} title={"All Work List"}/>,
+        create: <Form action={actionForm} old={null} title={"Create New Work Item"} instanceOf={activityName}/>,
+        update: <Form action={actionForm} generic={{old: selectedItem}} title={"Create New Work Item"} instanceOf={activityName}/>
     }
 
     const setModeToDom = (modeWant: string, param: string="")=>{

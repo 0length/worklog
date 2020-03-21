@@ -155,7 +155,6 @@ class Menu extends React.Component<any, any> {
     const handleItemClicked = (selectedOptionId: any) => {
       // is currently selected
       console.log('handleItemClicked', selectedOptionId, selectedOptions, selectedOptions[selectedOptionId])
-      
     const element: any = document.querySelectorAll('.wl-sidebar__menu-main__item.'+selectedOptionId)[0]
     document.querySelectorAll('.wl-sidebar__menu-main__item').forEach((a: any)=>a.classList.toggle("active", false))
       if(selectedOptions[selectedOptionId]){
@@ -188,14 +187,17 @@ class Menu extends React.Component<any, any> {
       onChange(selectedOptions)
     }
     // console.log('option', props)
-    
 
     return (
         <ul className="wl-sidebar__menu-main">
         {options.map((item: any) => {
-            console.log(selectedOptions[item.name], selectedOptions)
             return (
-          <Item  parent_name={item.parent_name||""} sequence={item.sequence} label={item.name} onChange={()=>handleItemClicked(item.name)} selected={selectedOptions[item.name]}>
+          <Item
+            parent_name={item.parent_name||""}
+            sequence={item.sequence} label={item.name}
+            onChange={()=>handleItemClicked(item.name)}
+            selected={selectedOptions[item.name]}
+          >
             { item.children.length >0 && selectedOptions[item.name] &&
             <ul className="wl-sidebar__menu-2nd show">
               <OptionsList

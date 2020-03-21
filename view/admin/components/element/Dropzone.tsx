@@ -162,13 +162,16 @@ const Dropzone: React.FC<IProps> = (props)=>{
     }, [])
 
     return(<Container
-        {...{event, className: event ? (props.className?props.className:'')+' slide-up': props.className?props.className:''}}
+        {...{
+                event,
+                className: event ? (props.className?props.className:'')+' slide-up': props.className?props.className:''
+            }
+        }
         onDragOver={(e)=>onDragOver(e)}
         onDragLeave={(e)=>onDragLeave(e)}
         onDrop={(e)=>onDrop(e)}
         // onDragStart={(e)=>onDrag(e)}
         onClick={(e)=>{openFileDialog(e)}}
-        
     >
         <LocalStyle />
         {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}

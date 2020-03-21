@@ -31,6 +31,11 @@ export const initUploader = {
     'uploader-ready': {error: null}
 }
 
+export const initGeneralGraph = {
+    'general-graph-ready': {error: null}
+}
+
+
 export const initLang = {
     'code': 'en'
 }
