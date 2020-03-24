@@ -149,7 +149,7 @@ const Form: React.FC<any> = (props) =>{
 
         const handleOnSubmit = ()=>{
             dispatch(generalGraph(
-                `mutation { ${props.generic.mode}Work(${props.generic.mode === 'update'?'where: {name: "'+props.generic.old.name+'"},': '' } name: "${name.value}", p: "${JSON.stringify(p.value).split('"').join("'")}", simple_caption: "${caption.value}", img_url: "${uploader.fileId}", client: "${client.value}", website: "${site.value}", completed_at: "${date.value}", long_desc: "${desc.value}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }`
+                `mutation { ${props.generic.mode}Work(${props.generic.mode === 'update'?'where: {name: "'+props.generic.old && props.generic.old.name+'"},': '' } name: "${name.value}", p: "${JSON.stringify(p.value).split('"').join("'")}", simple_caption: "${caption.value}", img_url: "${uploader.fileId}", client: "${client.value}", website: "${site.value}", completed_at: "${date.value}", long_desc: "${desc.value}", interisting_count: 0, social_links: "{facebook: '', twitter: '', instagram: ''}") { name } }`
             , activityName))
         }
     return(<div className="wl-work_form">
@@ -168,7 +168,7 @@ const Form: React.FC<any> = (props) =>{
         <div key={"wl_fr__work-tag"} className="wl-form-group">
             <div className="label"><label>Tags  </label><span>:</span></div>
             <TagsInput
-                initValue={JSON.parse(props.generic.old.p)}
+                initValue={props.generic.old && JSON.parse(props.generic.old.p)||[]}
                 valueGetter={setTag}
                 className='input'
             />
@@ -177,17 +177,17 @@ const Form: React.FC<any> = (props) =>{
             <div className="label"><label>Simple Caption  </label><span>:</span></div>
             <Input
                 value={caption.value}
-                onChange={(e)=>setCaption( { ...caption, value: e.target.value } ) } 
+                onChange={(e)=>setCaption( { ...caption, value: e.target.value } ) }
             />
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <div className="label"><label>File for Image  </label><span>:</span></div>
             {name.value && <Dropzone
                         className="input dropzone"
-                        onFilesAdded={(a, b)=>{setDisabledName(true); dispatch(upload(a, b))}}
+                        onFilesAdded={( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) }}
                         progress={uploader.progress}
                         pid={uploader.processId}
-                        onFinish={()=>setDisabledName(false)}
+                        onFinish={() => setDisabledName( false )}
                     />
             }
         </div>
@@ -195,7 +195,7 @@ const Form: React.FC<any> = (props) =>{
             <div className="label"><label>Client  </label><span>:</span></div>
             <Input
                 value={client.value}
-                onChange={(e)=>setClient({ ...client, value: e.target.value})}
+                onChange={( e ) => setClient( { ...client, value: e.target.value} ) }
             />
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">

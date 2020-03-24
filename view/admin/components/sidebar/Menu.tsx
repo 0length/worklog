@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
     box-sizeing: border-box;
     margin-left: -1vw;
-
+    color: rgb(123, 125, 130);
 }
 
 .wl-sidebar__menu-main__item{
@@ -27,6 +27,7 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     margin: 2px 0;
     transition: background-color .3s;
+    border-bottom: 2.5px solid #fff;
 
 }
 .wl-sidebar__menu-main__item-toggle{
@@ -70,7 +71,10 @@ const GlobalStyle = createGlobalStyle`
     transform: translateZ(0);
     -webkit-transform-style: preserve-3d;
     margin-left: 0vw;
+    margin-right: 0.5vw;
     transform: translateY(0);
+    background-color: #FBFBFB;
+    border-radius: 4px;
 }
 
  .hidden{
@@ -84,25 +88,25 @@ const GlobalStyle = createGlobalStyle`
 }
 
  .active {
-    color: #2384FB;
+    color: #353535;
     & > .wl-sidebar__menu-main__item-toggle {
         & > span {
-            color: #2384FB;
+            color: #353535;
         }
     }
 
     .wl-sidebar__menu-nd__item-toggle.active {
         & > span {
-            color: #2384FB;
+            color: #353535;
         }
     }
  }
 
- .wl-sidebar__menu-nd__item-toggle.active {
-    & > span {
-        color: #2384FB;
-    }
-}
+//  .wl-sidebar__menu-nd__item-toggle.active {
+//     & > span {
+//         color: #2384FB;
+//     }
+// }
 `
 
 const Menu: React.FC<any> = (props)=>{
@@ -128,6 +132,7 @@ useEffect(()=>{
         const sortBySquence = (a: any, b: any)=>{
             // a.children.length>0 ? a = a.children.sort(sortBySquence):null
             b.children.length>0 ? b = b.children.sort(sortBySquence):null
+            // tslint:disable-next-line: radix
             return parseInt(a.sequence) - parseInt(b.sequence)
         }
         menuData = menuData.sort(sortBySquence)
