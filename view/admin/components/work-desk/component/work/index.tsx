@@ -16,14 +16,43 @@ const Work: React.FC<any> = (props)=>{
     const [ mode, setMode ]= useState<string>( 'read' )
     const [ selectedItem, setSelectedItem ]= useState<Work>()
 
-    const actionTable = [<Button  key={"wl-work_add"} className="btn-add" onClick={()=>setMode('create')}><i className={"fa fa-plus"}/> Add New Work</Button>]
-    const actionForm = [ <Button key={"wl-work_back"}
-    {...{styleProfile: {danger: true}}} className="btn-back"
-    onClick={ () => setMode( 'read' ) } > <i className={"fa fa-minus"}/> Discard </Button> ]
+    const actionTable = [
+        <Button
+            key={"wl-work_add"}
+            className="btn-add"
+            onClick={()=>setMode('create')}>
+                <i className={"fa fa-plus"}/>
+                Add New Work
+        </Button>
+    ]
+
+    const actionForm = [
+        <Button
+            key={"wl-work_back"}
+            {...{styleProfile: {danger: true}}}
+            className="btn-back"
+            onClick={ () => setMode( 'read' ) } >
+                <i className={"fa fa-minus"}/>
+                Discard
+        </Button>
+    ]
+
     const allMode: AllMode = {
-        read :  <Table action={actionTable} generic={{setMode: setMode, setSelectedItem: setSelectedItem}} data={props.work.uptodate} title={"All Work List"}/>,
-        create: <Form action={actionForm} old={null} title={"Create New Work Item"} instanceOf={activityName}/>,
-        update: <Form action={actionForm} generic={{old: selectedItem}} title={"Create New Work Item"} instanceOf={activityName}/>
+        read :  <Table
+                    action={actionTable}
+                    generic={{mode: 'read', setMode, setSelectedItem}}
+                    data={props.work.uptodate}
+                    title={"All Work List"}/>,
+        create: <Form
+                    action={actionForm}
+                    generic={{mode: 'create'}}
+                    title={"Create New Work Item"}
+                    instanceOf={activityName}/>,
+        update: <Form
+                    action={actionForm}
+                    generic={{mode: 'update', old: selectedItem}}
+                    title={"Create New Work Item"}
+                    instanceOf={activityName}/>
     }
 
     const setModeToDom = (modeWant: string, param: string="")=>{

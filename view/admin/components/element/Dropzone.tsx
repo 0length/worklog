@@ -30,28 +30,46 @@ const LocalStyle = createGlobalStyle`
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
   }
+
+  .small{
+    font-family: 'Montserrat';
+    font-size: 8px;
+  }
+  .progress-ring {
+      align-self: center;
+  }
+  .uploading-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    & > * {
+        align-self: center;
+    }
+  }
 `
 
 
-const Container = styled.div`
+const Container = styled(styled.div`
     border: 3px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
-    height: 60px;
+    height: 80px;
     width: 100%;
-    justify-content: center;
+    align-content: center;
     cursor: pointer;
     opacity: 0;
     transition: opacity 500ms linear 0s;
+    justify-content: center;
+
     & > span{
         font-family: 'Montserrat';
-        font-size: 14px;
+        font-size: 10pt;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         font-weight: 600;
         align-self: center;
         color: white;
-        -webkit-text-stroke: 1px black;
+        -webkit-text-stroke: 0.05em black;
     }
     ${
         (props: any)=>
@@ -82,12 +100,17 @@ const Container = styled.div`
             animation: blink 1s infinite;
         `
     }
+`)`
+
 `
+
+
 interface IProps {
     onFilesAdded?: (file: FileList[], pid: string)=>void
     progress?: string
     pid: string
     className?: string
+    onFinish?:()=>void
 }
 
 
@@ -141,7 +164,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         // console.log(files)
         setTimeout(()=>{
             setEvent('none')
-        }, 3000)
+        }, 2000)
     }
 
 
@@ -157,9 +180,12 @@ const Dropzone: React.FC<IProps> = (props)=>{
       useEffect(()=>{
           setTimeout(() => {
               setEvent('none')
-          }, 500)
-
+          }, 10)
     }, [])
+
+    useEffect(()=>{
+        props.progress && props.progress === '100' && props.onFinish && props.onFinish()
+  }, [props.progress])
 
     return(<Container
         {...{
@@ -167,6 +193,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                 className: event ? (props.className?props.className:'')+' slide-up': props.className?props.className:''
             }
         }
+        // style={{justifyContent: props.progress?'flex-end':'center'}}
         onDragOver={(e)=>onDragOver(e)}
         onDragLeave={(e)=>onDragLeave(e)}
         onDrop={(e)=>onDrop(e)}
@@ -183,11 +210,12 @@ const Dropzone: React.FC<IProps> = (props)=>{
             disabled={inputDisable}
             hidden={true}
         />
-        {event === 'Drop' && props.progress &&  <div className={""} >
+        { props.progress &&  <div className={"uploading-container"} >
+            <span>Name of the File .jpg</span>
             <svg
                 className="progress-ring"
-                width="120"
-                height="120">
+                width="60"
+                height="60">
                 <circle
                     className="progress-ring__circle"
                     stroke="black"
@@ -199,7 +227,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                     strokeDasharray={`${circumference} ${circumference}`}
                     strokeDashoffset={props.progress?(circumference-parseFloat(props.progress)/100*circumference):0}
                 />
-                <text  x="50%" y="50%" textAnchor="middle">{ props.progress }% Done</text>
+                <text  className={'small'} x="50%" y="50%" textAnchor="middle">{ props.progress }%</text>
             </svg>
             </div>
         }
