@@ -194,9 +194,11 @@ const logout =  (action$: any, store: any)=>{
  }
 
  const generalGraph =  (action$: any, store: any)=>{
+     let pid: string
     return action$.pipe(
         ofType(GENERAL_GRAPH),
         flatMap((action: any)=>{
+            pid = action.pid
             return client({
                 service: 'graphql',
                 csrf: store.value.csrf.token,
@@ -211,12 +213,12 @@ const logout =  (action$: any, store: any)=>{
         mergeMap((payload: any)=>{
             return Observable.create((observer: any)=>{
                 if(payload.error){
-                    observer.next(generalGraphFailure(payload.error))
+                    observer.next(generalGraphFailure(payload.error, pid))
                     observer.next(pushToast([toastError(payload.error==="jwt expired"?
                     "Your Session has Expired":payload.error)]))
                 }
                 if(!payload.error){
-                    observer.next(generalGraphSuccess(payload))
+                    observer.next(generalGraphSuccess(payload, pid))
                     observer.next(pushToast([toastSuccess("Success")]))
                 }
             })
