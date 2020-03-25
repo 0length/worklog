@@ -90,7 +90,7 @@ const ActiveAccount: React.FC<any> = (props)=>{
                 */}
                 <div className={"wl-header__right-active__account"}>
                     <ul>
-                        <li {...{static: "bottom"}}><div>about</div>|<div onClick={()=>{props.logout()}}><i className={"flaticon-logout"}/>&nbsp;&nbsp;&nbsp;logout</div></li>
+                        <li {...{static: "bottom"}}><div>about</div>|<div onClick={(e: any)=>{props.logout()}}><i className={"flaticon-logout"}/>&nbsp;&nbsp;&nbsp;logout</div></li>
                     </ul>
                 </div>
             </Container>

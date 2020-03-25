@@ -27,7 +27,7 @@ const Forgot: React.FC<any> = ({setMode}) => {
                             Request
                         </Button>
                         <Button
-                            onClick={()=>{setMode('SignIn')}}
+                            onClick={(e: any)=>{setMode('SignIn')}}
                             id="kt_login_forgot_cancel"
                             className="btn btn-outline-brand btn-pill"
                         >

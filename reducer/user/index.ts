@@ -55,7 +55,7 @@ const userReducer = (state = initUser, action: any)=>{
             return{
                 ...state,
                 userData: null,
-                authToken: null,
+                authToken: '',
                 asGuest: true,
             }
         default:

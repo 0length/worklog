@@ -4,7 +4,7 @@ import { webSocket } from "rxjs/webSocket"
 import { combineEpics, ofType } from 'redux-observable'
 import client, { AjaxUpdate } from '../api/client'
 import { userTypes } from '../../reducer/user/types'
-import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure } from '../../reducer/user/actions'
+import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure, unauth } from '../../reducer/user/actions'
 import { AjaxResponse, AjaxRequest } from 'rxjs/ajax'
 import { menuTypes } from '../../reducer/menu/types'
 import { getMenuSuccess, getMenuFailure } from '../../reducer/menu/actions'
@@ -186,9 +186,10 @@ const auth = (action$: any, store: any)=>{
 const logout =  (action$: any, store: any)=>{
     return action$.pipe(
         ofType(userTypes.LOGOUT),
-        map(()=>{
+        map((action)=>{
             localStorage.removeItem(localStorageKeys.auth_token)
             localStorage.removeItem(localStorageKeys.username)
+            return unauth()
         })
      )
  }
@@ -219,7 +220,7 @@ const logout =  (action$: any, store: any)=>{
                 }
                 if(!payload.error){
                     observer.next(generalGraphSuccess(payload, pid))
-                    observer.next(pushToast([toastSuccess("Success")]))
+                    // observer.next(pushToast([toastSuccess("Success")]))
                 }
             })
         }),

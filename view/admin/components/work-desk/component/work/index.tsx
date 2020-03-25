@@ -12,7 +12,7 @@ const StyleWork = createGlobalStyle`
 
 const Work: React.FC<any> = (props)=>{
 
-    const activityName = 'work'
+    const activityName = 'Work'
     const [ mode, setMode ]= useState<string>( 'read' )
     const [ selectedItem, setSelectedItem ]= useState<Work>()
 
@@ -42,7 +42,8 @@ const Work: React.FC<any> = (props)=>{
                     action={actionTable}
                     generic={{mode: 'read', setMode, setSelectedItem}}
                     data={props.work.uptodate}
-                    title={"All Work List"}/>,
+                    title={"All Work List"}
+                    instanceOf={activityName}/>,
         create: <Form
                     action={actionForm}
                     generic={{mode: 'create'}}

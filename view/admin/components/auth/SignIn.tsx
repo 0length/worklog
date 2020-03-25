@@ -7,7 +7,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
     const [password, setPassword] = useState<string>("")
     const buttonSignIn = useRef<any>()
     const onEnter = (e: any)=>{
-        if(e.key === 'Enter'){
+        if(e && e.key === 'Enter'){
         buttonSignIn.current.click()
         }
     }
@@ -31,7 +31,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
             <div className="form-group">
                 <Input
                     {...{styleProfile: {auth:true}}}
-                    onChange={(e:any)=>{setEmail(e.target.value)}}
+                    onChange={(e:any)=>{setEmail(e && e.target.value||'')}}
                     value={email}
                     type="text"
                     placeholder="Email"
@@ -41,7 +41,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
             <div className="form-group">
                 <Input
                     {...{styleProfile: {auth:true, last: true}}}
-                    onChange={(e: any)=>{setPassword(e.target.value)}}
+                    onChange={(e: any)=>{setPassword(e && e.target.value||'')}}
                     value={password}
                     className="form-control-last"
                     type="password"
@@ -63,7 +63,7 @@ const SignIn: React.FC<any> = ({setMode, auth, error})=>{
                 }}>Forget Password ?</a> */}
             </div>
             <div className="wl-login__actions" >
-                <Button ref={buttonSignIn} onClick={()=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
+                <Button ref={buttonSignIn} onClick={(e: any)=>auth(`mutation { login(email: "${email}", password: "${password}") { token, user { name, username, email} } } `)} id="kt_login_signin_submit" {...{styleProfile: {primary: true}}} className="btn btn-brand btn-pill btn-elevate">Sign In</Button>
             </div>
         </div>
     </div>

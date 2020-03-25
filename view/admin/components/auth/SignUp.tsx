@@ -63,8 +63,8 @@ const SignUp: React.FC<any> = ({setMode, auth, error}) => {
                         <Checkbox name="agreement">I Agree the terms and conditions.</Checkbox>
                     </div>
                     <div className="wl-login__actions">
-                        <Button onClick={()=>auth(`mutation { signup(name: "${name}", username: "${username}", email: "${email}", password: "${password}") { token, user {name, username, email} } } `)} id="kt_login_signup_submit" className="btn btn-brand btn-pill btn-elevate">Sign Up</Button>
-                        <Button onClick={()=>{setMode('SignIn')}} id="kt_login_signup_cancel" className="btn btn-outline-brand btn-pill">Cancel</Button>
+                        <Button onClick={(e: any)=>auth(`mutation { signup(name: "${name}", username: "${username}", email: "${email}", password: "${password}") { token, user {name, username, email} } } `)} id="kt_login_signup_submit" className="btn btn-brand btn-pill btn-elevate">Sign Up</Button>
+                        <Button onClick={(e: any)=>{setMode('SignIn')}} id="kt_login_signup_cancel" className="btn btn-outline-brand btn-pill">Cancel</Button>
                     </div>
                 {/* </form> */}
             </div>

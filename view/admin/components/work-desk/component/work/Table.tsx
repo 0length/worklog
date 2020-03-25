@@ -4,9 +4,12 @@ import { Button } from '../../../element'
 import endPoint from '../../../../../../lib/const/endpoint'
 import { createGlobalStyle } from "styled-components"
 import withLayout from "../withLayout"
-import { connect } from "react-redux"
+import { connect, useDispatch } from "react-redux"
 import { bindActionCreators } from "redux"
 import { generalGraph } from "../../../../../../reducer/actions"
+import useGrapher, { status } from "../../../../../../lib/hook/useGrapher"
+import { pushToast } from "../../../../../../reducer/toast/action"
+import { toastSuccess } from "../../../../../../lib/utils/toastModel"
 
 const LocalStyle = createGlobalStyle`
 
@@ -20,8 +23,30 @@ const LocalStyle = createGlobalStyle`
 // }
 `
 const Table: React.FC<any> = (props)=>{
-    const { data } =props
+    const { data, instanceOf } =props
     const [tbody, setTbody] = useState<JSX.Element[]>([<tr key={"wl_dt__-tr"+(1)}></tr>])
+    const dispatch = useDispatch()
+    const { grapher, setGrapher } = useGrapher()
+    const actions = {
+        delete: 'delete'
+    }
+    const handleDelete = (name: string)=>{
+        setGrapher({
+            processId: instanceOf+'-'+actions.delete+'-'+name,
+            payload: {
+                method: 'mutation',
+                doWhat: actions.delete+instanceOf,
+                varIn: `where: { name: "${name}"}`,
+                varOut: 'name'
+            },
+            status: status.send,
+        })
+    }
+
+    useEffect(()=>{
+        // tslint:disable-next-line: max-line-length
+        grapher.data && grapher.data.name && dispatch(pushToast([toastSuccess(grapher.data.name+ " has been "+actions.delete+"ed ")]))
+    }, [grapher.data])
 
     useEffect(()=>{
         const temp: JSX.Element[] = []
@@ -44,9 +69,7 @@ const Table: React.FC<any> = (props)=>{
                     <td key={"wl_dt__-desc"+(idx+1)} className="longtext">{item.long_desc.substr(0, 150)+'...'}</td>
                     <td key={"wl_dt__-like"+(idx+1)}>{item.interisting_count}</td>
                     <td key={"wl_dt__-act"+(idx+1)}>
-                        <Button onClick={()=>{props.generalGraph(`
-                            mutation { deleteWork(where: {name: "${item.name}"}) { name } }
-                        `)}}><i className={"fa fa-lg fa-trash-o"}/></Button>
+                        <Button onClick={()=>handleDelete(item.name)}><i className={"fa fa-lg fa-trash-o"}/></Button>
                         <Button onClick={
                             ()=>{
                                 props.generic.setSelectedItem(item)

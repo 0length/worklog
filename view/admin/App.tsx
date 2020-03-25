@@ -1,5 +1,5 @@
 import React, { JSXElementConstructor, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Header from './components/header'
 import { createGlobalStyle } from 'styled-components'
@@ -9,11 +9,10 @@ import { startSubscribePost } from '../../reducer/post/actions'
 import SideBar from './components/sidebar'
 import WorkDesk from './components/work-desk'
 import BreadCrumbs from './components/bread-crumbs'
-import ToastNotifier from './components/toast-notifier'
 import { toastSuccess } from '../../lib/utils/toastModel'
 
 export const App: React.FC<any> = (props)=>{
-    const { user } = props
+    const { user } = useSelector( (state: any) => (state) )
     const WELCOME_MESSAGE = "Welcome back Mr. "
 
   const GlobalStyle = createGlobalStyle`
@@ -81,12 +80,13 @@ export const App: React.FC<any> = (props)=>{
 
 
   `
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     if(user && user.userData){
-      props.startSubscribeWork({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n   name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}\n}\n"}})
-      props.startSubscribePost({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  posts {\n   title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }\n}\n"}})
-      props.pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)])
+      dispatch(startSubscribeWork({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n   name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}\n}\n"}}))
+      dispatch(startSubscribePost({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  posts {\n   title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }\n}\n"}}))
+      dispatch(pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)]))
     }
   }, [user.userData])
 
@@ -97,17 +97,7 @@ export const App: React.FC<any> = (props)=>{
         <SideBar  />
         <BreadCrumbs/>
         <WorkDesk />
-        <ToastNotifier />
     </div>
   )
 }
-const mapStateToProps = (state:any) => (state)
-
-const mapDispatchToProps = (dispatch:any) =>
-    bindActionCreators({
-      startSubscribeWork,
-      startSubscribePost,
-      pushToast,
-    }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App

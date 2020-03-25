@@ -2,7 +2,7 @@ import {
 userTypes
 } from './types'
 
-export const unauth = (param: any) => ({
+export const unauth = () => ({
     type: userTypes.UNAUTHENTICATED,
 })
 

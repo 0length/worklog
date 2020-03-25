@@ -7,7 +7,9 @@ import { generalGraph, upload, killUploader } from './../../../../../../reducer/
 import withLayout from '../withLayout'
 import language from '../../../../../../lib/lang'
 import useUploader, { UploaderState } from '../../../../../../lib/hook/useUploader'
-import useGrapher from '../../../../../../lib/hook/useGrapher'
+import useGrapher, { status } from '../../../../../../lib/hook/useGrapher'
+import { pushToast } from '../../../../../../reducer/toast/action'
+import { toastSuccess } from '../../../../../../lib/utils/toastModel'
 
 
 const LocalStyle = createGlobalStyle`
@@ -155,7 +157,7 @@ const Form: React.FC<any> = (props) =>{
             setGrapher( {
                 payload: {
                     method: 'mutation',
-                    doWhat: props.generic.mode+'Work',
+                    doWhat: props.generic.mode+props.instanceOf,
                     varIn:
                         `${props.generic.mode === 'update'?'where: {name: "'+(props.generic.old && props.generic.old.name)+'"},':'' }
                         name: "${name.value}",
@@ -170,9 +172,14 @@ const Form: React.FC<any> = (props) =>{
                         social_links: "{facebook: '', twitter: '', instagram: ''}"`,
                     varOut: 'name'
                 },
-                status: 'submit'
+                status: status.send
             } )
         }
+
+        useEffect(()=>{
+            // tslint:disable-next-line: no-unused-expression
+            grapher.data && grapher.data.name && dispatch(pushToast([toastSuccess(grapher.data.name+ " has been "+props.generic.mode+"d ")]))
+        }, [grapher.data])
     return(<div className="wl-work_form">
          <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
         <LocalStyle />
