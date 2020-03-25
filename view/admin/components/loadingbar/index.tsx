@@ -23,8 +23,10 @@ const Wrapper = styled(styled.div`
 }
 `
 
-const LoadingBar: React.FC<any> = ({user})=>{
-const { isLoading } = user
+const LoadingBar: React.FC<any> = (props)=>{
+    const {user, menu, work, post} = props
+    const {isLoading}= menu
+
     useEffect(()=>{
         if(isLoading){
             document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 3px;width: 70%;')
