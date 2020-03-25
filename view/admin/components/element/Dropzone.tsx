@@ -184,6 +184,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
     }, [])
 
     useEffect(()=>{
+        // tslint:disable-next-line: no-unused-expression
         props.progress && props.progress === '100' && props.onFinish && props.onFinish()
   }, [props.progress])
 

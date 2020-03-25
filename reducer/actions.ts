@@ -2,6 +2,7 @@ import {
     GENERAL_GRAPH,
     GENERAL_GRAPH_SUCCESS,
     GENERAL_GRAPH_FAILURE,
+    GENERAL_GRAPH_RESET,
     UPLOAD, UPLOAD_FAILURE,
     UPLOAD_SUCCESS, UPLOAD_PROGRESS,
     UPLOAD_RESET,
@@ -35,6 +36,11 @@ export const generalGraphSuccess = (payload: any, pid: string) => ({
 export const generalGraphFailure = (message: any, pid: string) => ({
     type: GENERAL_GRAPH_FAILURE,
     payload: message,
+    pid
+})
+
+export const killGrapher = (pid: string) => ({
+    type: GENERAL_GRAPH_RESET,
     pid
 })
 
