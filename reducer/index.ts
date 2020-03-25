@@ -7,7 +7,8 @@ import {
   UPLOAD_SUCCESS,
   UPLOAD_PROGRESS,
   UPLOAD_RESET,
-  CHANGE_LANGUAGE
+  CHANGE_LANGUAGE,
+  GENERAL_GRAPH_RESET
   } from "./types"
   import { combineReducers, Reducer as R,  CombinedState } from "redux"
 
@@ -140,6 +141,11 @@ import postReducer from "./post"
           ...state,
           ...toFailure
         }
+        case GENERAL_GRAPH_RESET:
+          const newProcessReset: any = state
+          // newProcessReset[action.pid] = {}
+          delete newProcessReset[action.pid]
+          return newProcessReset
       default:
         return state
     }
