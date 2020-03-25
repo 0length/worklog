@@ -31,23 +31,17 @@ const useUploader=(overrides?: Partial<Uploader>): UploaderState=>{
         ...uploader,
         ...newVal
     })
-    // todo: change this type to uploader reducer if its avaliable
     const globalUploader = useSelector( (state: any) => state.uploader[ uploader.processId ] )
-    // useEffect(()=>{
-    //     if( uploader.processId ){
-    //         globalUploader = useSelector( (state: any) => state.uploader[ uploader.processId ] )
-    //     }
-    // }, [uploader.processId])
-
     useEffect(()=>{
         if( globalUploader){
-            console.log(globalUploader)
             setUploader(
                 {
                     ...uploader,
                     fileId: globalUploader.fileid,
                     progress:  globalUploader.fileid?'100':globalUploader.progress,
-                    status: globalUploader.fileid?'finish':globalUploader.error?'Error'+globalUploader.error:''
+                    status: globalUploader.fileid?'finish':
+                            globalUploader.error?'error: '+globalUploader.error:
+                            Number(globalUploader.progress)<100?'inProgress':''
                 }
             )
             dispatch( killUploader( uploader.processId ) )
@@ -56,12 +50,3 @@ const useUploader=(overrides?: Partial<Uploader>): UploaderState=>{
      return { uploader,  setUploader }
 }
 export default useUploader
-// const mapStateToProps = (state:any) => (state)
-
-// const mapDispatchToProps = (dispatch:any) => bindActionCreators({
-//     generalGraph,
-//     upload,
-//     killUploader
-// }, dispatch)
-
-// export default connect(mapStateToProps, mapDispatchToProps)(useUploader)
