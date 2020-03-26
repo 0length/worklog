@@ -50,13 +50,34 @@ const apolloServer = new ApolloServer({
         // require('./GraphQL/comment'),
     ],
     ...{path: endPoint.GRAPHQL},
-    context: async ({req}:any) =>{
+    context: async (connectionParams:any) =>{
+
+      const {req}=connectionParams
+      console.log('req', req, connectionParams)
+
       if(req && req.headers && req.headers.authorization){
         return {
           token: req.headers.authorization,
         }
-      }return { token: ":(" }
-    }
+      }
+      if(connectionParams && connectionParams.payload && connectionParams.payload && connectionParams.payload.authToken){
+      // console.log('req', req, connectionParams)
+
+        return {
+          token: connectionParams.payload.authToken,
+        }
+      }
+      return { token: ":(" }
+    },
+    // subscriptions: {
+    //   onConnect: (connectionParams: any, webSocket) => {
+    //     console.log(connectionParams)
+    //     if (connectionParams.authToken) {
+    //          return { token: connectionParams.authToken}
+    //     }
+    //     throw new Error('Missing auth token!')
+    //  }
+    // }
 })
 
 app.use(endPoint.GRAPHQL, csrfProtection, bodyParser.json())
