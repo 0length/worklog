@@ -31,12 +31,7 @@ import endPoint from '../const/endpoint'
 import { postTypes } from '../../reducer/post/types'
 
 
-const socket$ = webSocket(
-    {
-        url:"ws://localhost:3000/graphql",
-        protocol: "graphql-ws",
-    }
-  )
+
 
 const auth = (action$: any, store: any)=>{
      return action$.pipe(
@@ -160,6 +155,12 @@ const auth = (action$: any, store: any)=>{
      return action$.pipe(
          ofType(workTypes.START_SUBSCRIBE_WORKS, postTypes.START_SUBSCRIBE_POSTS),
          mergeMap((action: any) =>{
+            const socket$ = webSocket(
+                {
+                    url:"ws://localhost:3000/graphql",
+                    protocol: "graphql-ws",
+                }
+              )
             return Observable.create((observer: any)=>{
                 socket$.subscribe(({payload}: any)=>{
                     const key = (action.query.payload.query.split("{\n")[1]).replace(/\s/g, '')
@@ -168,7 +169,8 @@ const auth = (action$: any, store: any)=>{
                     // tslint:disable-next-line: max-line-length
                     observer.next({type: `SUBSCRIBE_${key.toUpperCase()}_IS_RUNNING`, payload: graphResponseParser(payload)})
                 })
-                socket$.next(action.query)
+                // action.query.variables.authToken = `Bearer ${store.value.user.authToken}`
+                socket$.next({...action.query, payload: {...action.query.payload, authToken: `Bearer ${store.value.user.authToken}`}})
             }).pipe(
                 takeUntil(action$.pipe(ofType(unsubscribe)))
             )

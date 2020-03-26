@@ -5,7 +5,7 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
 
   const drive = google.drive({version: 'v3', auth})
 
-  console.log("req.file", httpReq)
+  // console.log("req.file", httpReq)
 
   const file = await httpReq.on('end', ()=>{
     return httpReq.body
@@ -18,7 +18,7 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
         httpRes.json(result)
   }
 
-  const fileMetadata = {
+  const fileMetadata: any = {
     'name': new Date().toLocaleTimeString().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`
   }
 

@@ -83,7 +83,7 @@ const Table: React.FC<any> = (props)=>{
             })
         }else{
         temp.push( <tr key={"wl_dt_-tr"+0}>
-            <td key={"wl_dt_-no"+0} colSpan={10} align="center">
+            <td key={"wl_dt_-no"+0} colSpan={11} align="center">
                 <span > Not Record Found</span>
             </td>
         </tr> )
@@ -114,10 +114,5 @@ const Table: React.FC<any> = (props)=>{
             </table>)
 }
 
-const mapStateToProps = (state:any) => (state)
 
-const mapDispatchToProps = (dispatch:any) => bindActionCreators({
-    generalGraph,
-}, dispatch)
-
-export default withLayout(connect(mapStateToProps, mapDispatchToProps)(Table))
+export default withLayout(Table)

@@ -10,6 +10,7 @@ import SideBar from './components/sidebar'
 import WorkDesk from './components/work-desk'
 import BreadCrumbs from './components/bread-crumbs'
 import { toastSuccess } from '../../lib/utils/toastModel'
+import graphqlQuery from '../../lib/const/graphqlQuery'
 
 export const App: React.FC<any> = (props)=>{
     const { user } = useSelector( (state: any) => (state) )
@@ -84,8 +85,8 @@ export const App: React.FC<any> = (props)=>{
 
   useEffect(()=>{
     if(user && user.userData){
-      dispatch(startSubscribeWork({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  works {\n   name, website, social_links, long_desc, author_name, interisting_count, img_url, completed_at, client, simple_caption, p}\n}\n"}}))
-      dispatch(startSubscribePost({"id":"1","type":"start","payload":{"variables":{},"extensions":{},"operationName":null,"query":"subscription {\n  posts {\n   title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }\n}\n"}}))
+      dispatch(startSubscribeWork(graphqlQuery.SUBSCRIBE_WORKS))
+      dispatch(startSubscribePost(graphqlQuery.SUBSCRIBE_POSTS))
       dispatch(pushToast([toastSuccess(WELCOME_MESSAGE+user.userData.name)]))
     }
   }, [user.userData])

@@ -176,12 +176,20 @@ const Form: React.FC<any> = (props) =>{
             } )
         }
 
-        useEffect(()=>{
-            // tslint:disable-next-line: no-unused-expression
-            grapher.data && grapher.data.name && dispatch(pushToast([toastSuccess(grapher.data.name+ " has been "+props.generic.mode+"d ")]))
-        }, [grapher.data])
+    useEffect(()=>{
+        // tslint:disable-next-line: no-unused-expression
+        grapher.data && grapher.data.name && dispatch(
+                pushToast(
+                    [ toastSuccess( grapher.data.name+ " has been "+props.generic.mode+"d " ) ]
+                )
+            )
+    }, [grapher.data])
+
+    const handleOnDateChange = (d: Date)=>{
+        setDate( { ...date, value: d.toISOString().split('T')[0] } )
+    }
     return(<div className="wl-work_form">
-         <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
+        <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
         <LocalStyle />
         <div key={"wl_fr__work-name"} className="wl-form-group">
         <div className="label"><label>Name  </label><span>:</span></div>
@@ -210,13 +218,14 @@ const Form: React.FC<any> = (props) =>{
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <div className="label"><label>File for Image  </label><span>:</span></div>
-            {name.value && <Dropzone
-                        className="input dropzone"
-                        onFilesAdded={( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) }}
-                        progress={uploader.progress}
-                        pid={uploader.processId}
-                        onFinish={() => setDisabledName( false )}
-                    />
+            {
+                name.value && <Dropzone
+                    className="input dropzone"
+                    onFilesAdded={( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) }}
+                    progress={uploader.progress}
+                    pid={uploader.processId}
+                    onFinish={() => setDisabledName( false )}
+                />
             }
         </div>
         <div key={"wl_fr__work-client"} className="wl-form-group">
@@ -230,8 +239,8 @@ const Form: React.FC<any> = (props) =>{
             <div className="label"><label>Finish Date  </label><span>:</span></div>
             <DatePicker
                 className='input'
-                selected={new Date(date.value)}
-                onChange={(d: Date)=>setDate({...date, value: d.toISOString().split('T')[0]})}
+                selected={ new Date(date.value) }
+                onChange={ (d: Date)=>handleOnDateChange(d)}
             />
             {<div className="wl-invalid__feedback">{date.error}</div>}
         </div>

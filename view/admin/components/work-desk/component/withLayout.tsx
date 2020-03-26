@@ -24,7 +24,7 @@ const LocalStyle = createGlobalStyle`
             color: #212529;
             display: block;
             align-self: center;
-            padding-left: 2.5vw;
+            padding-left: 0.5vw;
         }
 
         & > .action {
