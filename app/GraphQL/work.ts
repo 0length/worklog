@@ -32,6 +32,7 @@ export const typeDefs =  gql`
     extend type Query {
         works: [Work]
         work(id: ID, name: String!):Work
+        apiWorks(author_name: String): [Work]
     }
 
     extend type Mutation {
@@ -57,7 +58,13 @@ export const resolvers = {
             const  access: any = await getAccess(context)
             const result: any = await prisma.work({name})
             if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result()}
-        }
+        },
+        apiWorks:  async (root: any, args: any, context: any, info: any)=> {
+            // const  access: any = await getAccess(context)
+            // tslint:disable-next-line: max-line-length
+            const result: any = args.author_name?await prisma.works({where: { author_name: args.author_name}}):await prisma.works()
+            return result()
+        },
     },
     Mutation: {
         // tslint:disable-next-line: max-line-length
@@ -121,7 +128,6 @@ export const resolvers = {
     Subscription: {
         works: {
             subscribe:  async (obj: any, args: any, context: any, info: any) =>{
-                console.log('Jos', context, info)
                 const  access: any = await getAccess(context)
                 workSubject.next(workSub(access.owner.user.name))
                 const result = observableToIterator(
