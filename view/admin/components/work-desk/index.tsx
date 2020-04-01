@@ -3,7 +3,7 @@ import styled,{ createGlobalStyle } from 'styled-components'
 import Testing from './component/Testing'
 import Work from './component/work'
 import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import Post from './component/post'
 
 const Wrapper = styled.div`
@@ -24,16 +24,11 @@ const HighOrder:  HighOrderType= {
     'testing' : <Testing />
 }
 
-const WorkDesk: React.FC<any> = (props)=>{
-    const activeMenu = props.menu.active
+const WorkDesk: React.FC = ()=>{
+    const activeMenu = useSelector( (state: any) => state.menu.active )
     return(<Wrapper>
         {HighOrder[activeMenu]}
     </Wrapper>)
 }
-const mapStateToProps = (state:any) => (state)
 
-const mapDispatchToProps = (dispatch:any) =>
-    bindActionCreators({
-    }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(WorkDesk)
+export default WorkDesk

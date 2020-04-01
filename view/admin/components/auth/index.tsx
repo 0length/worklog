@@ -165,7 +165,7 @@ const Auth: React.FC<any> = (props)=>{
                         Don't have an account yet ?
                     </span>&nbsp;&nbsp;
                     <a
-                        onClick={()=>{mode === "SignIn"?setMode('SignUp'):setMode('SignIn')}}
+                        onClick={(e: any)=>{mode === "SignIn"?setMode('SignUp'):setMode('SignIn')}}
                         id="kt_login_signup"
                         className="wl-login__account-link"
                     >

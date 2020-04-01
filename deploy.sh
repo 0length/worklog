@@ -1,0 +1,1 @@
+docker-compose up -d --build redis && docker-compose up -d --build mongo && docker-compose up -d --build prisma && ./preinstall.sh &&  docker-compose up -d --build app

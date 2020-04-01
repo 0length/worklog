@@ -16,8 +16,13 @@ function getUserId(context: any){
     const Authorization = context.token
      if(Authorization !==":("){
         const token = Authorization.replace('Bearer ', '')
-        const { userId } = jwt.verify(token, publicKEY, verifyOptions)
-        return userId
+        const result = jwt.verify(token, publicKEY, verifyOptions)
+        if(typeof result !== 'string' && result.hasOwnProperty('userId')) {
+            const temp:any = result
+            return temp.userId
+        }else {
+            return result
+        }
     }
 
     throw new Error('Not Authenticated')

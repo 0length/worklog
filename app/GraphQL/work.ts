@@ -5,8 +5,9 @@ import { BehaviorSubject } from 'rxjs'
 import observableToIterator from '../lib/utils/observableToAsyncIterator'
 import { map } from 'rxjs/operators'
 
-const workSub =  async ()=>await prisma.works()
-const workSubject = new BehaviorSubject(workSub())
+// tslint:disable-next-line: variable-name
+const workSub =  async (author_name: string)=>await prisma.works({where: {author_name}})
+const workSubject = new BehaviorSubject({})
 
 export const typeDefs =  gql`
     type Work {
@@ -32,6 +33,7 @@ export const typeDefs =  gql`
     extend type Query {
         works: [Work]
         work(id: ID, name: String!):Work
+        apiWorks(author_name: String): [Work]
     }
 
     extend type Mutation {
@@ -57,7 +59,13 @@ export const resolvers = {
             const  access: any = await getAccess(context)
             const result: any = await prisma.work({name})
             if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result()}
-        }
+        },
+        apiWorks:  async (root: any, args: any, context: any, info: any)=> {
+            // const  access: any = await getAccess(context)
+            // tslint:disable-next-line: max-line-length
+            const result: any = args.author_name?await prisma.works({where: { author_name: args.author_name}}):await prisma.works()
+            return result()
+        },
     },
     Mutation: {
         // tslint:disable-next-line: max-line-length
@@ -72,7 +80,7 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length
                 const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
                 setTimeout(() => {
-                workSubject.next(workSub())
+                workSubject.next(workSub(access.owner.user.name))
                 }, 1500)
                 return createdWork
             }
@@ -95,7 +103,7 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length
                 const updatedWork = await prisma.updateWork({data:{name, p: p.split("'").join('"'), simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},where:{name:where.name}})
                 setTimeout(() => {
-                    workSubject.next(workSub())
+                    workSubject.next(workSub(access.owner.user.name))
                     }, 1500)
                 return updatedWork
             }
@@ -111,7 +119,7 @@ export const resolvers = {
                 }
                 const deletedWork = await prisma.deleteWork({name})
                 setTimeout(() => {
-                    workSubject.next(workSub())
+                    workSubject.next(workSub(access.owner.user.name))
                     }, 1500)
                 return deletedWork
             }
@@ -120,10 +128,13 @@ export const resolvers = {
     },
     Subscription: {
         works: {
-            subscribe: () => {
-                return observableToIterator(
+            subscribe:  async (obj: any, args: any, context: any, info: any) =>{
+                const  access: any = await getAccess(context)
+                workSubject.next(workSub(access.owner.user.name))
+                const result = observableToIterator(
                     workSubject.pipe(map((item: any)=>({works: item})))
                 )
+                if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result}
             },
         }
     }

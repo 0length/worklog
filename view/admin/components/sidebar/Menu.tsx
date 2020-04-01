@@ -45,6 +45,12 @@ const GlobalStyle = createGlobalStyle`
     z-index:97;
 }
 
+// .wl-sidebar__menu__icon {
+//     display: inline-block;
+//     border-radius: 50px;
+//     background-color: #f3f;
+// }
+
 .wl-sidebar__menu__text{
     display: flex;
     align-item: center;
@@ -158,7 +164,7 @@ useEffect(()=>{
                     subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
                         }
                  }}>
-                <i className={"flaticon2-"+item.name}/>&nbsp;&nbsp;&nbsp;
+                <i className={"wl-sidebar__menu__icon fa-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
                     {

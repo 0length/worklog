@@ -1,7 +1,7 @@
 # The HTTP endpoint for your Prisma API
 #endpoint: ''
 #endpoint: ''
-endpoint: http://192.168.99.100:4466
+endpoint: http://kubernetes.docker.internal:4001
 
 
 

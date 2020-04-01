@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { createGlobalStyle } from 'styled-components'
 import { AllMode, Work } from '../../../../../../global-types'
 import Table from './Table'
@@ -10,9 +8,9 @@ import { Button } from '../../../element'
 const StyleWork = createGlobalStyle`
     `
 
-const Work: React.FC<any> = (props)=>{
+const Work: React.FC<any> = ()=>{
 
-    const activityName = 'work'
+    const activityName = 'Work'
     const [ mode, setMode ]= useState<string>( 'read' )
     const [ selectedItem, setSelectedItem ]= useState<Work>()
 
@@ -40,22 +38,25 @@ const Work: React.FC<any> = (props)=>{
     const allMode: AllMode = {
         read :  <Table
                     action={actionTable}
-                    generic={{mode: 'read', setMode, setSelectedItem}}
-                    data={props.work.uptodate}
-                    title={"All Work List"}/>,
+                    generic={{setMode, setSelectedItem}}
+                    title={"All Work List"}
+                    mode="read"
+                    instanceOf={activityName}/>,
         create: <Form
                     action={actionForm}
-                    generic={{mode: 'create'}}
+                    generic={{}}
+                    mode="create"
                     title={"Create New Work Item"}
                     instanceOf={activityName}/>,
         update: <Form
                     action={actionForm}
-                    generic={{mode: 'update', old: selectedItem}}
+                    generic={{old: selectedItem}}
+                    mode="update"
                     title={"Create New Work Item"}
                     instanceOf={activityName}/>
     }
 
-    const setModeToDom = (modeWant: string, param: string="")=>{
+    const setModeToDom = (modeWant: string)=>{
         return allMode[modeWant]
     }
 
@@ -70,10 +71,5 @@ const Work: React.FC<any> = (props)=>{
         </div>
     </>)
 }
-const mapStateToProps = (state:any) => (state)
 
-const mapDispatchToProps = (dispatch:any) => bindActionCreators({
-
-}, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Work)
+export default Work

@@ -25,9 +25,10 @@ const Wrapper = styled(styled.div`
 
 const LoadingBar: React.FC<any> = (props)=>{
     const {user, menu, work, post} = props
-    const {isLoading}= menu
+
 
     useEffect(()=>{
+        const isLoading= Object.keys(props).some((value: any)=>props[value] && props[value].isLoading)
         if(isLoading){
             document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 3px;width: 70%;')
         }
@@ -35,7 +36,7 @@ const LoadingBar: React.FC<any> = (props)=>{
             document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 100%;transition:width 0ms ease-out;')
             setTimeout(()=>document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 0;transition:width 1500ms ease-out;'), 2000)
         }
-    }, [isLoading])
+    }, [props])
 
     return(<Wrapper><div className="wl-loadingbar"/></Wrapper>)
 }

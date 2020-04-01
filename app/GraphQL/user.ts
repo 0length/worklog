@@ -54,7 +54,7 @@ export const resolvers = {
             // tslint:disable-next-line: max-line-length
             // console.log(access.owner.user.username, access.owner.user.username===args.username, access.user.indexOf("r")===-1)
             // tslint:disable-next-line: max-line-length
-            if(access.owner.user.username!==args.username){throw new Error("No Access")}else if(access.user.indexOf("r")===-1){throw new Error("No Access")}else{return result}
+            if(access.owner.user.username===args.username){return result}else if(access.user.indexOf("r")===-1){throw new Error("No Access")}else{throw new Error("No Access")}
         }
     },
     Mutation: {

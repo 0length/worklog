@@ -20,7 +20,11 @@ export interface GrapherState {
     grapher: Grapher
     setGrapher: (overrides: Partial<Grapher>)=>void
 }
-
+export const status = {
+    send:'send',
+    finish: 'finish',
+    inProgress: 'inProgress'
+}
 const useGrapher = (overrides?: Partial<Grapher>): GrapherState=>{
     // const {payload, processId, status} = overrides
     const defaultState: Grapher = {
@@ -51,7 +55,7 @@ const useGrapher = (overrides?: Partial<Grapher>): GrapherState=>{
     const globalGrapher = useSelector( (state: any) => state.grapher[ grapher.processId ] )
     useEffect(()=>{
         const { method, varIn, varOut, doWhat } = grapher.payload
-        if(grapher.status === 'submit'){
+        if(grapher.status === status.send){
             dispatch(
                 generalGraph(
                     `${method}{
@@ -62,7 +66,7 @@ const useGrapher = (overrides?: Partial<Grapher>): GrapherState=>{
                     grapher.processId
                 )
             )
-            setGrapher({status: 'inProgress'})
+            setGrapher({status: status.inProgress})
         }
     }, [ grapher.status ])
 
@@ -71,9 +75,9 @@ const useGrapher = (overrides?: Partial<Grapher>): GrapherState=>{
             setGrapher(
                 {
                     ...grapher,
-                    status: globalGrapher.data?'finish':
+                    status: globalGrapher.data?status.finish:
                             globalGrapher.error?'error: '+globalGrapher.error:
-                            globalGrapher.isLoading?'inProgress':'',
+                            globalGrapher.isLoading?status.inProgress:'',
                     data: globalGrapher.data?globalGrapher.data:''
                 }
             )

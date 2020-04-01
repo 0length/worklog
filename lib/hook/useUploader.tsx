@@ -33,7 +33,7 @@ const useUploader=(overrides?: Partial<Uploader>): UploaderState=>{
     })
     const globalUploader = useSelector( (state: any) => state.uploader[ uploader.processId ] )
     useEffect(()=>{
-        if( globalUploader){
+        if( globalUploader ){
             setUploader(
                 {
                     ...uploader,
