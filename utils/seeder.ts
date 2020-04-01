@@ -63,7 +63,15 @@ const runner = async () =>{
 
     // console.log("deleting old work")
     // prisma.deleteManyWorks({name_not: "ahaha"})
-    dummyWork.map((item, idx)=>workSeeder(item))
+    if(process.env.NODE_ENV !== 'production'){
+        // tslint:disable-next-line: no-console
+        console.log("Trying to seed dummy data")
+
+        // tslint:disable-next-line: no-console
+        console.log("adding dummy for work")
+        dummyWork.map(({name}, idx)=>prisma.deleteManyWorks({name_contains: name}))
+        dummyWork.map((item, idx)=>workSeeder(item))
+    }
 }
 
 

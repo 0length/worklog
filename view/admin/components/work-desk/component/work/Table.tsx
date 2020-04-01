@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { Work } from "../../../../../../global-types"
+import { Work, ActivityPageProps } from "../../../../../../global-types"
 import { Button } from '../../../element'
 import endPoint from '../../../../../../lib/const/endpoint'
 import { createGlobalStyle } from "styled-components"
 import withLayout from "../withLayout"
-import { connect, useDispatch } from "react-redux"
-import { bindActionCreators } from "redux"
-import { generalGraph } from "../../../../../../reducer/actions"
+import {  useDispatch } from "react-redux"
 import useGrapher, { status } from "../../../../../../lib/hook/useGrapher"
 import { pushToast } from "../../../../../../reducer/toast/action"
 import { toastSuccess } from "../../../../../../lib/utils/toastModel"
+import useUp2Date from "../../../../../../lib/hook/useUp2Date"
 
 const LocalStyle = createGlobalStyle`
 
@@ -22,8 +21,9 @@ const LocalStyle = createGlobalStyle`
 //     margin: 1vh 0vw;
 // }
 `
-const Table: React.FC<any> = (props)=>{
-    const { data, instanceOf } =props
+const Table: React.FC<ActivityPageProps> = (props)=>{
+    const { instanceOf } =props
+    const data = useUp2Date(instanceOf)
     const [tbody, setTbody] = useState<JSX.Element[]>([<tr key={"wl_dt__-tr"+(1)}></tr>])
     const dispatch = useDispatch()
     const { grapher, setGrapher } = useGrapher()
@@ -32,7 +32,7 @@ const Table: React.FC<any> = (props)=>{
     }
     const handleDelete = (name: string)=>{
         setGrapher({
-            processId: instanceOf+'-'+actions.delete+'-'+name,
+            processId: instanceOf + '-' + actions.delete + '-' + name.split( " " ).join( "-" ),
             payload: {
                 method: 'mutation',
                 doWhat: actions.delete+instanceOf,
@@ -44,8 +44,18 @@ const Table: React.FC<any> = (props)=>{
     }
 
     useEffect(()=>{
-        // tslint:disable-next-line: max-line-length
-        grapher.data && grapher.data.name && dispatch(pushToast([toastSuccess(grapher.data.name+ " has been "+actions.delete+"ed ")]))
+        // tslint:disable-next-line: no-unused-expression
+        grapher.data &&
+        grapher.data.name &&
+        dispatch(
+            pushToast(
+                [
+                    toastSuccess(
+                        grapher.data.name+ " has been "+actions.delete+"ed "
+                    )
+                ]
+            )
+        )
     }, [grapher.data])
 
     useEffect(()=>{

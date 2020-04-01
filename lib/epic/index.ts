@@ -1,7 +1,7 @@
 import { of, queueScheduler, Observable, timer, merge } from 'rxjs'
 import { map, catchError, flatMap, mergeMap, subscribeOn, take, delay, takeUntil, switchMap } from 'rxjs/operators'
 import { webSocket } from "rxjs/webSocket"
-import { combineEpics, ofType } from 'redux-observable'
+import { combineEpics, ofType, StateObservable } from 'redux-observable'
 import client, { AjaxUpdate } from '../api/client'
 import { userTypes } from '../../reducer/user/types'
 import { authSuccess, authFailure, getUserDataSuccess, getUserDataFailure, unauth } from '../../reducer/user/actions'
@@ -157,7 +157,7 @@ const auth = (action$: any, store: any)=>{
          mergeMap((action: any) =>{
             const socket$ = webSocket(
                 {
-                    url:"ws://localhost:3000/graphql",
+                    url:"ws://"+store.value.csrf.server.hostname.toString()+store.value.csrf.server.port+endPoint.GRAPHQL,
                     protocol: "graphql-ws",
                 }
               )

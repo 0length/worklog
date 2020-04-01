@@ -1,8 +1,8 @@
 import Redis from 'redis'
 const redisClient = Redis.createClient({
-    port      : 6379,               // replace with your port
-    host      : '192.168.99.100',        // replace with your hostanme or IP address
-    password  : 'redispassword',    // replace with your password
+    port      : Number(process.env.REDIS_PORT),               // replace with your port
+    host      : process.env.REDIS_HOST,        // replace with your hostanme or IP address
+    password  : process.env.REDIS_PASSWORD,    // replace with your password
     // optional, if using SSL
     // use `fs.readFile[Sync]` or another method to bring these values in
     // tls       : {

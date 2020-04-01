@@ -75,6 +75,7 @@ import postReducer from "./post"
 
   const tokenTypeReducer = (state={
     token: "",
+    server: {},
     isLoading: false,
     error: null
   }, action: any, tokenType: string)=>{

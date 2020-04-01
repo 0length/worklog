@@ -1,5 +1,6 @@
 import React from 'react'
 import { createGlobalStyle } from "styled-components"
+import { ActivityModeProps, ActivityPageProps } from '../../../../../global-types'
 
 const LocalStyle = createGlobalStyle`
 .wl-workdesk__container{
@@ -102,8 +103,8 @@ const LocalStyle = createGlobalStyle`
 
 `
 
-const withLayout = (Page: React.FC<any>)=>(props: any)=>{
-    const {title, action, data, instanceOf, generic}= props
+const withLayout = (Page: React.FC<ActivityPageProps>)=>(props: ActivityModeProps)=>{
+    const {title, action, mode, instanceOf, generic}= props
     return(<div className="wl-workdesk__container">
         <div className="activity-controls">
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -143,14 +144,14 @@ const withLayout = (Page: React.FC<any>)=>(props: any)=>{
                 </g>
             </svg>
         </div>
-    <LocalStyle />
-    <div className={"wl-workdesk__header"}>
-    <span key={"wl_lyt__work-title"} className="title">{title}</span>
-    <span key={"wl_lyt__work-action"} className={"action"}>
-        {action}
-    </span>
-    </div>
-    <Page {...{data, instanceOf, generic}}/>
+        <LocalStyle />
+        <div className={"wl-workdesk__header"}>
+            <span key={"wl_lyt__work-title"} className="title">{title}</span>
+            <span key={"wl_lyt__work-action"} className={"action"}>
+                {action}
+            </span>
+        </div>
+        <Page {...{mode, instanceOf, generic}}/>
     </div>)
 }
 

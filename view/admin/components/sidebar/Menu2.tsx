@@ -107,7 +107,7 @@ class Menu extends React.Component<any, any> {
         super(props)
         // Don't call this.setState() here!
       }
-      state = { selectedOptions: {}, dataMenu:[]}
+      state: any = { selectedOptions: {}, dataMenu:[]}
         // tslint:disable-next-line: no-unused-expression
         componentWillMount(){
             this.props.user && this.props.user.authToken && this.props.getMenu(`{ menus { name, parent_name, sequence } }`)
@@ -150,7 +150,7 @@ class Menu extends React.Component<any, any> {
   }
 
   // Recursive component
-  const OptionsList = ({ options, selectedOptions, onChange }) => {
+  const OptionsList: React.FC<any> = ({ options, selectedOptions, onChange }) => {
     // const { options, selectedOptions, onChange } = props
     const handleItemClicked = (selectedOptionId: any) => {
       // is currently selected

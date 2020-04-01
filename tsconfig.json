@@ -1,4 +1,19 @@
 {
+  "exclude": [
+    "**/*.js",
+    "./prisma/src",
+    "./prisma/src/*/**",
+    "dist",
+    "dist/*",
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts",
+    "./node_modules/@types/*",
+    "**/*.spec.ts",
+    "./jest.config.js",
+
+],
   "include": ["./"],
   "compilerOptions": {
     "esModuleInterop": true,
@@ -10,21 +25,13 @@
     "strict": true,
     "moduleResolution": "node",
     "removeComments": true,
+    // "outDir": "dist",
+    // "sourceMap": true,
+    // "declaration": true
     // "types": [],
     // "outFile": "dist/app.js",
-  },
-  "exclude": [
-    "dist",
-    "dist/*",
-    "node_modules",
-    "./node_modules",
-    "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts",
-    "./node_modules/@types/*",
-    "**/*.spec.ts",
-    "./jest.config.js",
-    "./prisma/src/*",
-]
+  }
+ 
 }
 // {
 //   "compilerOptions": {

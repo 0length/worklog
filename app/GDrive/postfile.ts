@@ -18,8 +18,8 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
         httpRes.json(result)
   }
 
-  const fileMetadata: any = {
-    'name': new Date().toLocaleTimeString().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`
+  const resource = {
+    'name': new Date().toLocaleTimeString().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`,
   }
 
   const media = {
@@ -28,7 +28,7 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
   }
 
   await drive.files.create({
-    resource: fileMetadata,
+    ...resource,
     media,
     fields: 'id'
   }, (err: any, uploaded: any)=> {

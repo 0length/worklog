@@ -4,6 +4,11 @@ import { Button } from '../../../element'
 import endPoint from '../../../../../../lib/const/endpoint'
 import { createGlobalStyle } from "styled-components"
 import withLayout from "../withLayout"
+import useUp2Date from "../../../../../../lib/hook/useUp2Date"
+import { useDispatch } from "react-redux"
+import useGrapher, { status } from "../../../../../../lib/hook/useGrapher"
+import { pushToast } from "../../../../../../reducer/toast/action"
+import { toastSuccess } from "../../../../../../lib/utils/toastModel"
 
 
 // tofo: merge stylesheet for table
@@ -75,8 +80,46 @@ const LocalStyle = createGlobalStyle`
 //     margin: 1vh 0vw;
 // }
 `
-const Table: React.FC<any> = ({data})=>{
-    const [tbody, setTbody] = useState<JSX.Element[]>([<tr key={"wl_dt_-tr"+(1)}></tr>])
+const Table: React.FC<any> = ( props )=>{
+
+    const { instanceOf } =props
+    const data = useUp2Date(instanceOf)
+    const [tbody, setTbody] = useState<JSX.Element[]>([<tr key={"wl_dt__-tr"+(1)}></tr>])
+    const dispatch = useDispatch()
+    const { grapher, setGrapher } = useGrapher()
+    const actions = {
+        delete: 'delete'
+    }
+
+
+    const handleDelete = (name: string)=>{
+        setGrapher({
+            processId: instanceOf+'-'+actions.delete+'-'+name,
+            payload: {
+                method: 'mutation',
+                doWhat: actions.delete+instanceOf,
+                varIn: `where: { name: "${name}"}`,
+                varOut: 'name'
+            },
+            status: status.send,
+        })
+    }
+
+    useEffect(()=>{
+        // tslint:disable-next-line: no-unused-expression
+        grapher.data &&
+        grapher.data.name &&
+        dispatch(
+            pushToast(
+                [
+                    toastSuccess(
+                        grapher.data.name+ " has been "+actions.delete+"ed "
+                    )
+                ]
+            )
+        )
+    }, [grapher.data])
+
     useEffect(()=>{
         const temp: JSX.Element[] = []
         if(data.length > 0){
@@ -98,9 +141,16 @@ const Table: React.FC<any> = ({data})=>{
                     <td key={"wl_dt_-date"+(idx+1)}>{item.published_at}</td>
                     <td key={"wl_dt_-view"+(idx+1)}>{item.view_cont}</td>
                     <td key={"wl_dt_-like"+(idx+1)}>{item.interisting_count}</td>
-                    <td key={"wl_dt_-act"+(idx+1)}>
-                        <Button><i className={"fa fa-lg fa-trash-o"}/></Button>
-                        <Button><i className={"flaticon-edit"}/></Button>
+                    <td key={"wl_dt__-act"+(idx+1)}>
+                        <Button onClick={()=>handleDelete(item.title)}><i className={"fa fa-lg fa-trash-o"}/></Button>
+                        <Button onClick={
+                            ()=>{
+                                props.generic.setSelectedItem(item)
+                                props.generic.setMode('update')
+                            }
+                        }>
+                            <i className={"flaticon-edit"}/>
+                        </Button>
                     </td>
                 </tr>)
             })

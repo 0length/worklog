@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs'
 import observableToIterator from '../lib/utils/observableToAsyncIterator'
 import { map } from 'rxjs/operators'
 
+// tslint:disable-next-line: variable-name
 const workSub =  async (author_name: string)=>await prisma.works({where: {author_name}})
 const workSubject = new BehaviorSubject({})
 

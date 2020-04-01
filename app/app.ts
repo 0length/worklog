@@ -16,14 +16,12 @@ import { postfile } from './GDrive/postfile'
 import { createServer } from 'http'
 import endPoint from '../lib/const/endpoint'
 // import Routes from '../view/portfolio/index'
-// const bodyParser = require('body-parser')
-import {ApolloServer} from 'apollo-server-express'
-// const cors = require('cors')
+import { ApolloServer } from 'apollo-server-express'
 
-// const router = express.router();
 
 const app : Application = express()
 
+// if (app.settings.env === 'production') app.disable('verbose errors')
 const csrfProtection = csurf({
     cookie: true
     // {
@@ -60,6 +58,7 @@ const apolloServer = new ApolloServer({
           token: req.headers.authorization,
         }
       }
+      // tslint:disable-next-line: max-line-length
       if(connectionParams && connectionParams.payload && connectionParams.payload && connectionParams.payload.authToken){
       // console.log('req', req, connectionParams)
 
@@ -81,17 +80,15 @@ const apolloServer = new ApolloServer({
 })
 
 app.use(endPoint.GRAPHQL, csrfProtection, bodyParser.json())
+app.use(endPoint.GRAPHQL_PUBLIC, bodyParser.json())
 apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
-    const CSRF_TOKEN = req.csrfToken()
-    // res.cookie('XSRF-TOKEN', CSRF_TOKEN)
-// const { name = 'Marvelous Wololo' } = req.query
-// const initialState = { initialArticleState, initialTranslateArticleState}
-const store = createStore(Reducer, {csrf: { token: CSRF_TOKEN}})
+const CSRF_TOKEN = req.csrfToken()
+const store = createStore(Reducer, {csrf: { server:{hostname: process.env.HOSTNAME, port: process.env.PORT}, token: CSRF_TOKEN, isLoading: false, error: null}})
 const componentStream  = ReactDOMServer.renderToNodeStream(React.createElement(Admin, {store}, null))
 const preloadedState = store.getState()
-  const htmlStart : string = `
+const htmlStart : string = `
   <!doctype html>
     <html>
     <head>
@@ -109,12 +106,12 @@ const preloadedState = store.getState()
     </head>
     <body>
     <div id="root">`
-  res.write(htmlStart)
-  componentStream.pipe(
-    res,
-    { end: false }
-  )
-  const htmlEnd: string = `</div>
+    res.write(htmlStart)
+    componentStream.pipe(
+      res,
+      { end: false }
+    )
+const htmlEnd: string = `</div>
     <script src="/static/vendors~home.js"></script>
     <script src="/static/home.js"></script>
   </body>
@@ -124,16 +121,24 @@ const preloadedState = store.getState()
     res.end()
   })
 })
+
 const bodyParserencoded = bodyParser.urlencoded({ extended: true })
-app.get(endPoint.GOOGLEDRIVE+"*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
+app.get(endPoint.GOOGLEDRIVE + "*",  (req: Request, res: Response)=>{return gdrive(req, res, getfile)})
 app.post(endPoint.GOOGLEDRIVE,
  csrfProtection,
 bodyParserencoded,
  (req: Request, res: Response)=>{return gdrive(req, res, postfile)})
 
+const publicApollo = new ApolloServer({
+  modules: [
+      require('./GraphQL/public/works'),
+  ],
+  playground: true
+})
+ publicApollo.applyMiddleware({app, path: endPoint.GRAPHQL_PUBLIC})
 
 const httpServer = createServer(app)
 apolloServer.installSubscriptionHandlers(httpServer)
-httpServer.listen({port: 3000}, () =>(
-    console.log(`🚀 Server ready at http://localhost:3000`, apolloServer.subscriptionsPath)
+httpServer.listen({port: process.env.PORT}, () =>(
+    console.log(`🚀 Server ready at http://${process.env.HOSTNAME+':'+process.env.PORT}`, apolloServer.subscriptionsPath)
 ))
