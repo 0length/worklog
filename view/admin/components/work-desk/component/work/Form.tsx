@@ -11,12 +11,12 @@ import { toastSuccess } from '../../../../../../lib/utils/toastModel'
 import { ActivityPageProps } from '../../../../../../global-types'
 import useLanguage from '../../../../../../lib/hook/useLanguage'
 import Validator  from 'validatorjs'
-import { debounceTime, startWith, map, finalize, debounce, distinctUntilChanged, switchMap } from 'rxjs/operators'
-import {Observable as Obs} from 'rxjs/Observable'
+import { debounce, distinctUntilChanged } from 'rxjs/operators'
 import 'rxjs/add/observable/fromEvent'
-import { timer, interval, empty } from 'rxjs'
+import { timer } from 'rxjs'
+import fromEventArgs from '../../../../../../lib/utils/fromEventArgs'
 
-const Observable: any = Obs
+
 const LocalStyle = createGlobalStyle`
     .wl-work_form {
         padding: 5% 10%;
@@ -84,15 +84,17 @@ export interface FormInput {
     rules: string
     name: string
 }
+
 const Form: React.FC<ActivityPageProps> = (props) =>{
     const activityCode = props.instanceOf +'-'+props.mode+'-'
     const [tag, setTag] = useState<string>('')
     const dispatch = useDispatch()
     const [disabledName, setDisabledName] = useState<boolean>(false)
     const __LANG = useLanguage()
+    const getOld = (key: string) => ( props.generic && props.generic.old && props.generic.old[ key ] ) || false
     const [name, setName] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old &&  props.generic.old.name||'',
+            value:getOld('name')||'',
             isValid: false,
             error: "",
             rules: 'required|min:3|max:30',
@@ -198,62 +200,37 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     const handleOnDateChange = (d: Date)=>{
         setDate( { ...date, value: d.toISOString().split('T')[0] } )
     }
-// const Rx: any = {Observable:{}}
-    Observable.fromEventArgs = (eventArgs: any, uniqueId: string) => {
-        if (!Observable.fromEventArgs.instances) {
-          Observable.fromEventArgs.instances = []
-        }
-        // If instance is found, it is already listening to events, so no need to return it
-        if (Observable.fromEventArgs.instances && !(uniqueId in Observable.fromEventArgs.instances) && event) {
-            // console.log(!(uniqueId in Observable.fromEventArgs.instances) ,event)
-          Observable.fromEventArgs.instances[uniqueId] =
-          Observable.fromEvent(event.target, event.type).pipe(
-            startWith(event),
-            finalize(() => {
-                if(Observable.fromEventArgs.instances){
-                    delete Observable.fromEventArgs.instances[uniqueId]
-                }
-            })
-          )
-          return Observable.fromEventArgs.instances[uniqueId]
-        }
-        // Do nothing after inited
-        return empty()
-      }
 
-    const handleOnChange = (e: any, setState: (newVal: FormInput) => void, oldState: FormInput): void => {
-        // if( e && e.target && e.target.value ) {
-        //     setState(newState)
-        // //     // singleFieldValidation(newState, setState)
-        // }
-        Observable
-        .fromEventArgs(e, 'UniqueKey')
+
+    const handleOnChange = ( e: any, setState: ( newVal: FormInput ) => void, oldState: FormInput ): void => {
+        fromEventArgs( e, oldState.name )
         .pipe(
-            debounce(() => timer(400)),
+            debounce( () => timer( 400 ) ),
             distinctUntilChanged()
         )
         .subscribe((x: any) => {
-            if(x && x.target){
-                const newState = {...oldState, value: x.target.value||""}
-                singleFieldValidation(newState, setState)
+            if( x && x.target ){
+                // console.log(x)
+                const newState = { ...oldState, value: x.target.value }
+                singleFieldValidation( newState, setState )
             }
         })
     }
 
-    const singleFieldValidation = (state: FormInput, setState: (newVal: any) => void) => {
-        const validation = new Validator({[state.name]: state.value}, {[state.name]: state.rules})
-        if(!validation.passes()){
-            setState({
+    const singleFieldValidation = ( state: FormInput, setState: ( newVal: any ) => void ) => {
+        const validation = new Validator( { [ state.name ]: state.value }, { [ state.name ]: state.rules } )
+        if( !validation.passes( ) ){
+            setState( {
                 ...state,
                 isValid: false,
                 error: validation.errors.all()[state.name][0]
-            })
-        }else{
-            setState({
+            } )
+        } else {
+            setState( {
                 ...state,
                 isValid: true,
                 error: ""
-            })
+            } )
         }
     }
     return(<div className="wl-work_form">
@@ -262,9 +239,8 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <div key={"wl_fr__work-name"} className="wl-form-group">
         <div className="label"><label>Name  </label><span>:</span></div>
             <Input
-                // value={ name.value }
                 style={ { fontWeight: 'bold' } }
-                onChange={ (e) => e.target.value && handleOnChange(e, setName, name) }
+                onChange={ (e: any) => handleOnChange( e, setName, name ) }
                 disabled={ disabledName }
             />
             { <div className="wl-invalid__feedback">{ name.error }</div> }
@@ -281,7 +257,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <div className="label"><label>Simple Caption  </label><span>:</span></div>
             <Input
                 value={ caption.value }
-                onChange={ (e) => setCaption( { ...caption, value: e.target.value } ) }
+                onChange={ (e: any) => setCaption( { ...caption, value: e.target.value } ) }
             />
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
