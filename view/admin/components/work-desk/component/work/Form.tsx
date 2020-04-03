@@ -10,8 +10,13 @@ import { pushToast } from '../../../../../../reducer/toast/action'
 import { toastSuccess } from '../../../../../../lib/utils/toastModel'
 import { ActivityPageProps } from '../../../../../../global-types'
 import useLanguage from '../../../../../../lib/hook/useLanguage'
+import Validator  from 'validatorjs'
+import { debounceTime, startWith, map, finalize, debounce, distinctUntilChanged, switchMap } from 'rxjs/operators'
+import {Observable as Obs} from 'rxjs/Observable'
+import 'rxjs/add/observable/fromEvent'
+import { timer, interval, empty } from 'rxjs'
 
-
+const Observable: any = Obs
 const LocalStyle = createGlobalStyle`
     .wl-work_form {
         padding: 5% 10%;
@@ -76,6 +81,8 @@ export interface FormInput {
     value: string
     isValid: boolean
     error: string
+    rules: string
+    name: string
 }
 const Form: React.FC<ActivityPageProps> = (props) =>{
     const activityCode = props.instanceOf +'-'+props.mode+'-'
@@ -87,17 +94,19 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         {
             value:props.generic && props.generic.old &&  props.generic.old.name||'',
             isValid: false,
-            error: __LANG.form.error.min5char
+            error: "",
+            rules: 'required|min:3|max:30',
+            name: 'name'
         }
     )
-    const [p, setP] = useState<FormInput>(
+    const [p, setP] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.p||'',
             isValid: false,
-            error: __LANG.form.error.min5char
+            error: __LANG.form.error.min5char,
         }
     )
-    const [caption, setCaption] = useState<FormInput>(
+    const [caption, setCaption] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.simple_caption||'',
             isValid: false,
@@ -106,21 +115,21 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     )
     //  todo: create custom hook useFileUploaded
     // const [file, setFile] = useState<string>('')
-    const [client, setClient] = useState<FormInput>(
+    const [client, setClient] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.client||'',
             isValid: false,
             error: __LANG.form.error.min5char
         }
     )
-    const [date, setDate] = useState<FormInput>(
+    const [date, setDate] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.completed_at||'1970/01/01',
             isValid: false,
             error: __LANG.form.error.noselected
         }
     )
-    const [site, setSite] = useState<FormInput>(
+    const [site, setSite] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.website||'',
             isValid: false,
@@ -128,7 +137,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         }
     )
 
-    const [desc, setDesc] = useState<FormInput>(
+    const [desc, setDesc] = useState<any>(
         {
             value:props.generic && props.generic.old && props.generic.old.long_desc||'',
             isValid: false,
@@ -189,15 +198,73 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     const handleOnDateChange = (d: Date)=>{
         setDate( { ...date, value: d.toISOString().split('T')[0] } )
     }
+// const Rx: any = {Observable:{}}
+    Observable.fromEventArgs = (eventArgs: any, uniqueId: string) => {
+        if (!Observable.fromEventArgs.instances) {
+          Observable.fromEventArgs.instances = []
+        }
+        // If instance is found, it is already listening to events, so no need to return it
+        if (Observable.fromEventArgs.instances && !(uniqueId in Observable.fromEventArgs.instances) && event) {
+            // console.log(!(uniqueId in Observable.fromEventArgs.instances) ,event)
+          Observable.fromEventArgs.instances[uniqueId] =
+          Observable.fromEvent(event.target, event.type).pipe(
+            startWith(event),
+            finalize(() => {
+                if(Observable.fromEventArgs.instances){
+                    delete Observable.fromEventArgs.instances[uniqueId]
+                }
+            })
+          )
+          return Observable.fromEventArgs.instances[uniqueId]
+        }
+        // Do nothing after inited
+        return empty()
+      }
+
+    const handleOnChange = (e: any, setState: (newVal: FormInput) => void, oldState: FormInput): void => {
+        // if( e && e.target && e.target.value ) {
+        //     setState(newState)
+        // //     // singleFieldValidation(newState, setState)
+        // }
+        Observable
+        .fromEventArgs(e, 'UniqueKey')
+        .pipe(
+            debounce(() => timer(400)),
+            distinctUntilChanged()
+        )
+        .subscribe((x: any) => {
+            if(x && x.target){
+                const newState = {...oldState, value: x.target.value||""}
+                singleFieldValidation(newState, setState)
+            }
+        })
+    }
+
+    const singleFieldValidation = (state: FormInput, setState: (newVal: any) => void) => {
+        const validation = new Validator({[state.name]: state.value}, {[state.name]: state.rules})
+        if(!validation.passes()){
+            setState({
+                ...state,
+                isValid: false,
+                error: validation.errors.all()[state.name][0]
+            })
+        }else{
+            setState({
+                ...state,
+                isValid: true,
+                error: ""
+            })
+        }
+    }
     return(<div className="wl-work_form">
         <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
         <LocalStyle />
         <div key={"wl_fr__work-name"} className="wl-form-group">
         <div className="label"><label>Name  </label><span>:</span></div>
             <Input
-                value={ name.value }
+                // value={ name.value }
                 style={ { fontWeight: 'bold' } }
-                onChange={ (e) => setName( { ...name, value: e.target.value } ) }
+                onChange={ (e) => e.target.value && handleOnChange(e, setName, name) }
                 disabled={ disabledName }
             />
             { <div className="wl-invalid__feedback">{ name.error }</div> }
