@@ -97,53 +97,65 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             value:getOld('name')||'',
             isValid: false,
             error: "",
-            rules: 'required|min:3|max:30',
+            rules: 'required|min:3|max:100',
             name: 'name'
         }
     )
-    const [p, setP] = useState<any>(
+    const [p, setP] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.p||'',
+            value:getOld('p')||'',
             isValid: false,
-            error: __LANG.form.error.min5char,
+            error: "",
+            rules:'',
+            name: 'p'
         }
     )
-    const [caption, setCaption] = useState<any>(
+    const [caption, setCaption] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.simple_caption||'',
+            value: getOld('simple_caption')||'',
             isValid: false,
-            error: __LANG.form.error.min5char
+            error: '',
+            rules: 'required|min:5|max:500',
+            name: 'simple_caption'
         }
     )
     //  todo: create custom hook useFileUploaded
     // const [file, setFile] = useState<string>('')
-    const [client, setClient] = useState<any>(
+    const [client, setClient] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.client||'',
+            value: getOld('client')||'',
             isValid: false,
-            error: __LANG.form.error.min5char
+            error: '',
+            rules: '',
+            name: 'client'
         }
     )
-    const [date, setDate] = useState<any>(
+    const [date, setDate] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.completed_at||'1970/01/01',
+            value:getOld('completed_at')||'1970/01/01',
             isValid: false,
-            error: __LANG.form.error.noselected
+            error: '',
+            name: 'completed_at',
+            rules: ''
         }
     )
-    const [site, setSite] = useState<any>(
+    const [site, setSite] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.website||'',
+            value: getOld('website')||'',
             isValid: false,
-            error: __LANG.form.error.noselected
+            error: '',
+            name: 'website',
+            rules: ''
         }
     )
 
-    const [desc, setDesc] = useState<any>(
+    const [desc, setDesc] = useState<FormInput>(
         {
-            value:props.generic && props.generic.old && props.generic.old.long_desc||'',
+            value: getOld('long_desc')||'',
             isValid: false,
-            error: __LANG.form.error.noselected
+            error: '',
+            name: 'long_desc',
+            rules: ''
         }
     )
 
@@ -202,7 +214,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     }
 
 
-    const handleOnChange = ( e: any, setState: ( newVal: FormInput ) => void, oldState: FormInput ): void => {
+    const handleOnChange = ( e: any, oldState: FormInput, setState: ( newVal: FormInput ) => void, ): void => {
         fromEventArgs( e, oldState.name )
         .pipe(
             debounce( () => timer( 400 ) ),
@@ -218,14 +230,23 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     }
 
     const singleFieldValidation = ( state: FormInput, setState: ( newVal: any ) => void ) => {
-        const validation = new Validator( { [ state.name ]: state.value }, { [ state.name ]: state.rules } )
-        if( !validation.passes( ) ){
-            setState( {
-                ...state,
-                isValid: false,
-                error: validation.errors.all()[state.name][0]
-            } )
-        } else {
+        if(!state.rules){
+            const validation = new Validator( { [ state.name ]: state.value }, { [ state.name ]: state.rules } )
+            if( !validation.passes( ) ){
+                // console.log(validation.errors.all()[ state.name ][ 0 ])
+                setState( {
+                    ...state,
+                    isValid: false,
+                    error:  validation.errors.all()[ state.name ][ 0 ]
+                } )
+            } else {
+                setState( {
+                    ...state,
+                    isValid: true,
+                    error: ""
+                } )
+            }
+        }else {
             setState( {
                 ...state,
                 isValid: true,
@@ -240,7 +261,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <div className="label"><label>Name  </label><span>:</span></div>
             <Input
                 style={ { fontWeight: 'bold' } }
-                onChange={ (e: any) => handleOnChange( e, setName, name ) }
+                onChange={ (e: any) => handleOnChange( e, name, setName ) }
                 disabled={ disabledName }
             />
             { <div className="wl-invalid__feedback">{ name.error }</div> }
@@ -256,8 +277,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <div key={"wl_fr__work-cap"}className="wl-form-group">
             <div className="label"><label>Simple Caption  </label><span>:</span></div>
             <Input
-                value={ caption.value }
-                onChange={ (e: any) => setCaption( { ...caption, value: e.target.value } ) }
+                onChange={ (e: any) => handleOnChange( e, caption, setCaption ) }
             />
         </div>
         <div key={"wl_fr__work-img"} className="wl-form-group">
@@ -275,8 +295,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <div key={"wl_fr__work-client"} className="wl-form-group">
             <div className="label"><label>Client  </label><span>:</span></div>
             <Input
-                value={ client.value }
-                onChange={ ( e ) => setClient( { ...client, value: e.target.value} ) }
+                onChange={ ( e ) => handleOnChange( e, client, setClient ) }
             />
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
@@ -292,8 +311,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <div className="label"><label>Long Description  </label><span>:</span></div>
             <Textarea
                 className="input"
-                value={desc.value}
-                onChange={ (e)=>setDesc( { ...desc, value:  e.target.value } ) }
+                onChange={ (e)=>handleOnChange( e, desc, setDesc ) }
             />
         </div>
         <div key={"wl_fr__work-action"} className="wl-form-group">
