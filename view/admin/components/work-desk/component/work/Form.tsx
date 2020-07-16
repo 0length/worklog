@@ -209,8 +209,8 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             )
     }, [ grapher.data ] )
 
-    const handleOnDateChange = (d: Date)=>{
-        setDate( { ...date, value: d.toISOString().split('T')[0] } )
+    const handleOnDateChange = (d: string)=>{
+        setDate( { ...date, value: d.split('T')[0] } )
     }
 
 
@@ -303,7 +303,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <DatePicker
                 className='input'
                 selected={ new Date( date.value ) }
-                onChange={ ( d: Date ) => handleOnDateChange( d ) }
+                onChange={ ( d: string ) => handleOnDateChange( d ) }
             />
             {<div className="wl-invalid__feedback">{date.error}</div>}
         </div>

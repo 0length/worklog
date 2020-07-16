@@ -237,4 +237,5 @@ const csrfReducer = (state: any= null, action: any) =>{
      uploader: uploadReducer,
      language: languageReducer
     })
+    
    export default Reducer
