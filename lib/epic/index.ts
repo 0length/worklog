@@ -157,7 +157,7 @@ const auth = (action$: any, store: any)=>{
          mergeMap((action: any) =>{
             const socket$ = webSocket(
                 {
-                    url:"ws://"+store.value.csrf.server.hostname.toString()+store.value.csrf.server.port+endPoint.GRAPHQL,
+                    url:"ws://"+store.value.csrf.server.hostname.toString()+':'+store.value.csrf.server.port+endPoint.GRAPHQL,
                     protocol: "graphql-ws",
                 }
               )

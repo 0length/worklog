@@ -62,23 +62,23 @@ const Table: React.FC<ActivityPageProps> = (props)=>{
         const temp: JSX.Element[] = []
         if(data.length > 0){
             data.map((item: Work, idx: number)=>{
-                temp.push( <tr key={"wl_dt__-tr"+(idx+1)}>
-                    <td key={"wl_dt__-no"+(idx+1)}>{idx+1}</td>
-                    <td key={"wl_dt__-name"+(idx+1)}>{item.name}</td>
-                    <td key={"wl_dt__-p"+(idx+1)}>{
+                temp.push( <tr key={"wl_dt__-tr"+(++idx)}>
+                    <td key={"wl_dt__-no"+(++idx)}>{++idx}</td>
+                    <td key={"wl_dt__-name"+(++idx)}>{item.name}</td>
+                    <td key={"wl_dt__-p"+(++idx)}>{
                         JSON.parse(item.p).map((tag: string, iTag: number)=>
                         (<a key={'w-'+item.name+'-tag-'+iTag} className="tag">{tag}</a>))
                     }</td>
-                    <td key={"wl_dt__-author"+(idx+1)}>{item.author_name}</td>
-                    <td key={"wl_dt__-cap"+(idx+1)} className="text">{item.simple_caption.substr(0, 50)+'...'}</td>
-                    <td key={"wl_dt__-img"+(idx+1)}>
+                    <td key={"wl_dt__-author"+(++idx)}>{item.author_name}</td>
+                    <td key={"wl_dt__-cap"+(++idx)} className="text">{item.simple_caption.substr(0, 50)+'...'}</td>
+                    <td key={"wl_dt__-img"+(++idx)}>
                         <img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} />
                     </td>
-                    <td key={"wl_dt__-client"+(idx+1)}>{item.client}</td>
-                    <td key={"wl_dt__-date"+(idx+1)}>{item.completed_at}</td>
-                    <td key={"wl_dt__-desc"+(idx+1)} className="longtext">{item.long_desc.substr(0, 150)+'...'}</td>
-                    <td key={"wl_dt__-like"+(idx+1)}>{item.interisting_count}</td>
-                    <td key={"wl_dt__-act"+(idx+1)}>
+                    <td key={"wl_dt__-client"+(++idx)}>{item.client}</td>
+                    <td key={"wl_dt__-date"+(++idx)}>{item.completed_at}</td>
+                    <td key={"wl_dt__-desc"+(++idx)} className="longtext">{item.long_desc.substr(0, 150)+'...'}</td>
+                    <td key={"wl_dt__-like"+(++idx)}>{item.interisting_count}</td>
+                    <td key={"wl_dt__-act"+(++idx)}>
                         <Button onClick={()=>handleDelete(item.name)}><i className={"fa fa-lg fa-trash-o"}/></Button>
                         <Button onClick={
                             ()=>{

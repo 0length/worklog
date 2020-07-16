@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch  } from "react-redux"
 import { killUploader } from '../../reducer/actions'
 
@@ -13,7 +13,7 @@ export interface UploaderState{
     setUploader: (overrides: Partial<Uploader>)=>void
 }
 
-const useUploader=(overrides?: Partial<Uploader>): UploaderState=>{
+const useUploader = ( overrides?: Partial<Uploader> ): UploaderState => {
     const defaultState = {
         fileId:"",
         processId: "",
@@ -32,16 +32,16 @@ const useUploader=(overrides?: Partial<Uploader>): UploaderState=>{
         ...newVal
     })
     const globalUploader = useSelector( (state: any) => state.uploader[ uploader.processId ] )
-    useEffect(()=>{
+    useEffect( () => {
         if( globalUploader ){
             setUploader(
                 {
                     ...uploader,
                     fileId: globalUploader.fileid,
-                    progress:  globalUploader.fileid?'100':globalUploader.progress,
-                    status: globalUploader.fileid?'finish':
-                            globalUploader.error?'error: '+globalUploader.error:
-                            Number(globalUploader.progress)<100?'inProgress':''
+                    progress:  globalUploader.fileid ? '100' : globalUploader.progress,
+                    status: globalUploader.fileid ? 'finish' :
+                            globalUploader.error ? 'error: ' + globalUploader.error :
+                            Number( globalUploader.progress ) < 100 ? 'inProgress' : ''
                 }
             )
             dispatch( killUploader( uploader.processId ) )

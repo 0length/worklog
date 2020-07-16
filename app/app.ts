@@ -34,10 +34,7 @@ const csrfProtection = csurf({
 })
 
 app.use(cookieParser())
-// app.use()
-// app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
-// app.use(compression())
 const apolloServer = new ApolloServer({
     modules: [
         require('./GraphQL/user'),
@@ -49,10 +46,7 @@ const apolloServer = new ApolloServer({
     ],
     ...{path: endPoint.GRAPHQL},
     context: async (connectionParams:any) =>{
-
       const {req}=connectionParams
-      console.log('req', req, connectionParams)
-
       if(req && req.headers && req.headers.authorization){
         return {
           token: req.headers.authorization,
@@ -60,23 +54,12 @@ const apolloServer = new ApolloServer({
       }
       // tslint:disable-next-line: max-line-length
       if(connectionParams && connectionParams.payload && connectionParams.payload && connectionParams.payload.authToken){
-      // console.log('req', req, connectionParams)
-
         return {
           token: connectionParams.payload.authToken,
         }
       }
       return { token: ":(" }
     },
-    // subscriptions: {
-    //   onConnect: (connectionParams: any, webSocket) => {
-    //     console.log(connectionParams)
-    //     if (connectionParams.authToken) {
-    //          return { token: connectionParams.authToken}
-    //     }
-    //     throw new Error('Missing auth token!')
-    //  }
-    // }
 })
 
 app.use(endPoint.GRAPHQL, csrfProtection, bodyParser.json())
@@ -85,37 +68,38 @@ apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
 const CSRF_TOKEN = req.csrfToken()
-const store = createStore(Reducer, {csrf: { server:{hostname: process.env.HOSTNAME, port: process.env.PORT}, token: CSRF_TOKEN, isLoading: false, error: null}})
+const store = createStore(Reducer, {csrf: { server:{hostname: process.env.HOSTNAME || 'localhost', port: process.env.PORT || 3000}, token: CSRF_TOKEN, isLoading: false, error: null}})
 const componentStream  = ReactDOMServer.renderToNodeStream(React.createElement(Admin, {store}, null))
 const preloadedState = store.getState()
 const htmlStart : string = `
-  <!doctype html>
-    <html>
-    <head>
-    <meta charset="utf-8">
-      <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico' />
-      <link href="/static/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
-      <link href="/static/plugins/flaticon/css/flaticon.css" rel="stylesheet" type="text/css" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <script id="willberemoved">window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico' />
+    <link href="/static/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />      <link href="/static/plugins/flaticon/css/flaticon.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script id="willberemoved">window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
         /</g,
         '\\u003c'
-      )}</script>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700">
-    </head>
-    <body>
+      )}
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700" />
+  </head>
+  <body>
     <div id="root">`
     res.write(htmlStart)
     componentStream.pipe(
       res,
       { end: false }
     )
-const htmlEnd: string = `</div>
+const htmlEnd: string = `
+    </div>
     <script src="/static/vendors~home.js"></script>
     <script src="/static/home.js"></script>
   </body>
-  </html>`
+</html>`
   componentStream.on('end', () => {
     res.write(htmlEnd)
     res.end()
@@ -135,10 +119,10 @@ const publicApollo = new ApolloServer({
   ],
   playground: true
 })
- publicApollo.applyMiddleware({app, path: endPoint.GRAPHQL_PUBLIC})
+publicApollo.applyMiddleware({app, path: endPoint.GRAPHQL_PUBLIC})
 
 const httpServer = createServer(app)
 apolloServer.installSubscriptionHandlers(httpServer)
-httpServer.listen({port: process.env.PORT}, () =>(
+httpServer.listen({port: process.env.PORT||3000}, () =>(
     console.log(`🚀 Server ready at http://${process.env.HOSTNAME+':'+process.env.PORT}`, apolloServer.subscriptionsPath)
 ))

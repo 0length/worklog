@@ -19,7 +19,7 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
   }
 
   const resource = {
-    'name': new Date().toLocaleTimeString().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`,
+    'name': new Date().toISOString().split("-").join().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`,
   }
 
   const media = {
