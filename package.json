@@ -17,7 +17,7 @@
     "copy_static_assets": "npx ts-node ./utils/copyStaticAssets.ts",
     "db-seed": "npx ts-node ./utils/seeder.ts",
     "prisma": "cd ./prisma && prisma deploy",
-    "deploy": "deploy.sh"
+    "deploy": "./deploy.sh"
   },
   "author": "0length",
   "license": "ISC",
