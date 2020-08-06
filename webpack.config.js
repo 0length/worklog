@@ -14,8 +14,10 @@ module.exports = [
     devtool: 'inline-source-map',
     entry: './app/app.ts',
     output: {
+        // globalObject: "this",
         path: path.resolve(__dirname, 'dist'),
         filename: 'app.js',
+        // libraryTarget: 'umd'
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
@@ -70,6 +72,8 @@ module.exports = [
         }
     },
     output: {
+        // globalObject: "this",
+        // libraryTarget: 'umd',
         path: path.resolve(__dirname, 'dist/public'),
         filename: '[name]'
     },

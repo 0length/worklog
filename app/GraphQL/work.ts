@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators'
 
 // tslint:disable-next-line: variable-name
 const workSub =  async (author_name: string)=>await prisma.works({where: {author_name}})
-const workSubject = new BehaviorSubject({})
+const splitSubs: any = {}
 
 export const typeDefs =  gql`
     type Work {
@@ -80,8 +80,8 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length
                 const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
                 setTimeout(() => {
-                workSubject.next(workSub(access.owner.user.name))
-                }, 1500)
+                    if(splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
+                }, 0)
                 return createdWork
             }
             if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
@@ -103,8 +103,8 @@ export const resolvers = {
                 // tslint:disable-next-line: max-line-length
                 const updatedWork = await prisma.updateWork({data:{name, p: p.split("'").join('"'), simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links},where:{name:where.name}})
                 setTimeout(() => {
-                    workSubject.next(workSub(access.owner.user.name))
-                    }, 1500)
+                    if(splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
+                }, 0)
                 return updatedWork
             }
             if(access.work.indexOf("u")===-1){throw new Error("No Access")}else{return result()}
@@ -119,8 +119,8 @@ export const resolvers = {
                 }
                 const deletedWork = await prisma.deleteWork({name})
                 setTimeout(() => {
-                    workSubject.next(workSub(access.owner.user.name))
-                    }, 1500)
+                    if(splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
+                }, 0)
                 return deletedWork
             }
             if(access.work.indexOf("d")===-1){throw new Error("No Access")}else{return result()}
@@ -130,9 +130,11 @@ export const resolvers = {
         works: {
             subscribe:  async (obj: any, args: any, context: any, info: any) =>{
                 const  access: any = await getAccess(context)
-                workSubject.next(workSub(access.owner.user.name))
+                if(!splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name] = new BehaviorSubject({})
+                splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
+
                 const result = observableToIterator(
-                    workSubject.pipe(map((item: any)=>({works: item})))
+                    splitSubs[access.owner.user.name].pipe(map((item: any)=>({works: item})))
                 )
                 if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result}
             },

@@ -15,6 +15,7 @@ import { debounce, distinctUntilChanged } from 'rxjs/operators'
 import 'rxjs/add/observable/fromEvent'
 import { timer } from 'rxjs'
 import fromEventArgs from '../../../../../../lib/utils/fromEventArgs'
+import Editor from '../../../element/Editor'
 
 
 const LocalStyle = createGlobalStyle`
@@ -92,9 +93,9 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     const [disabledName, setDisabledName] = useState<boolean>(false)
     const __LANG = useLanguage()
     const getOld = (key: string) => ( props.generic && props.generic.old && props.generic.old[ key ] ) || false
-    const [name, setName] = useState<FormInput>(
+    const [title, setTitle] = useState<FormInput>(
         {
-            value:getOld('name')||'',
+            value:getOld('title')||'',
             isValid: false,
             error: "",
             rules: 'required|min:3|max:100',
@@ -110,18 +111,20 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             name: 'p'
         }
     )
-    const [caption, setCaption] = useState<FormInput>(
-        {
-            value: getOld('simple_caption')||'',
-            isValid: false,
-            error: '',
-            rules: 'required|min:5|max:500',
-            name: 'simple_caption'
-        }
-    )
+    // const [caption, setCaption] = useState<FormInput>(
+    //     {
+    //         value: getOld('simple_caption')||'',
+    //         isValid: false,
+    //         error: '',
+    //         rules: 'required|min:5|max:500',
+    //         name: 'simple_caption'
+    //     }
+    // )
+
     //  todo: create custom hook useFileUploaded
-    // const [file, setFile] = useState<string>('')
-    const [client, setClient] = useState<FormInput>(
+
+
+    const [text_content, setTextContent] = useState<FormInput>(
         {
             value: getOld('client')||'',
             isValid: false,
@@ -130,7 +133,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             name: 'client'
         }
     )
-    const [date, setDate] = useState<FormInput>(
+    const [published_at, setPublishedAt] = useState<FormInput>(
         {
             value:getOld('completed_at')||'1970/01/01',
             isValid: false,
@@ -139,37 +142,38 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             rules: ''
         }
     )
-    const [site, setSite] = useState<FormInput>(
-        {
-            value: getOld('website')||'',
-            isValid: false,
-            error: '',
-            name: 'website',
-            rules: ''
-        }
-    )
 
-    const [desc, setDesc] = useState<FormInput>(
-        {
-            value: getOld('long_desc')||'',
-            isValid: false,
-            error: '',
-            name: 'long_desc',
-            rules: ''
-        }
-    )
+    // const [site, setSite] = useState<FormInput>(
+    //     {
+    //         value: getOld('website')||'',
+    //         isValid: false,
+    //         error: '',
+    //         name: 'website',
+    //         rules: ''
+    //     }
+    // )
+
+    // const [desc, setDesc] = useState<FormInput>(
+    //     {
+    //         value: getOld('long_desc')||'',
+    //         isValid: false,
+    //         error: '',
+    //         name: 'long_desc',
+    //         rules: ''
+    //     }
+    // )
 
     const { uploader, setUploader } = useUploader()
     const { grapher, setGrapher } = useGrapher()
 
 
         useEffect( () => {
-           if( name.value ){
-               const pid = activityCode + name.value.split(" ").join("-")
+           if( title.value ){
+               const pid = activityCode + title.value.split(" ").join("-")
             setUploader( {processId: pid} )
             setGrapher( {processId: pid} )
            }
-        }, [ name.value ] )
+        }, [ title.value ] )
 
         useEffect( () => {
             if( tag ){
@@ -184,14 +188,12 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                     doWhat: props.mode + props.instanceOf,
                     varIn:
                         `${ props.mode === 'update'?'where: {name: "' + ( props.generic.old && props.generic.old.name ) + '"},' : '' }
-                        name: "${ name.value }",
+                        title: "${ title.value }",
                         p: "${JSON.stringify(p.value).split('"').join("'")}",
-                        simple_caption: "${ caption.value }",
                         img_url: "${ uploader.fileId }",
-                        client: "${ client.value }",
-                        website: "${ site.value }",
-                        completed_at: "${ date.value }",
-                        long_desc: "${ desc.value }",
+                        text_content: "${ text_content.value }",
+                        published_at: "${ published_at.value }",
+                        view_count: 0,
                         interisting_count: 0,
                         social_links: "{facebook: '', twitter: '', instagram: ''}"`,
                     varOut: 'name'
@@ -210,7 +212,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     }, [ grapher.data ] )
 
     const handleOnDateChange = (d: string)=>{
-        setDate( { ...date, value: d.toISOString().split('T')[0] } )
+        setPublishedAt( { ...published_at, value: d.split('T')[0] } )
     }
 
 
@@ -258,13 +260,13 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
         <LocalStyle />
         <div key={"wl_fr__work-name"} className="wl-form-group">
-        <div className="label"><label>Name  </label><span>:</span></div>
+        <div className="label"><label>Title  </label><span>:</span></div>
             <Input
                 style={ { fontWeight: 'bold' } }
-                onChange={ (e: any) => handleOnChange( e, name, setName ) }
+                onChange={ (e: any) => handleOnChange( e, title, setTitle ) }
                 disabled={ disabledName }
             />
-            { <div className="wl-invalid__feedback">{ name.error }</div> }
+            { <div className="wl-invalid__feedback">{ title.error }</div> }
         </div>
         <div key={"wl_fr__work-tag"} className="wl-form-group">
             <div className="label"><label>Tags  </label><span>:</span></div>
@@ -274,16 +276,16 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                 className='input'
             />
         </div>
-        <div key={"wl_fr__work-cap"}className="wl-form-group">
+        {/* <div key={"wl_fr__work-cap"}className="wl-form-group">
             <div className="label"><label>Simple Caption  </label><span>:</span></div>
             <Input
                 onChange={ (e: any) => handleOnChange( e, caption, setCaption ) }
             />
-        </div>
+        </div> */}
         <div key={"wl_fr__work-img"} className="wl-form-group">
             <div className="label"><label>File for Image  </label><span>:</span></div>
             {
-                name.value && <Dropzone
+                title.value && <Dropzone
                     className="input dropzone"
                     onFilesAdded={ ( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) } }
                     progress={ uploader.progress }
@@ -292,33 +294,151 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                 />
             }
         </div>
-        <div key={"wl_fr__work-client"} className="wl-form-group">
-            <div className="label"><label>Client  </label><span>:</span></div>
-            <Input
-                onChange={ ( e ) => handleOnChange( e, client, setClient ) }
-            />
+        <div key={"wl_fr__work-content-label"} className="wl-form-group">
+            <div className="label"><label>Content  </label><span>:</span></div>
+            {/* <Input
+                onChange={ ( e ) => handleOnChange( e, text_content, setTextContent ) }
+            /> */}
+        </div>
+        <div key={"wl_fr__work-content-editor"}  className="wl-form-group">
+            {typeof window !== 'undefined' ?  <Editor data={data} /> : null }
         </div>
         <div key={"wl_fr__work-date"} className="wl-form-group">
             <div className="label"><label>Finish Date  </label><span>:</span></div>
             <DatePicker
                 className='input'
-                selected={ new Date( date.value ) }
+                selected={ new Date( published_at.value ) }
                 onChange={ ( d: string ) => handleOnDateChange( d ) }
             />
-            {<div className="wl-invalid__feedback">{date.error}</div>}
+            {<div className="wl-invalid__feedback">{published_at.error}</div>}
         </div>
-        <div key={"wl_fr__work-desc"} className="wl-form-group">
+        {/* <div key={"wl_fr__work-desc"} className="wl-form-group">
             <div className="label"><label>Long Description  </label><span>:</span></div>
             <Textarea
                 className="input"
                 onChange={ (e)=>handleOnChange( e, desc, setDesc ) }
             />
-        </div>
+        </div> */}
         <div key={"wl_fr__work-action"} className="wl-form-group">
             <Button onClick={ () => handleOnSubmit() }>Save</Button>
             &nbsp;
         </div>
     </div>)
 }
+
+
+
+const data: string = JSON.stringify({
+    time: 1556098174501,
+    blocks: [
+      {
+        type: "header",
+        data: {
+          text: "Editor.js",
+          level: 2
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            "Hey. Meet the new Editor. On this page you can see it in action — try to edit this text."
+        }
+      },
+      {
+        type: "header",
+        data: {
+          text: "Key features",
+          level: 3
+        }
+      },
+      {
+        type: "list",
+        data: {
+          style: "unordered",
+          items: [
+            "It is a block-styled editor",
+            "It returns clean data output in JSON",
+            "Designed to be extendable and pluggable with a simple API"
+          ]
+        }
+      },
+      {
+        type: "header",
+        data: {
+          text: "What does it mean «block-styled editor»",
+          level: 3
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            'Workspace in classic editors is made of a single contenteditable element, used to create different HTML markups. Editor.js <mark class="cdx-marker">workspace consists of separate Blocks: paragraphs, headings, images, lists, quotes, etc</mark>. Each of them is an independent contenteditable element (or more complex structure) provided by Plugin and united by Editor\'s Core.'
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            'There are dozens of <a href="https://github.com/editor-js">ready-to-use Blocks</a> and the <a href="https://editorjs.io/creating-a-block-tool">simple API</a> for creation any Block you need. For example, you can implement Blocks for Tweets, Instagram posts, surveys and polls, CTA-buttons and even games.'
+        }
+      },
+      {
+        type: "header",
+        data: {
+          text: "What does it mean clean data output",
+          level: 3
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            "Classic WYSIWYG-editors produce raw HTML-markup with both content data and content appearance. On the contrary, Editor.js outputs JSON object with data of each Block. You can see an example below"
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            'Given data can be used as you want: render with HTML for <code class="inline-code">Web clients</code>, render natively for <code class="inline-code">mobile apps</code>, create markup for <code class="inline-code">Facebook Instant Articles</code> or <code class="inline-code">Google AMP</code>, generate an <code class="inline-code">audio version</code> and so on.'
+        }
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            "Clean data is useful to sanitize, validate and process on the backend."
+        }
+      },
+      {
+        type: "delimiter",
+        data: {}
+      },
+      {
+        type: "paragraph",
+        data: {
+          text:
+            "We have been working on this project more than three years. Several large media projects help us to test and debug the Editor, to make it's core more stable. At the same time we significantly improved the API. Now, it can be used to create any plugin for any task. Hope you enjoy. 😏"
+        }
+      },
+      {
+        type: "image",
+        data: {
+          file: {
+            url:
+              "https://codex.so/upload/redactor_images/o_e48549d1855c7fc1807308dd14990126.jpg"
+          },
+          caption: "",
+          withBorder: true,
+          stretched: false,
+          withBackground: false
+        }
+      }
+    ],
+    version: "2.12.4"
+  }
+)
 
 export default withLayout(Form)

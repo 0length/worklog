@@ -7,7 +7,7 @@ export const getfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
     const allId: any = []
     const fileid = httpReq.originalUrl.split("/")[3]
     const drive = google.drive({version: 'v3', auth})
-    httpRes.contentType('video/mp4')
+    httpRes.contentType(httpReq.headers.accept ?? 'image/jpg')
     
     await drive.files.list({
         pageSize: 10,
@@ -18,7 +18,7 @@ export const getfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
         if (files.length) {
             console.log('Files:')
             files.map((file: any) => {
-                console.log(`${file.name} (${file.id})`)
+                // console.log(...files)
                 if(allId.indexOf(file.id) === -1)allId.push(file.id)
             })
         } else {
@@ -33,7 +33,7 @@ export const getfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
         res.data.on('end', ()=>{
         console.log(`Done`)
         }).on('error', (err: any)=>{
-            console.log("eroor:", err)
+            console.log("error:", err)
         }).pipe(httpRes)
     })
 

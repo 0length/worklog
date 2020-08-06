@@ -12,6 +12,32 @@ const GlobalStyle = createGlobalStyle`
     box-sizeing: border-box;
     margin-left: -1vw;
     color: rgb(123, 125, 130);
+
+    .hidden{
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+     }
+     .show{
+         transition: all 0.5s;
+         height: 100%;
+    }
+    
+     .active {
+        color: #353535;
+        & > .wl-sidebar__menu-main__item-toggle {
+            & > span {
+                color: #353535;
+            }
+        }
+    
+        .wl-sidebar__menu-nd__item-toggle.active {
+            & > span {
+                color: #353535;
+            }
+        }
+     }
+     
 }
 
 .wl-sidebar__menu-main__item{
@@ -83,30 +109,7 @@ const GlobalStyle = createGlobalStyle`
     border-radius: 4px;
 }
 
- .hidden{
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
- }
- .show{
-     transition: all 0.5s;
-     height: 100%;
-}
 
- .active {
-    color: #353535;
-    & > .wl-sidebar__menu-main__item-toggle {
-        & > span {
-            color: #353535;
-        }
-    }
-
-    .wl-sidebar__menu-nd__item-toggle.active {
-        & > span {
-            color: #353535;
-        }
-    }
- }
 
 //  .wl-sidebar__menu-nd__item-toggle.active {
 //     & > span {

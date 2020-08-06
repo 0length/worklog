@@ -12,9 +12,9 @@ const SideBar: React.FC<any> = (props)=>{
 
     .wl-sidebar {
         font-family: Poppins,Helvetica,sans-serif;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
+        // display: -webkit-box;
+        // display: -ms-flexbox;
+        // display: flex;
         justify-content: space-between;
         width: 13vw;
         height: 100%;
@@ -43,7 +43,7 @@ const SideBar: React.FC<any> = (props)=>{
 
 
     return(
-        <div className="wl-sidebar wl-sidebar--fixed">
+        <div className="wl-sidebar wl-sidebar--fixed hidden lg:flex">
                 <LocalStyle />
             <div className="wl-sidebar__menu">
                 <Menu />

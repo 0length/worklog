@@ -86,6 +86,7 @@ const htmlStart : string = `
       )}
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700" />
+    <link rel="stylesheet" href="/static/css/admin.css" />
   </head>
   <body>
     <div id="root">`

@@ -1,8 +1,8 @@
 FROM alpine:latest
-RUN apk add --no-cache nodejs npm
+RUN apk add --no-cache nodejs yarn
 WORKDIR /app
 COPY package.json /app
 COPY dist /app/dist
-RUN npm install 
+RUN yarn install 
 ENTRYPOINT [ "node" ]
 CMD ["/app/dist/app.js"]

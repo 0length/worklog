@@ -1,5 +1,6 @@
 import {google} from 'googleapis'
 import { Request, Response, NextFunction } from 'express'
+import endPoint from '../../lib/const/endpoint'
 
 export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
 
@@ -19,24 +20,28 @@ export const postfile = async (httpReq: Request, httpRes: Response, auth: any)=>
   }
 
   const resource = {
-    'name': new Date().toISOString().split("-").join().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`,
+    'name': new Date().toString().split("-").join().split("/").join().split(".").join().split(":").join()+`.${ct && ct.split("/")[1]}`,
   }
 
-  const media = {
-    mimeType: ct,
-    body: file
-  }
+  // const media = {
+  //   mimeType: ct,
+  //   body: file
+  // }
 
   await drive.files.create({
     ...resource,
-    media,
+    // media,
+    media:{
+      mimeType: ct,
+      body: file
+    },
     fields: 'id'
   }, (err: any, uploaded: any)=> {
     if (err) {
       const result = {data: {success: false, id: null}, error: "Server Bussy"}
       httpRes.json(result)
     } else {
-      const result = {data: {success: true, id: uploaded.data.id}}
+      const result = {data: {success: true, id: uploaded.data.id}, success: true, file: {url: endPoint.GOOGLEDRIVE+uploaded.data.id}}
       httpRes.json(result)
     }
   })
