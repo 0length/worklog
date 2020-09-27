@@ -9,6 +9,14 @@
 npm install
 ```
 
+
+## Build Docker App
+
+```sh
+npm run deploy
+```
+
+
 ## Usage
 
 ```sh
