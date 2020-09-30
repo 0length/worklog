@@ -68,7 +68,7 @@ apolloServer.applyMiddleware({app})
 app.use('/static', express.static(path.resolve(__dirname, 'public')))
 app.get('/admin', csrfProtection, cookieParser(), (req : Request, res : Response)=> {
 const CSRF_TOKEN = req.csrfToken()
-const store = createStore(Reducer, {csrf: { server:{hostname: process.env.HOSTNAME || 'localhost', port: process.env.PORT || 3000}, token: CSRF_TOKEN, isLoading: false, error: null}})
+const store = createStore(Reducer, {csrf: { server:{hostname: process.env.HOSTNAME || '192.168.2.119', port: process.env.PORT || 3000}, token: CSRF_TOKEN, isLoading: false, error: null}})
 const componentStream  = ReactDOMServer.renderToNodeStream(React.createElement(Admin, {store}, null))
 const preloadedState = store.getState()
 const htmlStart : string = `

@@ -210,7 +210,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     }, [ grapher.data ] )
 
     const handleOnDateChange = (d: string)=>{
-        setDate( { ...date, value: d.toISOString().split('T')[0] } )
+        setDate( { ...date, value: d.toString() } )
     }
 
 
