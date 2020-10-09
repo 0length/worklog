@@ -43,6 +43,6 @@ npm run db-seed
 ## Contributor
 
 👤 **0length**
-👤 **0length**
+👤 **hidesec**
 
 
