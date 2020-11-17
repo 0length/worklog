@@ -36,7 +36,7 @@ const Input = styled(styled.input`
         border: 0;
         `
     }
-`)`
+` as any)`
 &:-internal-autofill-selected {
     background-color: none;
     color: none;

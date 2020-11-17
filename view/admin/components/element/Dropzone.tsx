@@ -100,7 +100,7 @@ const Container = styled(styled.div`
             animation: blink 1s infinite;
         `
     }
-`)`
+` as any)`
 
 `
 
@@ -170,7 +170,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
 
 
     const fileListToArray = (list: any)=>{
-        const array = []
+        const array: any[] = []
         for (let i = 0; i < list.length; i++) {
           array.push(list.item(i))
         }

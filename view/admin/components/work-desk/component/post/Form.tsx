@@ -187,7 +187,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                     method: 'mutation',
                     doWhat: props.mode + props.instanceOf,
                     varIn:
-                        `${ props.mode === 'update'?'where: {name: "' + ( props.generic.old && props.generic.old.name ) + '"},' : '' }
+                        `${ props.mode === 'update'?'where: {title: "' + ( props.generic.old && props.generic.old.name ) + '"},' : '' }
                         title: "${ title.value }",
                         p: "${JSON.stringify(p.value).split('"').join("'")}",
                         img_url: "${ uploader.fileId }",
@@ -196,7 +196,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                         view_count: 0,
                         interisting_count: 0,
                         social_links: "{facebook: '', twitter: '', instagram: ''}"`,
-                    varOut: 'name'
+                    varOut: 'title'
                 },
                 status: status.send
             } )

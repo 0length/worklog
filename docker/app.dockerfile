@@ -1,8 +1,7 @@
-FROM alpine:latest
-RUN apk add --no-cache nodejs yarn
-WORKDIR /app
-COPY package.json /app
-COPY dist /app/dist
-RUN yarn install 
-ENTRYPOINT [ "node" ]
-CMD ["/app/dist/app.js"]
+FROM node:12
+WORKDIR /usr/src/app
+COPY package.json ./
+RUN npm install 
+COPY dist ./
+COPY app/lib/common-keys/ ./app/lib/common-keys/
+CMD ["node", "app.js"]

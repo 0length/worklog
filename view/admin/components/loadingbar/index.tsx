@@ -10,7 +10,7 @@ const Wrapper = styled(styled.div`
     top: 20;
     min-width: 100%;
     min-height: 10px;
-`)`
+` as any)`
 &> div {
     position: fixed;
     left: 0;

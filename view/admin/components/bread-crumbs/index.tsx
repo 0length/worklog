@@ -36,7 +36,7 @@ font-size: 10.5px !important;
 letter-spacing: 0.06em;
 font-weight: 500;
 color: #7b7d82;
-`)`
+` as any)`
 &:before {
     font-family: FontAwesome;
     content:'\f105';

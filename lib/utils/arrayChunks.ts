@@ -1,5 +1,5 @@
 const arrayChunks = (array: any[] ,chunkSize: number)=> {
-      const R = []
+      const R: any[] = []
       for (let i = 0; i < array.length; i += chunkSize)
         R.push(array.slice(i, i + chunkSize))
       return R

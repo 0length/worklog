@@ -118,9 +118,7 @@ export const resolvers = {
                     throw new Error(`Work with ${name} is doesn't exists`)
                 }
                 const deletedWork = await prisma.deleteWork({name})
-                setTimeout(() => {
-                    if(splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
-                }, 0)
+                if(deletedWork && splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
                 return deletedWork
             }
             if(access.work.indexOf("d")===-1){throw new Error("No Access")}else{return result()}

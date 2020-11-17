@@ -26,7 +26,7 @@ const Button = styled(styled.button`
 
         `}
 
-    `)`
+    ` as any)`
 
     &:hover {
         box-shadow: 0 0 5px rgba(33,33,33,.5) !important;

@@ -14,8 +14,12 @@ const signOptions: any = {
  algorithm:  "RS256"   // RSASSA [ "RS256", "RS384", "RS512" ]
 }
 
-const tokenGenerator = (payload: any)=>{
-    const token = jwt.sign(payload, privateKEY, signOptions)
+interface Optional {
+    ignoreExpiration: boolean
+}
+
+const tokenGenerator = (payload: any, optional?: Optional)=>{
+    const token = jwt.sign(payload, privateKEY, {...signOptions, ...optional})
     console.log("TOKEN:"+token)
     return token
 }

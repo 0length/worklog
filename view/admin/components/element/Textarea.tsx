@@ -15,7 +15,7 @@ border: 1px solid #e2e5ec;
 border-radius: 4px;
 transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
 
-`)`
+` as any)`
 &:focus {
     color: #495057;
     // background-color: #5fccff;
