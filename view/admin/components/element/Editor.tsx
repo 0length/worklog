@@ -1,6 +1,9 @@
-import React, { useCallback, useRef, useState } from "react";
-import endPoint from "../../../../lib/const/endpoint";
-import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import endPoint from "../../../../lib/const/endpoint"
+import { useDispatch, useSelector } from "react-redux"
+import {  upload } from './../../../../reducer/actions'
+import useUploader from './../../../../lib/hook/useUploader'
+import { resolve } from "path"
 // import EditorJs from "react-editor-js";
 
 
@@ -15,12 +18,13 @@ import { useSelector } from "react-redux";
 interface EditorIProps {
   data: string
 }
-
+const interval = {}, fileId = {};
 const EditorJs = typeof window !== 'undefined' ? require('react-editor-js') : null
-
 const Editor: React.FC<EditorIProps> = ({data}) => {
   const [ref, setRef] = useState<any>(null);
+  const [wait, setWait] = useState<boolean>(true);
   const store = useSelector((store: any)=>store)
+  const dispatch = useDispatch()
   const handleSave = useCallback(()=>{
     if(ref){
       // console.log(ref.save().then); 
@@ -28,7 +32,12 @@ const Editor: React.FC<EditorIProps> = ({data}) => {
     }
     console.log(ref, "ref")
   },[ref])
-
+  const { uploader, setUploader } = useUploader()
+  useEffect(()=>{ 
+    if(uploader.fileId && interval){
+      fileId[uploader.processId] = uploader.fileId
+    } 
+  }, [uploader.processId, uploader.fileId])
 
   const EDITOR_JS_TOOLS: any = ({store}: any)=> ({
     embed: require("@editorjs/embed"),
@@ -41,11 +50,24 @@ const Editor: React.FC<EditorIProps> = ({data}) => {
       class: require("@editorjs/image"),
       config: {
         endpoints: {
-          byFile: endPoint.GOOGLEDRIVE
+          byFile: endPoint.GOOGLEDRIVE,
         },
-        additionalRequestHeaders: {
-          'CSRF-Token': store.csrf.token,
-          'Authorization':`Bearer ${store.user.authToken}`
+        uploader: {
+          uploadByFile: (a)=>{
+            const pid = Date.now().toString()
+            setUploader({processId: pid})
+            dispatch( upload( [a], pid ))
+            return new Promise((resolve)=>{
+              interval[pid] = setInterval(() => {
+                if(fileId[pid]) {
+                  resolve({"success":true,"file":{"url":`/api/gdrive/${fileId[pid]}`}})
+                  clearInterval(interval[pid])
+                  interval[pid] = undefined
+                  fileId[pid] = undefined
+                }
+              }, 0)
+            })
+          }
         }
       }
     },
@@ -66,11 +88,7 @@ const Editor: React.FC<EditorIProps> = ({data}) => {
       tools={EDITOR_JS_TOOLS({store})}
       instanceRef={(ref: any)=>setRef(ref)}
       />
-  </div>);
+  </div>)
 }
-
-
-
-
 
 export default Editor

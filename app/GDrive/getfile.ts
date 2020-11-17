@@ -7,8 +7,9 @@ export const getfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
     const allId: any = []
     const fileid = httpReq.originalUrl.split("/")[3]
     const drive = google.drive({version: 'v3', auth})
-    httpRes.contentType(httpReq.headers.accept ?? 'image/jpg')
-    
+    // tslint:disable-next-line: no-unused-expression
+    // httpReq.headers.accept && httpRes.contentType(httpReq.headers.accept)
+
     await drive.files.list({
         pageSize: 10,
         fields: 'nextPageToken, files(id, name)',
@@ -24,10 +25,10 @@ export const getfile = async (httpReq: Request, httpRes: Response, auth: any)=>{
         } else {
             console.log('No files found.')
         }
-    });
+    })
 
     await drive.files.get(
-        {fileId: fileid, alt: `media`}, {responseType: `stream`}
+        {fileId: fileid, alt: 'media'}, {responseType: `stream`}
         ,(err: any, res: any) => {
         if (err)return console.log("ERROR", err)
         res.data.on('end', ()=>{

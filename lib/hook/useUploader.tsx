@@ -34,6 +34,7 @@ const useUploader = ( overrides?: Partial<Uploader> ): UploaderState => {
     const globalUploader = useSelector( (state: any) => state.uploader[ uploader.processId ] )
     useEffect( () => {
         if( globalUploader ){
+
             setUploader(
                 {
                     ...uploader,
@@ -44,9 +45,14 @@ const useUploader = ( overrides?: Partial<Uploader> ): UploaderState => {
                             Number( globalUploader.progress ) < 100 ? 'inProgress' : ''
                 }
             )
-            dispatch( killUploader( uploader.processId ) )
+            // dispatch( killUploader( uploader.processId ) )
+        // console.log("Uploader Update",!!globalUploader.fileid);
         }
-     }, [ globalUploader ])
+     }, [ globalUploader, globalUploader ])
+     useEffect( () => {
+        globalUploader && globalUploader.fileid && console.log("Uploader Update", uploader);
+     }, [ uploader, globalUploader ])
+
      return { uploader,  setUploader }
 }
 export default useUploader

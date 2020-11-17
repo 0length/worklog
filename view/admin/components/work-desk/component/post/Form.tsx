@@ -212,7 +212,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     }, [ grapher.data ] )
 
     const handleOnDateChange = (d: string)=>{
-        setPublishedAt( { ...published_at, value: d.split('T')[0] } )
+        setPublishedAt( { ...published_at, value: new Date(d).toDateString() } )
     }
 
 
@@ -308,7 +308,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <DatePicker
                 className='input'
                 selected={ new Date( published_at.value ) }
-                onChange={ ( d: string ) => handleOnDateChange( d ) }
+                onChange={ ( d: Date ) => handleOnDateChange( d.toString() ) }
             />
             {<div className="wl-invalid__feedback">{published_at.error}</div>}
         </div>
@@ -428,7 +428,7 @@ const data: string = JSON.stringify({
         data: {
           file: {
             url:
-              "https://codex.so/upload/redactor_images/o_e48549d1855c7fc1807308dd14990126.jpg"
+              "/api/gdrive/1-vJUGDZnlTn7g5B8srgJs4_x40ICB9_n"
           },
           caption: "",
           withBorder: true,
