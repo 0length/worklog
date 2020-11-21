@@ -45,7 +45,7 @@ const LocalStyle = createGlobalStyle`
             background: #fff;
         }
         & > .input.dropzone  {
-            width: 85%;
+            width: 80%;
         }
         & > .wl-invalid__feedback {
             position: absolute;

@@ -18,14 +18,15 @@ interface HighOrderType {
     [index: string]: JSX.Element
 }
 
-const HighOrder:  HighOrderType= {
-    'work': <Work/>,
-    'post': <Post/>,
-    'testing' : <Testing />
-}
+
 
 const WorkDesk: React.FC = ()=>{
     const activeMenu = useSelector( (state: any) => state.menu.active )
+    const HighOrder:  HighOrderType= {
+        'work': <Work/>,
+        'post': <Post/>,
+        'testing' : <Testing />
+    }
     return(<Wrapper>
         {HighOrder[activeMenu]}
     </Wrapper>)

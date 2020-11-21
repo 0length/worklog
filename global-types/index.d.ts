@@ -9,6 +9,14 @@ export {
     User
 }
 
+export type Models = Work | Menu | Post | Comment | Group | User 
+export interface AccessGuard {
+    context: any
+    menu: string
+    accessCode?: 'c' | 'r' | 'u' | 'd' | Function
+    result: (access: any)=>Promise<Models>
+}
+
 export interface AllMode {
     [key: string]: JSX.Element
 }

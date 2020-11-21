@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express'
-import { prisma } from '../../prisma/src/generated/prisma-client'
+import { Post, prisma } from '../../prisma/src/generated/prisma-client'
 import { getAccess } from '../lib/utils/getAccess'
 import { BehaviorSubject } from 'rxjs'
 import observableToIterator from '../lib/utils/observableToAsyncIterator'
@@ -16,7 +16,7 @@ type Post {
     img_url: String!
     text_content: String
     published_at: String
-    view_count: String!
+    view_count: Int!
     interisting_count: Int!
     social_links: String
 }
@@ -31,8 +31,8 @@ type Post {
     }
 
     extend type Mutation {
-        createPost(title: String!, p: String, author_name: String!, img_url: String!, text_content: String, published_at: String, view_cont: String!, interisting_count: Int!, social_links: String):Post
-        updatePost(where: PostWhereUniqueInput!, title: String, p: String, author_name: String, img_url: String, text_content: String, published_at: String, view_cont: String, interisting_count: Int, social_links: String):Post
+        createPost(title: String!, p: String, img_url: String!, text_content: String, published_at: String, view_count: Int!, interisting_count: Int!, social_links: String):Post
+        updatePost(where: PostWhereUniqueInput!, title: String, p: String, author_name: String, img_url: String, text_content: String, published_at: String, view_count: String, interisting_count: Int, social_links: String):Post
         deletePost(where: PostWhereUniqueInput!): Post
     }
 
@@ -57,22 +57,22 @@ export const resolvers = {
     },
     Mutation: {
         // tslint:disable-next-line: max-line-length
-        createPost: async (obj: any, {title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links}: any, context: any, info: any)=>{
+        createPost: async (obj: any, {title, p, img_url, text_content, published_at, view_count, interisting_count, social_links}: Post, context: any, info: any)=>{
             const  access: any = await getAccess(context)
             const result: any = async ()=>{
                 const postWithNameAlreadyExists = await prisma.post({title})
                 if(postWithNameAlreadyExists){
-                throw new Error(`Already Exist`)
+                    throw new Error(`Already Exist`)
                 }
                 // tslint:disable-next-line: max-line-length
-                const createdPost = await prisma.createPost({title, p: p.split("'").join('"'), author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links})
+                const createdPost = await prisma.createPost({title, p: p.split("'").join('"'), author_name: access.owner.user.name, img_url, text_content: text_content.split("'").join('"'), published_at, view_count, interisting_count, social_links})
                 postSubject.next(postSub())
                 return createdPost
             }
             if(access.post.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
         },
         // tslint:disable-next-line: max-line-length
-        updatePost: async (obj: any, { where, title, p, author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links }: any, context: any, info: any)=>{
+        updatePost: async (obj: any, { where, title, p, author_name, img_url, text_content, published_at, view_count, interisting_count, social_links }: any, context: any, info: any)=>{
             const  access: any = await getAccess(context)
             const result: any = async ()=>{
                 const postWhereName = await prisma.post({title:where.title})
@@ -80,9 +80,9 @@ export const resolvers = {
                     throw new Error(`Not Found`)
                 }
                 // tslint:disable-next-line: max-line-length no-unused-expression
-                !title&& !p&& !author_name&& !img_url&& !text_content&& !published_at&& !view_cont&& !interisting_count&& !social_links? ()=>{throw new Error("nothing to update")}:!title?title=postWhereName.title:!p?p=postWhereName.p:!author_name?author_name=postWhereName.author_name:!img_url?img_url=postWhereName.img_url:!text_content?text_content=postWhereName.text_content:!published_at?published_at=postWhereName.published_at: !view_cont?view_cont=postWhereName.view_cont: !interisting_count?interisting_count=postWhereName.interisting_count: !social_links?social_links=postWhereName.social_links:null
+                !title&& !p&& !author_name&& !img_url&& !text_content&& !published_at&& !view_count&& !interisting_count&& !social_links? ()=>{throw new Error("nothing to update")}:!title?title=postWhereName.title:!p?p=postWhereName.p:!author_name?author_name=postWhereName.author_name:!img_url?img_url=postWhereName.img_url:!text_content?text_content=postWhereName.text_content:!published_at?published_at=postWhereName.published_at: !view_count?view_count=postWhereName.view_count: !interisting_count?interisting_count=postWhereName.interisting_count: !social_links?social_links=postWhereName.social_links:null
                 // tslint:disable-next-line: max-line-length
-                const updatedPost = await prisma.updatePost({data:{title, p: p.split("'").join('"'), author_name, img_url, text_content, published_at, view_cont, interisting_count, social_links},where:{title:where.title}})
+                const updatedPost = await prisma.updatePost({data:{title, p: p.split("'").join('"'), author_name, img_url, text_content, published_at, view_count, interisting_count, social_links},where:{title:where.title}})
                 postSubject.next(postSub())
                 return updatedPost
             }

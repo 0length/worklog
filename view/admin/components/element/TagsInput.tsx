@@ -24,7 +24,7 @@ transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
 `
 
-const TagsInput: React.FC<any> = ({valueGetter, className, initValue=[]})=>{
+const TagsInput: React.FC<any> = ({valueGetter, className, initValue=[], placeholder})=>{
     const [tags, setTags] = useState<string[]>(initValue)
     const [dom, setdom] = useState<JSX.Element[]>([])
     const [focus, setFocus] = useState<boolean>(false)
@@ -103,6 +103,7 @@ return (
                     lineHeight: '1.5'
                 }
             }
+            placeholder={placeholder}
         />
     </Span>)
 }

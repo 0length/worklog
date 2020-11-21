@@ -15,20 +15,28 @@ import { resolve } from "path"
 // }else{
 //   EditorJs = null
 // }
+
+
 interface EditorIProps {
   data: string
+  onChange: (data: string)=>void
 }
 const interval = {}, fileId = {};
 const EditorJs = typeof window !== 'undefined' ? require('react-editor-js') : null
-const Editor: React.FC<EditorIProps> = ({data}) => {
-  const [ref, setRef] = useState<any>(null);
-  const [wait, setWait] = useState<boolean>(true);
+const Editor: React.FC<EditorIProps> = ({data, onChange}) => {
+  const [ref, setRef] = useState<any>(null)
+  const [wait, setWait] = useState<boolean>(true)
   const store = useSelector((store: any)=>store)
   const dispatch = useDispatch()
   const handleSave = useCallback(()=>{
     if(ref){
       // console.log(ref.save().then); 
-      ref.save().then((data: any)=>data.blocks && console.log(data))
+      ref.save().then((data: any)=>{
+        if(data.blocks){
+          const payload = {...data, blocks: data.blocks.map((i)=>i && i.data && i.data.text?i.data.text.split('"').join("'"):i)}
+          onChange(JSON.stringify(payload))
+        }
+      })
     }
     console.log(ref, "ref")
   },[ref])
@@ -81,8 +89,7 @@ const Editor: React.FC<EditorIProps> = ({data}) => {
   })
 
 
-  return (<div style={{margin: 'auto'}}>
-    <button onClick={handleSave}>save</button>
+  return (<div style={{width: '100%'}} onKeyUp={handleSave}>
     <EditorJs.default
       data={JSON.parse(data)}
       tools={EDITOR_JS_TOOLS({store})}

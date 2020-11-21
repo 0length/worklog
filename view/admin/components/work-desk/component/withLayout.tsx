@@ -100,7 +100,6 @@ const LocalStyle = createGlobalStyle`
     // margin-left: -2px;/
     z-index: 2;
 }
-
 `
 
 const withLayout = (Page: React.FC<ActivityPageProps>)=>(props: ActivityModeProps)=>{

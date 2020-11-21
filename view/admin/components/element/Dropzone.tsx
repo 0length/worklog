@@ -50,7 +50,7 @@ const LocalStyle = createGlobalStyle`
 
 
 const Container = styled(styled.div`
-    border: 3px dashed #D8D5D1;
+    border: 1px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
     height: 80px;
@@ -60,7 +60,8 @@ const Container = styled(styled.div`
     opacity: 0;
     transition: opacity 500ms linear 0s;
     justify-content: center;
-
+    align-items: center;
+    flex-direction: column;
     & > span{
         font-family: 'Montserrat';
         font-size: 10pt;
@@ -111,6 +112,7 @@ interface IProps {
     pid: string
     className?: string
     onFinish?:()=>void
+    placeholder?: string
 }
 
 
@@ -202,7 +204,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         onClick={(e)=>{openFileDialog(e)}}
     >
         <LocalStyle />
-        {event !== 'Drop' && <span>Drag & Drop Files Or Browse</span>}
+    {event !== 'Drop' && <><span>Drag & Drop Files Or Browse</span>{props.placeholder && <div style={{border: 'none', color: 'grey'}}>{props.placeholder}</div>}</>}
         <input
             ref={inputRef}
             style={{display: 'none'}}

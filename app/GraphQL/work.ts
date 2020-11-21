@@ -4,11 +4,11 @@ import { getAccess } from '../lib/utils/getAccess'
 import { BehaviorSubject } from 'rxjs'
 import observableToIterator from '../lib/utils/observableToAsyncIterator'
 import { map } from 'rxjs/operators'
+import { accessGuard } from '../Middleware/AccessGuard'
 
 // tslint:disable-next-line: variable-name
 const workSub =  async (author_name: string)=>await prisma.works({where: {author_name}})
 const splitSubs: any = {}
-
 export const typeDefs =  gql`
     type Work {
         id: ID
@@ -49,11 +49,11 @@ export const typeDefs =  gql`
 `
 
 export const resolvers = {
+    Menu: 'work',
     Query: {
         works: async (root: any, args: any, context: any, info: any)=> {
-            const  access: any = await getAccess(context)
             const result: any = await prisma.works()
-            if(access.work.indexOf("r")===-1){throw new Error("No Access")}else{return result()}
+            return accessGuard({ context, menu: resolvers.Menu, result })
         },
         work: async (obj: any, {name}: any, context: any, info: any) =>{
             const  access: any = await getAccess(context)
@@ -70,21 +70,25 @@ export const resolvers = {
     Mutation: {
         // tslint:disable-next-line: max-line-length
         createWork: async (obj: any, {name, p, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links}: any, context: any, info: any)=>{
-            const  access: any = await getAccess(context)
-            const result: any = async () => {
+            const result: any = async (access) => {
                 const workWithNameAlreadyExists = await prisma.work({name})
                 if(workWithNameAlreadyExists){
                 throw new Error(` ${name} already in use`)
                 }
-
                 // tslint:disable-next-line: max-line-length
                 const createdWork =  await prisma.createWork({name, p: p.split("'").join('"'), author_name: access.owner.user.name, simple_caption, img_url, client, website, completed_at, long_desc, interisting_count, social_links})
                 setTimeout(() => {
-                    if(splitSubs[access.owner.user.name]) splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
+                    if(splitSubs[access.owner.user.name])
+                    splitSubs[access.owner.user.name].next(workSub(access.owner.user.name))
                 }, 0)
                 return createdWork
             }
-            if(access.work.indexOf("c")===-1){throw new Error("No Access")}else{return result()}
+            return accessGuard({
+                context,
+                menu: resolvers.Menu,
+                accessCode: resolvers.Mutation.createWork,
+                result
+            })
 
         },
         // tslint:disable-next-line: max-line-length

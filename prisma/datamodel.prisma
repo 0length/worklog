@@ -38,7 +38,7 @@ type Post {
     img_url: String!
     text_content: String!
     published_at: String!
-    view_count: String!
+    view_count: Int!
     interisting_count: Int!
     social_links: String!
 }

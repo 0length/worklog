@@ -13,73 +13,6 @@ import { toastSuccess } from "../../../../../../lib/utils/toastModel"
 
 // tofo: merge stylesheet for table
 
-const LocalStyle = createGlobalStyle`
-
-.table {
-    font-size: 13px;
-    font-weight: 300;
-    font-family: Poppins,Helvetica,sans-serif;
-    border-collapse: initial !important;
-    border-spacing: 0 !important;
-    width: 100%;
-    border: 1px solid #ebedf2;
-    border-radius: 4px;
-}
-
-.table td, .table th{
-    padding: 6px;
-    font-weight: 500;
-    border: 1px solid #ebedf2;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    padding: .75rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-left-width: 0;
-    box-sizing: content-box;
-}
-
-.table tr:nth-child(even){background-color: #fafbfc;}
-
-.table tr:hover {
-    color: #212529;
-    background: #FAFBFC;
-}
-
-.table th{
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    color: #212529;
-    cursor: pointer;
-    position: relative;
-    vertical-align: middle;
-    border-bottom: 2px solid #ebedf2;
-    border-bottom-width: 2px;
-    text-transform: capitalize;
-}
-.table tr td {
-    font-weight: 300;
-    color: #595d6e;
-    border-top-width: 0px;
-    border-bottom-width: 1px;
-}
-
-.text {
-    font-size: 11px;
-}
-
-.longtext {
-    font-size: 8px;
-}
-
-
-
-// .btn-add {
-//     float: right;
-//     margin: 1vh 0vw;
-// }
-`
 const Table: React.FC<any> = ( props )=>{
 
     const { instanceOf } =props
@@ -92,14 +25,14 @@ const Table: React.FC<any> = ( props )=>{
     }
 
 
-    const handleDelete = (name: string)=>{
+    const handleDelete = (title: string)=>{
         setGrapher({
-            processId: instanceOf+'-'+actions.delete+'-'+name,
+            processId: instanceOf+'-'+actions.delete+'-'+title,
             payload: {
                 method: 'mutation',
                 doWhat: actions.delete+instanceOf,
-                varIn: `where: { name: "${name}"}`,
-                varOut: 'name'
+                varIn: `where: { title: "${title}"}`,
+                varOut: 'title'
             },
             status: status.send,
         })
@@ -139,7 +72,7 @@ const Table: React.FC<any> = ( props )=>{
                             item.text_content.substr(0, 150)+'...'
                         }</td>
                     <td key={"wl_dt_-date"+(idx+1)}>{item.published_at}</td>
-                    <td key={"wl_dt_-view"+(idx+1)}>{item.view_cont}</td>
+                    <td key={"wl_dt_-view"+(idx+1)}>{item.view_count}</td>
                     <td key={"wl_dt_-like"+(idx+1)}>{item.interisting_count}</td>
                     <td key={"wl_dt__-act"+(idx+1)}>
                         <Button onClick={()=>handleDelete(item.title)}><i className={"fa fa-lg fa-trash-o"}/></Button>
@@ -165,7 +98,6 @@ const Table: React.FC<any> = ( props )=>{
     }, [data])
     return(
         <table className="table">
-            <LocalStyle />
                 <thead>
                     <tr key={"wl_dt_-tr"+0}>
                         <th key={"wl_dt_-no"+0}>#</th>
