@@ -33,7 +33,10 @@ const Editor: React.FC<EditorIProps> = ({data, onChange}) => {
       // console.log(ref.save().then); 
       ref.save().then((data: any)=>{
         if(data.blocks){
-          const payload = {...data, blocks: data.blocks.map((i)=>i && i.data && i.data.text?i.data.text.split('"').join("'"):i)}
+          const payload = {...data, blocks: data.blocks.map((i)=>i && i.data && i.data.text
+            ?
+            {...i, text: i.data.text.split('"').join("'")}
+          :i)}
           onChange(JSON.stringify(payload))
         }
       })

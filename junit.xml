@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" time="0.884">
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-11-17T09:23:31" time="0.747" tests="1">
+<testsuites name="jest tests" tests="1" failures="0" time="0.915">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-11-24T05:53:54" time="0.772" tests="1">
     <testcase classname=" chunk array with 10 element into 4 element/chunk tobe 3 chunks" name=" chunk array with 10 element into 4 element/chunk tobe 3 chunks" time="0.002">
     </testcase>
   </testsuite>

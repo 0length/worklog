@@ -36,19 +36,19 @@ const Work: React.FC<any> = ()=>{
     ]
 
     const allMode: AllMode = {
-        read :  <Table
+        read :  ()=><Table
                     action={actionTable}
                     generic={{setMode, setSelectedItem}}
                     title={"All Work List"}
                     mode="read"
                     instanceOf={activityName}/>,
-        create: <Form
+        create: ()=><Form
                     action={actionForm}
                     generic={{}}
                     mode="create"
                     title={"Create New Work Item"}
                     instanceOf={activityName}/>,
-        update: <Form
+        update: ()=><Form
                     action={actionForm}
                     generic={{old: selectedItem}}
                     mode="update"
@@ -67,7 +67,7 @@ const Work: React.FC<any> = ()=>{
     return (<>
         <div className="div-work">
             <StyleWork />
-            {allMode[mode]}
+            { (()=>allMode[ mode ]())() }
         </div>
     </>)
 }

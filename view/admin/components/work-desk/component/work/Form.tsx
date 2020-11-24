@@ -20,7 +20,7 @@ import fromEventArgs from '../../../../../../lib/utils/fromEventArgs'
 const LocalStyle = createGlobalStyle`
     .wl-work_form {
         padding: 5% 10%;
-        background: #FAFAFA;
+        background: #F6F8FA;
     }
     .wl-form-group {
         position: relative;
@@ -159,7 +159,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         }
     )
 
-    const { uploader, setUploader } = useUploader()
+    const { uploader, setUploader, resetUploader } = useUploader()
     const { grapher, setGrapher } = useGrapher()
 
 
@@ -209,24 +209,27 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             )
     }, [ grapher.data ] )
 
-    const handleOnDateChange = (d: string)=>{        
+    const handleOnDateChange = (d: Date)=>{
         setDate( { ...date, value: new Date(d).toDateString() } )
     }
 
 
     const handleOnChange = ( e: any, oldState: FormInput, setState: ( newVal: FormInput ) => void, ): void => {
-        fromEventArgs( e, oldState.name )
-        .pipe(
-            debounce( () => timer( 400 ) ),
-            distinctUntilChanged()
-        )
-        .subscribe((x: any) => {
-            if( x && x.target ){
-                // console.log(x)
-                const newState = { ...oldState, value: x.target.value }
-                singleFieldValidation( newState, setState )
-            }
-        })
+        // e.persist()
+        // setTimeout(() => {
+            fromEventArgs( e, oldState.name )
+            .pipe(
+                debounce( () => timer( 400 ) ),
+                distinctUntilChanged()
+            )
+            .subscribe((x: any) => {
+                if( x && x.target ){
+                    // console.log(x)
+                    const newState = { ...oldState, value: x.target.value }
+                    singleFieldValidation( newState, setState )
+                }
+            })
+        // }, 100)
     }
 
     const singleFieldValidation = ( state: FormInput, setState: ( newVal: any ) => void ) => {
@@ -261,7 +264,14 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <div className="label"><label>Name  </label><span>:</span></div>
             <Input
                 style={ { fontWeight: 'bold' } }
-                onChange={ (e: any) => handleOnChange( e, name, setName ) }
+                onChange={ (e: any) =>{
+                    // setName((old: any)=>({...old, value: e.target.value}))
+                    e.persist()
+                    setTimeout(() => {
+                        setName((old: any)=>({...old, value: e.target.value}))
+                        // handleOnChange( e, name, setName )
+                    }, 100)
+                } }
                 disabled={ disabledName }
             />
             { <div className="wl-invalid__feedback">{ name.error }</div> }
@@ -289,6 +299,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                     progress={ uploader.progress }
                     pid={ uploader.processId }
                     onFinish={ () => setDisabledName( false ) }
+                    onCancel={resetUploader}
                 />
             }
         </div>
@@ -303,7 +314,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <DatePicker
                 className='input'
                 selected={ new Date( date.value ) }
-                onChange={ ( d: string ) => handleOnDateChange( d ) }
+                onChange={ ( d: Date ) => handleOnDateChange( d ) }
             />
             {<div className="wl-invalid__feedback">{date.error}</div>}
         </div>

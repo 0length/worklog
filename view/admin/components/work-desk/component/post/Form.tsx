@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Input, Button, Dropzone, TagsInput, Textarea, DatePicker } from '../../../element'
 import { createGlobalStyle } from 'styled-components'
 import { useDispatch } from 'react-redux'
@@ -16,16 +16,16 @@ import 'rxjs/add/observable/fromEvent'
 import { timer } from 'rxjs'
 import fromEventArgs from '../../../../../../lib/utils/fromEventArgs'
 import Editor from '../../../element/Editor'
+import endPoint from '../../../../../../lib/const/endpoint'
 
 
 const LocalStyle = createGlobalStyle`
     .wl-post_form {
-        padding: 5% 10%;
-        background: #FAFAFA;
+        padding: 2.5% 5%;
     }
     .wl-form-group {
         position: relative;
-        margin-bottom: 3rem;
+        margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
         & >.label {
@@ -39,8 +39,7 @@ const LocalStyle = createGlobalStyle`
                 padding: 0 7%;
             }
         }
-
-        & > input, & > .input, & > .react-datepicker-wrapper > .react-datepicker__input-container > input {
+        & > input, & > .input, & > .wl_fr__post-title__input {
             background: transparent;
             border: none;
             outline: none;
@@ -48,11 +47,30 @@ const LocalStyle = createGlobalStyle`
             float: right;
             color: #495057;
         }
+        & > .react-datepicker-wrapper {
+            width: 100%;
+            & > .react-datepicker__input-container {
+                width: 100%;
+                input
+                {
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    color: #495057;
+                    width: 100%;
+                }
+            }
+        }
+
+        & > .react-datepicker__tab-loop > .react-datepicker-popper {
+            z-index: 2;
+        }
+
         & > .input > input {
             background: transparent;
         }
         & > .input.dropzone  {
-            width: 80%;
+            width: 100%;
             color: #495057;
         }
         & > .wl-invalid__feedback {
@@ -64,14 +82,20 @@ const LocalStyle = createGlobalStyle`
         }
         .wl_fr__post-title__input {
             font-size: 46px;
+            padding-left:0;
+            width: 100%;
         }
     }
 
 
     #editor-js{
         color: #495057;
-        .ce-block__content{
+        .ce-block__content, .ce-toolbar__content{
             margin: revert;
+            max-width: none;
+        }
+        .codex-editor__redactor{
+            padding-bottom: 100px !important;
         }
         h1 {
             font-size: 42px;
@@ -115,6 +139,7 @@ export interface FormInput {
 const Form: React.FC<ActivityPageProps> = (props) =>{
     const activityCode = props.instanceOf +'-'+props.mode+'-'
     const [tag, setTag] = useState<string>('')
+    const submitRef = useRef<any>()
     const dispatch = useDispatch()
     const [disabledName, setDisabledName] = useState<boolean>(false)
     const __LANG = useLanguage()
@@ -137,19 +162,6 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             name: 'p'
         }
     )
-    // const [caption, setCaption] = useState<FormInput>(
-    //     {
-    //         value: getOld('simple_caption')||'',
-    //         isValid: false,
-    //         error: '',
-    //         rules: 'required|min:5|max:500',
-    //         name: 'simple_caption'
-    //     }
-    // )
-
-    //  todo: create custom hook useFileUploaded
-
-
     const [text_content, setTextContent] = useState<FormInput>(
         {
             value: getOld('text_content')||DEFAULT_TEXT_CONTENT,
@@ -161,37 +173,52 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     )
     const [published_at, setPublishedAt] = useState<FormInput>(
         {
-            value:getOld('published_at')||'1970/01/01',
+            value:getOld('published_at')||new Date().toString(),
             isValid: false,
             error: '',
             name: 'published_at',
             rules: ''
         }
     )
-
-    // const [site, setSite] = useState<FormInput>(
-    //     {
-    //         value: getOld('website')||'',
-    //         isValid: false,
-    //         error: '',
-    //         name: 'website',
-    //         rules: ''
-    //     }
-    // )
-
-    // const [desc, setDesc] = useState<FormInput>(
-    //     {
-    //         value: getOld('long_desc')||'',
-    //         isValid: false,
-    //         error: '',
-    //         name: 'long_desc',
-    //         rules: ''
-    //     }
-    // )
-
-    const { uploader, setUploader } = useUploader()
+    const { uploader, setUploader, resetUploader } = useUploader()
     const { grapher, setGrapher } = useGrapher()
+    const handleOnSubmit = ()=>{
+        // return console.log(title.value);
+        
+        setGrapher( {
+            payload: {
+                method: 'mutation',
+                doWhat: props.mode + props.instanceOf,
+                varIn:
+                    `${ props.mode === 'update'?'where: {title: "' + ( props.generic.old && props.generic.old.name ) + '"},' : '' }
+                    title: "${ title.value }",
+                    p: "${JSON.stringify(p.value).split('"').join("'")}",
+                    img_url: "${ uploader.fileId }",
+                    text_content: "${ text_content.value.split('"').join("'") }",
+                    published_at: "${ published_at.value }",
+                    view_count: 0,
+                    interisting_count: 0,
+                    social_links: "{facebook: '', twitter: '', instagram: ''}"`,
+                varOut: 'title'
+            },
+            status: status.send
+        } )
+    }
 
+    useEffect( () => {
+        if( props.setAction ){
+            props.setAction((old)=>{
+            return ([
+                ...old,
+                <Button
+                    {...{styleProfile: {primary: true}}}
+                    key={"wl-post_save"}
+                    onClick={()=>submitRef.current.click()}>
+                        <i className="fa fa-save"></i> &nbsp;Save
+                </Button>])
+            })
+        }
+     }, [])
 
         useEffect( () => {
            if( title.value ){
@@ -206,27 +233,6 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
              setP( { ...p, value: tag } )
             }
          }, [ tag ])
-
-        const handleOnSubmit = () => {
-            setGrapher( {
-                payload: {
-                    method: 'mutation',
-                    doWhat: props.mode + props.instanceOf,
-                    varIn:
-                        `${ props.mode === 'update'?'where: {title: "' + ( props.generic.old && props.generic.old.name ) + '"},' : '' }
-                        title: "${ title.value }",
-                        p: "${JSON.stringify(p.value).split('"').join("'")}",
-                        img_url: "${ uploader.fileId }",
-                        text_content: "${ text_content.value.split('"').join("'") }",
-                        published_at: "${ published_at.value }",
-                        view_count: 0,
-                        interisting_count: 0,
-                        social_links: "{facebook: '', twitter: '', instagram: ''}"`,
-                    varOut: 'title'
-                },
-                status: status.send
-            } )
-        }
 
     useEffect(()=>{
         // tslint:disable-next-line: no-unused-expression
@@ -285,38 +291,64 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
 
     useEffect(()=>{
         return ()=>{
-            setTitle((old)=>({...old, value: ""}))
-            setP((old)=>({...old, value: ""}))
-            setTextContent((old)=>({...old, value: ""}))
-            setPublishedAt((old)=>({...old, value: ""}))
+            // setTitle((old)=>({...old, value: ""}))
+            // setP((old)=>({...old, value: ""}))
+            // setTextContent((old)=>({...old, value: ""}))
+            // setPublishedAt((old)=>({...old, value: ""}))
         }
     }, [])
     return(<div className="wl-post_form">
+        <div style={{
+            background: '#F6F8FA',
+            border: '1px solid #d8e4ef',
+            padding: '5% 5%'
+        }}
+        >
         <link href="/static/plugins/react-datepicker/css/index.css" rel="stylesheet" type="text/css" />
         <LocalStyle />
         <div key={"wl_fr__post-title"} className="wl-form-group">
         {/* <div className="label"><label>Title  </label><span>:</span></div> */}
-            <Input
-                style={ { fontWeight: 'bold' } }
-                onChange={ (e: any) => handleOnChange( e, title, setTitle ) }
-                disabled={ disabledName }
-                placeholder={"Title"}
+            <div
+                {...{suppressContentEditableWarning: true}}
+                style={ { fontWeight: 'bold'} }
+                onInput={ (e: any) => {
+                    e.persist()
+                    setTimeout(() => {
+                        setTitle((old)=>({...old, value: e.target.innerText}))
+                    }, 100)
+                }}
                 className={"wl_fr__post-title__input"}
-            />
+                contentEditable="true"
+                // dangerouslySetInnerHTML={{__html: title.value}}
+            >Title</div>
             { <div className="wl-invalid__feedback">{ title.error }</div> }
         </div>
-        <div key={"wl_fr__post-img"} className="wl-form-group">
-            {/* <div className="label"><label>File for Image  </label><span>:</span></div> */}
-            {
-                title.value && <Dropzone
-                    className="input dropzone"
-                    onFilesAdded={ ( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) } }
-                    progress={ uploader.progress }
-                    pid={ uploader.processId }
-                    onFinish={ () => setDisabledName( false ) }
-                    placeholder={"Illustration Image"}
-                />
-            }
+        <div key={"wl_fr__post-date"} className="wl-form-group">
+            <DatePicker
+                className='input'
+                selected={ new Date( published_at.value ) }
+                onChange={ ( d: Date ) => handleOnDateChange( d.toString() ) }
+                showTimeSelect
+                dateFormat="MMMM d, yyyy h:mm aa"
+            />
+            {/* {<div className="wl-invalid__feedback">{published_at.error}</div>} */}
+        </div>
+    { title.value && <div key={"wl_fr__post-img"} className="wl-form-group">
+        {/* <div className="label"><label>File for Image  </label><span>:</span></div> */}
+        <Dropzone
+                className="input dropzone"
+                onFilesAdded={ ( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) } }
+                progress={ uploader.progress }
+                pid={ uploader.processId }
+                onFinish={ () => setDisabledName( false ) }
+                onCancel={resetUploader}
+                placeholder={"for The Illustration Image"}
+                // imgSrc={getOld('img_url')?endPoint.GOOGLEDRIVE+getOld('img_url'):''}
+        />
+    </div>}
+        
+        <div key={"wl_fr__post-content-editor"}  className="wl-form-group">
+            {typeof window !== 'undefined' ?  <Editor data={text_content.value} onChange={(data)=>setTextContent((old)=>({...old, value: data}))}/> : null }
         </div>
         <div key={"wl_fr__post-tag"} className="wl-form-group">
             <TagsInput
@@ -326,22 +358,13 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
                 placeholder={"Tag"}
             />
         </div>
-        <div key={"wl_fr__post-content-editor"}  className="wl-form-group">
-            {typeof window !== 'undefined' ?  <Editor data={text_content.value} onChange={(data)=>setTextContent((old)=>({...old, value: data}))}/> : null }
-        </div>
-        <div key={"wl_fr__post-date"} className="wl-form-group">
-            <DatePicker
-                className='input'
-                selected={ new Date( published_at.value ) }
-                onChange={ ( d: Date ) => handleOnDateChange( d.toString() ) }
-            />
-            {/* {<div className="wl-invalid__feedback">{published_at.error}</div>} */}
-        </div>
         <div key={"wl_fr__post-action"} className="wl-form-group">
-            <Button onClick={ () => handleOnSubmit() }>Save</Button>
+            <Button ref={submitRef} onClick={handleOnSubmit} style={{display: 'none'}}>Save</Button>
             &nbsp;
         </div>
+    </div>
     </div>)
+
 }
 
 
@@ -359,7 +382,7 @@ const DEFAULT_TEXT_CONTENT: string = JSON.stringify({
         type: "paragraph",
         data: {
           text:
-            "Pharagraph"
+            "Paragraph"
         }
       }
     ],

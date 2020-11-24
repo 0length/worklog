@@ -30,11 +30,11 @@ const LoadingBar: React.FC<any> = (props)=>{
     useEffect(()=>{
         const isLoading= Object.keys(props).some((value: any)=>props[value] && props[value].isLoading)
         if(isLoading){
-            document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 3px;width: 70%;')
+            document.querySelectorAll(".wl-loadingbar")[0] && document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 3px;width: 70%;')
         }
         if(!isLoading){
-            document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 100%;transition:width 0ms ease-out;')
-            setTimeout(()=>document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 0;transition:width 1500ms ease-out;'), 2000)
+            document.querySelectorAll(".wl-loadingbar")[0] && document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 100%;transition:width 0ms ease-out;')
+            setTimeout(()=>document.querySelectorAll(".wl-loadingbar")[0] && document.querySelectorAll(".wl-loadingbar")[0].setAttribute('style', 'height: 0;width: 0;transition:width 1500ms ease-out;'), 2000)
         }
     }, [props])
 

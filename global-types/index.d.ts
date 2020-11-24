@@ -18,7 +18,7 @@ export interface AccessGuard {
 }
 
 export interface AllMode {
-    [key: string]: JSX.Element
+    [key: string]: ()=>JSX.Element
 }
 
 export interface ActivityModeProps {
@@ -33,5 +33,6 @@ export interface ActivityPageProps {
     generic: any
     mode: "read"|"create"|"update"
     instanceOf: string
+    setAction?: React.Dispatch<React.SetStateAction<JSX.Element[]>>
 }
 

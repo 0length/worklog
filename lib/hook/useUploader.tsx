@@ -11,6 +11,7 @@ export interface Uploader{
 export interface UploaderState{
     uploader: Uploader
     setUploader: (overrides: Partial<Uploader>)=>void
+    resetUploader: ()=>void
 }
 
 const useUploader = ( overrides?: Partial<Uploader> ): UploaderState => {
@@ -53,6 +54,6 @@ const useUploader = ( overrides?: Partial<Uploader> ): UploaderState => {
         globalUploader && globalUploader.fileid && console.log("Uploader Update", uploader);
      }, [ uploader, globalUploader ])
 
-     return { uploader,  setUploader }
+     return { uploader,  setUploader, resetUploader: ()=>setUploader({ progress: "", status: "", fileId: ""}) }
 }
 export default useUploader

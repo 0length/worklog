@@ -24,35 +24,34 @@ const Post: React.FC<any> = (props)=>{
         </Button>
     ]
 
-    const actionForm = [
+    const actionForm =[
         <Button
             key={"wl-post_back"}
             {...{styleProfile: {danger: true}}}
             className="btn-back"
             onClick={ () => setMode( 'read' ) } >
-                <i className={"fa fa-minus"}/>
-                Discard
+                <i className={"fa fa-times"}/> &nbsp;Discard
         </Button>
     ]
 
     const allMode: AllMode = {
-        read :  <Table
+        read :  ()=><Table
                     action={actionTable}
                     generic={{setMode, setSelectedItem}}
-                    title={"All Work List"}
+                    title={"All Post List"}
                     mode="read"
                     instanceOf={activityName}/>,
-        create: <Form
+        create: ()=><Form
                     action={actionForm}
                     generic={{}}
                     mode="create"
-                    title={"Create New Work Item"}
+                    title={"Create New Post Item"}
                     instanceOf={activityName}/>,
-        update: <Form
+        update: ()=><Form
                     action={actionForm}
                     generic={{old: selectedItem}}
                     mode="update"
-                    title={"Create New Work Item"}
+                    title={"Edit Current Post Item"}
                     instanceOf={activityName}/>
     }
 
@@ -67,7 +66,7 @@ const Post: React.FC<any> = (props)=>{
     return (<>
         <div className="div-post">
             <StylePost />
-            { allMode[ mode ] }
+            { (()=>allMode[ mode ]())() }
         </div>
     </>)
 }

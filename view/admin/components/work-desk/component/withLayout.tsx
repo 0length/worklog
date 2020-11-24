@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createGlobalStyle } from "styled-components"
 import { ActivityModeProps, ActivityPageProps } from '../../../../../global-types'
 
@@ -20,7 +20,7 @@ const LocalStyle = createGlobalStyle`
         margin: 2vh 0;
         & > .title {
             font-family: Poppins,Helvetica,sans-serif;
-            font-size: 1.2rem;
+            font-size: 2rem;
             font-weight: 500;
             color: #212529;
             display: block;
@@ -103,7 +103,9 @@ const LocalStyle = createGlobalStyle`
 `
 
 const withLayout = (Page: React.FC<ActivityPageProps>)=>(props: ActivityModeProps)=>{
-    const {title, action, mode, instanceOf, generic}= props
+    const {title, action: defaultAction, mode, instanceOf, generic }= props
+    const [action, setAction] = useState(defaultAction)
+
     return(<div className="wl-workdesk__container">
         <div className="activity-controls">
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +152,7 @@ const withLayout = (Page: React.FC<ActivityPageProps>)=>(props: ActivityModeProp
                 {action}
             </span>
         </div>
-        <Page {...{mode, instanceOf, generic}}/>
+        <Page {...{mode, instanceOf, generic, setAction}}/>
     </div>)
 }
 

@@ -101,9 +101,9 @@ const Auth: React.FC<any> = (props)=>{
     const {error} = user
     const [mode, setMode]= useState<string>('SignIn')
     const allMode: AllMode = {
-        SignIn :    <SignIn setMode={setMode} auth={props.auth} error={error}/>,
-        SignUp :    <SignUp setMode={setMode} auth={props.auth} error={error}/>,
-        Forgot :    <Forgot setMode={setMode} auth={props.auth} error={error}/>
+        SignIn :    ()=><SignIn setMode={setMode} auth={props.auth} error={error}/>,
+        SignUp :    ()=><SignUp setMode={setMode} auth={props.auth} error={error}/>,
+        Forgot :    ()=><Forgot setMode={setMode} auth={props.auth} error={error}/>
     }
 
     const setModeToDom = (modeWant: string)=>{
@@ -154,7 +154,7 @@ const Auth: React.FC<any> = (props)=>{
                             </a>
                         </div>
                         {
-                            allMode[mode]
+                            allMode[mode]()
                         }
                     </div>
                 </div>

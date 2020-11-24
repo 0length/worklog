@@ -41,7 +41,8 @@ const LocalStyle = createGlobalStyle`
   .uploading-container {
     display: flex;
     justify-content: space-between;
-    width: 90%;
+    width: 100%;
+    z-index: 5;
     & > * {
         align-self: center;
     }
@@ -53,7 +54,7 @@ const Container = styled(styled.div`
     border: 1px dashed #D8D5D1;
     display: flex;
     border-radius: 3px;
-    height: 80px;
+    min-height: 80px;
     width: 100%;
     align-content: center;
     cursor: pointer;
@@ -112,12 +113,16 @@ interface IProps {
     pid: string
     className?: string
     onFinish?:()=>void
+    onCancel?:()=>void
     placeholder?: string
+    imgSrc?: string
+
 }
 
 
 const Dropzone: React.FC<IProps> = (props)=>{
     const [event, setEvent] = useState<string>('')
+    const [imgSrc, setImgSrc] = useState<string>(props.imgSrc || '')
     const [inputDisable, setinputDisable] = useState<boolean>(false)
     const radius = 22
     const cycx= radius+8
@@ -136,6 +141,11 @@ const Dropzone: React.FC<IProps> = (props)=>{
         if (props.onFilesAdded) {
             const array = fileListToArray(files)
             props.onFilesAdded(array, props.pid)
+            const reader = new FileReader()
+            reader.onload = (e: any)=>{
+                setImgSrc(e.target.result)
+            }
+            reader.readAsDataURL(array[0])
         }
     }
 
@@ -183,6 +193,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
           setTimeout(() => {
               setEvent('none')
           }, 10)
+          return ()=>props.onCancel && props.onCancel()
     }, [])
 
     useEffect(()=>{
@@ -202,9 +213,12 @@ const Dropzone: React.FC<IProps> = (props)=>{
         onDrop={(e)=>onDrop(e)}
         // onDragStart={(e)=>onDrag(e)}
         onClick={(e)=>{openFileDialog(e)}}
+        onMouseOver={()=>setEvent("Hover")}
+        onMouseLeave={()=>setEvent('none')}
     >
         <LocalStyle />
-    {event !== 'Drop' && <><span>Drag & Drop Files Or Browse</span>{props.placeholder && <div style={{border: 'none', color: 'grey'}}>{props.placeholder}</div>}</>}
+    { !props.progress || !props.imgSrc && <><span>Drag & Drop Files Or Browse</span>{props.placeholder &&
+    <div style={{border: 'none', color: 'grey'}}>{props.placeholder}</div>}</>}
         <input
             ref={inputRef}
             style={{display: 'none'}}
@@ -213,8 +227,33 @@ const Dropzone: React.FC<IProps> = (props)=>{
             disabled={inputDisable}
             hidden={true}
         />
-        { props.progress &&  <div className={"uploading-container"} >
-            <span>Name of the File .jpg</span>
+        { props.progress || props.imgSrc &&  <div className={"uploading-container"} >
+            {imgSrc && props.progress  === '100' || props.imgSrc && <div
+                style={{
+                    minHeight: '30vh',
+                    width: '100%',
+                    backgroundImage: `url("${imgSrc}")`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: 'no-repeat',
+                    filter: event==='Hover'?'blur(1px)':'none',
+                }}
+                />
+            }
+            {props.progress === '100' || props.imgSrc ?
+            <i className={event==='Hover'?"fa fa-times":""} style={
+                {
+                    position: 'absolute',
+                    right: 10,
+                    color: '#FD27EB',
+                    textShadow: '1px 0 1px black'
+                }
+            } onClick={()=>{
+                if(event!=='Hover') return
+                props.onCancel && props.onCancel()
+                setEvent('none')
+                setImgSrc("")
+            }}/>:
             <svg
                 className="progress-ring"
                 width="60"
@@ -232,6 +271,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                 />
                 <text  className={'small'} x="50%" y="50%" textAnchor="middle">{ props.progress }%</text>
             </svg>
+            }
             </div>
         }
     </Container>)

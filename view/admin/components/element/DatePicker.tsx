@@ -1,8 +1,9 @@
 import React from 'react'
 import { createGlobalStyle } from "styled-components"
-import DP from 'react-datepicker'
-const DatePicker: React.FC<any>  = ({selected, onChange, className})=>{
-return (<><LocalStyle /><DP selected={selected} onChange={(date)=>onChange(date)}/></>)
+import DP, { ReactDatePickerProps } from 'react-datepicker'
+
+const DatePicker: React.FC<ReactDatePickerProps>  = (props)=>{
+return (<><LocalStyle /><DP {...props} selected={props.selected} onChange={props.onChange}/></>)
 }
 const LocalStyle = createGlobalStyle`
 

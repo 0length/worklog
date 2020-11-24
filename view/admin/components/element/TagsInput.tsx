@@ -43,8 +43,7 @@ const TagsInput: React.FC<any> = ({valueGetter, className, initValue=[], placeho
     }
 
     const pressMatch = (e: any)=>{
-        // console.log(e.key)
-
+        if((e.key === '"' || e.key === "'")) return e.target.value = e.target.value.split("'").join("").split('"').join("")
         if((e.key === 'Enter' || e.key === ' ')&& e.target.value && tags.indexOf(e.target.value) === -1){
             addTag(e.target.value)
             e.target.value = ""
