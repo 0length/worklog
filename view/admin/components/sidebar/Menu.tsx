@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizeing: border-box;
     margin-left: -1vw;
     color: rgb(123, 125, 130);
-
+    padding-left: 20px;
     .hidden{
         opacity: 0;
         height: 0;
@@ -167,7 +167,7 @@ useEffect(()=>{
                     subMenuClassList.contains("show")?subMenuClassList.toggle("show", false):subMenuClassList.toggle("show", true)
                         }
                  }}>
-                <i className={"wl-sidebar__menu__icon fa-"+item.name}/>&nbsp;&nbsp;&nbsp;
+                <i className={"wl-sidebar__menu__icon fa fa-"+item.name}/>&nbsp;&nbsp;&nbsp;
                 <span className="wl-sidebar__menu__text">{item.name}</span>
                 </div>
                     {

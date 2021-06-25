@@ -168,7 +168,7 @@ const auth = (action$: any, store: any)=>{
                     payload && payload.data && payload.data[key] &&
                     // tslint:disable-next-line: max-line-length
                     observer.next({type: `SUBSCRIBE_${key.toUpperCase()}_IS_RUNNING`, payload: graphResponseParser(payload)})
-                })
+                });
                 // action.query.variables.authToken = `Bearer ${store.value.user.authToken}`
                 socket$.next({...action.query, payload: {...action.query.payload, authToken: `Bearer ${store.value.user.authToken}`}})
             }).pipe(

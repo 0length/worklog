@@ -56,6 +56,7 @@ ${
     &::after {
         position: absolute;
         left: 0;
+        bottom: 0;
         content : "";
         margin-top: 2.03rem;
         border-bottom:2px solid #260026;

@@ -201,7 +201,7 @@
 .fa-star-o:before {
   content: "\f006";
 }
-.fa-user:before {
+.fa-user1:before {
   content: "\f007";
 }
 .fa-film:before {
@@ -380,6 +380,7 @@
   content: "\f043";
 }
 .fa-edit:before,
+.fa-post:before,
 .fa-pencil-square-o:before {
   content: "\f044";
 }
@@ -698,7 +699,8 @@
 .fa-arrows-alt:before {
   content: "\f0b2";
 }
-.fa-group:before,
+/* .fa-group:before, */
+.fa-user:before,
 .fa-users:before {
   content: "\f0c0";
 }
@@ -732,6 +734,7 @@
 }
 .fa-navicon:before,
 .fa-reorder:before,
+.fa-menu:before,
 .fa-bars:before {
   content: "\f0c9";
 }
@@ -1416,6 +1419,7 @@
 .fa-cube:before {
   content: "\f1b2";
 }
+.fa-work:before,
 .fa-cubes:before {
   content: "\f1b3";
 }
@@ -2191,7 +2195,8 @@
 .fa-linode:before {
   content: "\f2b8";
 }
-.fa-address-book:before {
+.fa-address-book:before,
+.fa-group:before {
   content: "\f2b9";
 }
 .fa-address-book-o:before {

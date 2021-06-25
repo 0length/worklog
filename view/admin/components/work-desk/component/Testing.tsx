@@ -11,7 +11,7 @@ const Testing: React.FC<any> = (props)=>{
         <button style={{zIndex: 10000, color: 'blue', left: '0px', top: '50px'}} onClick={ ()=>{
           const curr = new Date()
           const newData={message: "Ini adalah uji coba tapi jangan di coba-coba.",
-          timeOut: 10000, type: "info", created_at: curr+""}
+          timeOut: 10000000, type: "info", created_at: curr+""}
           const newData2={message: "Ini adalah uji coba tapi jangan di coba-coba.",
           timeOut: 13000, type: "success", created_at: curr+""}
           const newData3={message: "Ini adalah uji coba tapi jangan di coba-coba.",

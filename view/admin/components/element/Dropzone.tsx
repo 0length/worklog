@@ -217,7 +217,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
         onMouseLeave={()=>setEvent('none')}
     >
         <LocalStyle />
-    { !props.progress || !props.imgSrc && <><span>Drag & Drop Files Or Browse</span>{props.placeholder &&
+    { !props.progress && <><span>Drag & Drop Files Or Browse</span>{props.placeholder &&
     <div style={{border: 'none', color: 'grey'}}>{props.placeholder}</div>}</>}
         <input
             ref={inputRef}
@@ -227,8 +227,8 @@ const Dropzone: React.FC<IProps> = (props)=>{
             disabled={inputDisable}
             hidden={true}
         />
-        { props.progress || props.imgSrc &&  <div className={"uploading-container"} >
-            {imgSrc && props.progress  === '100' || props.imgSrc && <div
+        { props.progress  &&  <div className={"uploading-container"} >
+            {imgSrc && props.progress  === '100'  && <div
                 style={{
                     minHeight: '30vh',
                     width: '100%',
@@ -240,7 +240,7 @@ const Dropzone: React.FC<IProps> = (props)=>{
                 }}
                 />
             }
-            {props.progress === '100' || props.imgSrc ?
+            {props.progress === '100'  ?
             <i className={event==='Hover'?"fa fa-times":""} style={
                 {
                     position: 'absolute',

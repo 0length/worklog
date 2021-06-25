@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Post } from "../../../../../../global-types"
-import { Button } from '../../../element'
+import { Button, Image } from '../../../element'
 import endPoint from '../../../../../../lib/const/endpoint'
 import { createGlobalStyle } from "styled-components"
 import withLayout from "../withLayout"
@@ -66,10 +66,14 @@ const Table: React.FC<any> = ( props )=>{
                     }</td>
                     <td key={"wl_dt_-author"+(idx+1)}>{item.author_name}</td>
                     <td key={"wl_dt_-img"+(idx+1)}>
-                        <img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.title} />
+
+                        { typeof window !== 'undefined' && typeof document !== 'undefined' ?
+                        <Image width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.title} />
+                        : null}
                     </td>
                     <td key={"wl_dt_-content"+(idx+1)} className="longtext">{
-                            item.text_content.substr(0, 150)+'...'
+                            JSON.parse(item.text_content).blocks.filter((i: any)=>i.type==="paragraph")[0].data.text
+                            .substr(0, 150)+'...'
                         }</td>
                     <td key={"wl_dt_-date"+(idx+1)}>{item.published_at}</td>
                     <td key={"wl_dt_-view"+(idx+1)}>{item.view_count}</td>

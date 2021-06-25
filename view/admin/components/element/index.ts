@@ -3,6 +3,7 @@ import Input from './Input'
 import Checkbox from './Checkbox'
 import ToastCard from './ToastCard'
 import Dropzone from './Dropzone'
+import Image from './Image'
 import TagsInput from './TagsInput'
 import Textarea from './Textarea'
 import DatePicker from './DatePicker'
@@ -15,6 +16,7 @@ export {
     Dropzone,
     TagsInput,
     Textarea,
-    DatePicker
+    DatePicker,
+    Image
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Work, ActivityPageProps } from "../../../../../../global-types"
-import { Button } from '../../../element'
+import { Button, Image } from '../../../element'
 import endPoint from '../../../../../../lib/const/endpoint'
 import { createGlobalStyle } from "styled-components"
 import withLayout from "../withLayout"
@@ -72,7 +72,7 @@ const Table: React.FC<ActivityPageProps> = (props)=>{
                     <td key={"wl_dt__-author"+(++idx)}>{item.author_name}</td>
                     <td key={"wl_dt__-cap"+(++idx)} className="text">{item.simple_caption.substr(0, 50)+'...'}</td>
                     <td key={"wl_dt__-img"+(++idx)}>
-                        <img width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} />
+                        <Image width="50px" height="auto" src={endPoint.GOOGLEDRIVE+item.img_url} alt={item.name} />
                     </td>
                     <td key={"wl_dt__-client"+(++idx)}>{item.client}</td>
                     <td key={"wl_dt__-date"+(++idx)}>{item.completed_at}</td>

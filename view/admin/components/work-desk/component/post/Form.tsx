@@ -17,6 +17,7 @@ import { timer } from 'rxjs'
 import fromEventArgs from '../../../../../../lib/utils/fromEventArgs'
 import Editor from '../../../element/Editor'
 import endPoint from '../../../../../../lib/const/endpoint'
+import { text } from 'body-parser'
 
 
 const LocalStyle = createGlobalStyle`
@@ -43,7 +44,7 @@ const LocalStyle = createGlobalStyle`
             background: transparent;
             border: none;
             outline: none;
-            width: 80%;
+            width: 100%;
             float: right;
             color: #495057;
         }
@@ -72,6 +73,7 @@ const LocalStyle = createGlobalStyle`
         & > .input.dropzone  {
             width: 100%;
             color: #495057;
+            border: 1px dashed #495057;
         }
         & > .wl-invalid__feedback {
             position: absolute;
@@ -83,7 +85,6 @@ const LocalStyle = createGlobalStyle`
         .wl_fr__post-title__input {
             font-size: 46px;
             padding-left:0;
-            width: 100%;
         }
     }
 
@@ -146,7 +147,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
     const getOld = (key: string) => ( props.generic && props.generic.old && props.generic.old[ key ] ) || false
     const [title, setTitle] = useState<FormInput>(
         {
-            value:getOld('title')||'',
+            value:getOld('title')||'Title',
             isValid: false,
             error: "",
             rules: 'required|min:3|max:100',
@@ -338,12 +339,12 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
         <Dropzone
                 className="input dropzone"
                 onFilesAdded={ ( a, b ) => { setDisabledName( true ); dispatch( upload( a, b ) ) } }
-                progress={ uploader.progress }
+                progress={ getOld('img_url')?'100':uploader.progress }
                 pid={ uploader.processId }
                 onFinish={ () => setDisabledName( false ) }
                 onCancel={resetUploader}
                 placeholder={"for The Illustration Image"}
-                // imgSrc={getOld('img_url')?endPoint.GOOGLEDRIVE+getOld('img_url'):''}
+                imgSrc={getOld('img_url')?endPoint.GOOGLEDRIVE+getOld('img_url'):''}
         />
     </div>}
         
@@ -354,7 +355,7 @@ const Form: React.FC<ActivityPageProps> = (props) =>{
             <TagsInput
                 initValue={ props.generic.old && JSON.parse( props.generic.old.p ) || [] }
                 valueGetter={ setTag }
-                className='input'
+                className='input w-full'
                 placeholder={"Tag"}
             />
         </div>
