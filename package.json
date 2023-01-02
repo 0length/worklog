@@ -99,7 +99,7 @@
     "chai": "^4.2.0",
     "concurrently": "^3.6.1",
     "cross-env": "^7.0.2",
-    "css-loader": "^3.4.0",
+    "css-loader": "^6.7.3",
     "date-fns": "^2.11.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
@@ -113,11 +113,11 @@
     "reflect-metadata": "^0.1.13",
     "tailwindcss": "^1.6.2",
     "ts-jest": "^25.2.1",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.4.2",
     "ts-node": "^8.6.1",
     "typescript": "^3.8.3",
-    "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
     "webpack-node-externals": "^1.7.2",
     "winston": "^3.2.1"
   }
